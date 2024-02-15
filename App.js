@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { withExpoSnack } from "nativewind";
 
-export default function App() {
+import { Text, View } from "react-native";
+import { styled } from "nativewind";
+import CategoryPage from "./screens/CategoryPage";
+import VendorLogin from "./screens/Vendor/VendorLogin";
+import AdminLogin from "./screens/Admin/AdminLogin";
+import AdminStalls from "./screens/Admin/AdminStalls";
+import MenuScreen from "./screens/MenuScreen";
+import HomeScreen from "./screens/HomeScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import VendorRegistration from "./screens/Vendor/VendorRegistration";
+const StyledView = styled(View);
+const StyledText = styled(Text);
+
+const stack = createNativeStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <stack.Navigator>
+        {/* <stack.Screen name="Home" component={HomeScreen} /> */}
+        {/* <stack.Screen name="List" component={CategoryPage} /> */}
+        {/* <stack.Screen name="menu" component={MenuScreen} /> */}
+        {/* <stack.Screen name="vendor-login" component={VendorLogin} /> */}
+        <stack.Screen
+          name="vendor-registration"
+          component={VendorRegistration}
+        />
+        {/* <stack.Screen name="admin-login" component={AdminLogin} /> */}
+        {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
+      </stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default withExpoSnack(App);
