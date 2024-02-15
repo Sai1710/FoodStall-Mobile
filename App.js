@@ -1,6 +1,6 @@
 import React from "react";
 import { withExpoSnack } from "nativewind";
-
+import AdminRegistration from "./screens/Admin/AdminRegistration";
 import { Text, View } from "react-native";
 import { styled } from "nativewind";
 import CategoryPage from "./screens/CategoryPage";
@@ -25,12 +25,15 @@ const App = () => {
         {/* <stack.Screen name="List" component={CategoryPage} /> */}
         {/* <stack.Screen name="menu" component={MenuScreen} /> */}
         {/* <stack.Screen name="vendor-login" component={VendorLogin} /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="vendor-registration"
           component={VendorRegistration}
-        />
-        {/* <stack.Screen name="admin-login" component={AdminLogin} /> */}
-        {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
+        /> */}
+        {/* <stack.Screen name="admin-registration" component={AdminRegistration} /> */}
+        <stack.Screen name="admin-login" component={AdminLogin} />
+        {/* <stack.Screen name="stall-requests" component={StallRequests} /> */}
+
+        <stack.Screen name="admin-stalls" component={AdminStalls} />
       </stack.Navigator>
     </NavigationContainer>
   );
