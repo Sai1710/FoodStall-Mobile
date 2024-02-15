@@ -7,6 +7,10 @@ export default function AdminLogin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setAccessToken = async () => {
+    await AsyncStorage.setItem("access-token", res.data.admin.access_token);
+  };
+
   const handleLogin = async () => {
     try {
       axios
@@ -24,8 +28,8 @@ export default function AdminLogin({ navigation }) {
           console.log(res);
 
           if (res.status == 200) {
-            navigation.navigate("admin-stalls");
-            AsyncStorage.setItem("access-token", res.data.admin.access_token);
+            navigation.navigate("stall-requests");
+            setAccessToken();
           }
         })
         .catch((err) => {
@@ -33,10 +37,9 @@ export default function AdminLogin({ navigation }) {
         });
     } catch (error) {
       console.error("Error logging in:", error);
+      setEmail("");
+      setPassword("");
     }
-
-    setEmail("");
-    setPassword("");
   };
   return (
     <>

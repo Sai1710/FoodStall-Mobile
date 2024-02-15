@@ -1,14 +1,39 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { useEffect } from "react";
+import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function StallRequests() {
-  useEffect(async () => {
-    try {
-      const value = await AsyncStorage.getItem("access-token");
-      console.log(value);
-    } catch (err) {
-      console.log(err);
-    }
+  const [requests, setRequests] = useState([]);
+  const fetchRequests = async () => {
+    const token = AsyncStorage.getItem("access-token");
+    console.log(token);
+    // try {
+    //   axios
+    //     .get(
+    //       "https://b622-2401-4900-1f3e-1590-ed04-e2c0-9ce9-45e9.ngrok-free.app/api/v1/admin/requests",
+    //       {
+    //         headers: {
+    //           Authorization: "Bearer " + AsyncStorage.getItem("access-token"),
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       console.log(res);
+    //       const requestData = res.data.requests || [];
+    //       setRequests(requestData);
+    //       console.log(requests);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // } catch (error) {
+    //   console.error("Error fetching requests data:", error);
+    // }
+  };
+
+  useEffect(() => {
+    fetchRequests();
   });
   return (
     <>
