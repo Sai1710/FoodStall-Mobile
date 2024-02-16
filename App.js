@@ -3,6 +3,7 @@ import { withExpoSnack } from "nativewind";
 import AdminRegistration from "./screens/Admin/AdminRegistration";
 import { Text, View } from "react-native";
 import { styled } from "nativewind";
+import AdminDashboard from "./screens/Admin/AdminDashboard";
 import StallRequests from "./screens/Admin/StallRequests";
 import CategoryPage from "./screens/CategoryPage";
 import VendorLogin from "./screens/Vendor/VendorLogin";
@@ -26,23 +27,36 @@ const App = () => {
         {/* <stack.Screen name="Home" component={HomeScreen} /> */}
         {/* <stack.Screen name="List" component={CategoryPage} /> */}
         {/* <stack.Screen name="menu" component={MenuScreen} /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="vendor-login"
           component={VendorLogin}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <stack.Screen
           name="vendor-registration"
           component={VendorRegistration}
+          options={{ headerShown: false }}
         /> */}
-        {/* <stack.Screen name="admin-registration" component={AdminRegistration} /> */}
+        {/* <stack.Screen
+          name="admin-registration"
+          component={AdminRegistration}
+          options={{ headerShown: false }}
+        /> */}
+        {/* <stack.Screen
+          name="admin-dashboard"
+          component={AdminDashboard}
+          options={{ headerShown: false }}
+        /> */}
         {/* <stack.Screen
           name="admin-login"
           component={AdminLogin}
           options={{ headerShown: false }}
         /> */}
-        <stack.Screen name="stall-requests" component={StallRequests} />
-
+        <stack.Screen
+          name="stall-requests"
+          component={StallRequests}
+          options={{ headerShown: false }}
+        />
         {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
       </stack.Navigator>
     </NavigationContainer>

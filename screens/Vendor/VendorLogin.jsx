@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import axios from "axios";
+import DEFAULT_URL from "../../config";
 
 export default function VendorLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ export default function VendorLogin({ navigation }) {
 
       axios
         .post(
-          "https://b622-2401-4900-1f3e-1590-ed04-e2c0-9ce9-45e9.ngrok-free.app/api/v1/vendor/login",
+          `${DEFAULT_URL}/api/v1/vendor/login`,
           formData,
 
           {

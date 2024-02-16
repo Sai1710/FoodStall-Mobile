@@ -1,6 +1,16 @@
-import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
+import DEFAULT_URL from "../../config";
 import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 export default function AdminRegistration({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,16 +21,13 @@ export default function AdminRegistration({ navigation }) {
       console.log(email, password);
       try {
         axios
-          .post(
-            "https://b622-2401-4900-1f3e-1590-ed04-e2c0-9ce9-45e9.ngrok-free.app/api/v1/admin/sign_up",
-            {
-              admin: {
-                email: email,
-                password: password,
-              },
-              client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-            }
-          )
+          .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
+            admin: {
+              email: email,
+              password: password,
+            },
+            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+          })
           .then((res) => {
             console.log(res);
             navigation.navigate("admin-login");
@@ -40,44 +47,61 @@ export default function AdminRegistration({ navigation }) {
   };
 
   return (
-    <>
-      <View>
-        <Text>Admin SignUp</Text>
-      </View>
-      <View>
-        <TextInput
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Email"
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-        />
+    <View className="flex-1 justify-center items-center">
+      <StatusBar backgroundColor={"#fff"}></StatusBar>
 
-        <Pressable
-          onPress={handleSubmit}
-          style={{
-            backgroundColor: "#4caf50",
-            alignItems: "center",
-            padding: 10,
-          }}
-        >
-          <Text style={{ color: "white" }}>SignUp</Text>
-        </Pressable>
-      </View>
-    </>
+      <ImageBackground
+        source={require("../../assets/AdminBack.png")}
+        style={{
+          flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center",
+          alignItems: "center",
+          width: 450,
+        }}
+        blurRadius={5}
+      >
+        <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
+          <Text className="text-2xl font-bold text-center mb-5">
+            Admin Registration
+          </Text>
+          <Text className="text-sm font-semibold text-center mb-5">
+            Welcome to FoodStall !
+          </Text>
+          <TextInput
+            className="border-gray-300 p-3 mb-4 rounded-lg"
+            style={{ borderWidth: 1 }}
+            placeholder="Email"
+            onChangeText={setEmail}
+            value={email}
+          />
+          <TextInput
+            secureTextEntry={true}
+            className="border-gray-300 p-3 mb-4 rounded-lg"
+            style={{ borderWidth: 1 }}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="Password"
+          />
+          <TextInput
+            secureTextEntry={true}
+            className="border-gray-300 p-3 mb-4 rounded-lg"
+            style={{ borderWidth: 1 }}
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
+            placeholder="Confirm Password"
+          />
+          <TouchableOpacity
+            className="bg-green-900 py-3 rounded-lg"
+            onPress={handleSubmit}
+          >
+            <Text className="text-white text-center text-lg font-semibold">
+              Register
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
 

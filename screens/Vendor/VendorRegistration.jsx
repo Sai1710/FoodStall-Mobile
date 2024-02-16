@@ -1,3 +1,5 @@
+// import SelectBox from "react-native-multi-selectbox";
+
 import {
   View,
   Text,
@@ -6,15 +8,21 @@ import {
   TextInput,
   Image,
   Pressable,
+  TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  StatusBar,
+  VirtualizedList,
+  FlatList,
 } from "react-native";
 import axios from "axios";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { xorBy } from "lodash";
+import { CheckBox } from "react-native-btr";
 import { useState } from "react";
 import { CATEGORIES } from "../../data/dummy-data";
 import MultiSelect from "react-native-multiple-select";
 // import * as ImagePicker from "expo-image-picker";
-
+import ModalDropdown from "react-native-modal-dropdown";
 export default function VendorRegistration() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,10 +37,21 @@ export default function VendorRegistration() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const onSubmit = async () => {
+    console.log(
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      categories,
+      franchise,
+      franchiseDetails,
+      confirmPassword
+    );
     if (confirmPassword == password) {
       axios
         .post(
-          "https://b622-2401-4900-1f3e-1590-ed04-e2c0-9ce9-45e9.ngrok-free.app/api/v1/vendor/sign_up",
+          `${DEFAULT_URL}/api/v1/vendor/sign_up`,
 
           {
             vendor: {
@@ -117,112 +136,155 @@ export default function VendorRegistration() {
     },
   ];
   return (
-    <View style={{ backgroundColor: "white", flex: 1 }}>
-      <View className="p-3">
-        <Text className="font-extrabold text-2xl">Register your Stall</Text>
-      </View>
-      <View>
-        <TextInput
-          value={firstName}
-          onChangeText={setFirstName}
-          style={styles.input}
-          placeholder="First Name"
-        />
-        <TextInput
-          value={lastName}
-          onChangeText={setLastName}
-          style={styles.input}
-          placeholder="Last Name"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setPhoneNumber}
-          value={phoneNumber}
-          keyboardType="numeric"
-          placeholder="Phone Number"
-        />
-
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-        />
-
-        <MultiSelect
-          hideTags
-          items={items}
-          uniqueKey="id"
-          onSelectedItemsChange={onSelectedItemsChange}
-          selectedItems={categories}
-          selectText="Categories"
-          searchInputPlaceholderText="Search"
-          submitButtonColor="#4caf50"
-          submitButtonText="Submit"
-        />
-        <View className="flex-row align-middle justify-center">
-          <BouncyCheckbox
-            size={25}
-            fillColor="red"
-            unfillColor="#FFFFFF"
-            iconStyle={{ borderColor: "red" }}
-            innerIconStyle={{ borderWidth: 2 }}
-            onPress={(isChecked) => {
-              setFranchise((prev) => !prev);
-            }}
-          />
-          <Text>Franchise</Text>
-        </View>
-        {franchise && (
-          <TextInput
-            style={styles.input}
-            onChangeText={setFranchiseDetails}
-            value={franchiseDetails}
-            placeholder="Franchise Details"
-          />
-        )}
-
-        {/* <View>
-              <Button
-                theme="primary"
-                label="Choose a photo"
-                title="Choose Photo"
-                onPress={pickImageAsync}
-              />
-              <Image
-                source={{ uri: selectedImage }}
-                style={{ height: 60, width: 60 }}
-              />
-            </View> */}
-        <View>
-          <Pressable
-            style={{
-              backgroundColor: "#4caf50",
-              alignItems: "center",
-              padding: 10,
-            }}
-            onPress={onSubmit}
+    <ScrollView>
+      <StatusBar backgroundColor={"#fff"}></StatusBar>
+      <View className="flex-1 justify-center items-center">
+        <ImageBackground
+          source={require("../../assets/VendorLoginBack.png")}
+          style={{
+            flex: 1,
+            resizeMode: "cover",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 450,
+          }}
+          blurRadius={5}
+        >
+          <View
+            className="w-4/5 bg-white p-5 rounded-lg shadow-md"
+            style={{ margin: 80 }}
           >
-            <Text style={{ color: "white" }}>Register</Text>
-          </Pressable>
-        </View>
+            <Text className="text-2xl font-bold text-center mb-5">
+              Register your Stall
+            </Text>
+            <TextInput
+              value={firstName}
+              onChangeText={setFirstName}
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              style={{ borderWidth: 1 }}
+              placeholder="First Name"
+            />
+            <TextInput
+              value={lastName}
+              onChangeText={setLastName}
+              style={{ borderWidth: 1 }}
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              placeholder="Last Name"
+            />
+            <TextInput
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              style={{ borderWidth: 1 }}
+              onChangeText={setEmail}
+              value={email}
+              placeholder="Email"
+            />
+            <TextInput
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              style={{ borderWidth: 1 }}
+              onChangeText={setPhoneNumber}
+              value={phoneNumber}
+              keyboardType="numeric"
+              placeholder="Phone Number"
+            />
+            <TextInput
+              secureTextEntry={true}
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              style={{ borderWidth: 1 }}
+              onChangeText={setPassword}
+              value={password}
+              placeholder="Password"
+            />
+            <TextInput
+              secureTextEntry={true}
+              className="border-gray-300 p-3 mb-4 rounded-lg"
+              style={{ borderWidth: 1 }}
+              onChangeText={setConfirmPassword}
+              value={confirmPassword}
+              placeholder="Confirm Password"
+            />
+
+            {/* <SelectBox
+              label="Categories"
+              options={items}
+              selectedValues={categories}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti
+            /> */}
+            <MultiSelect
+              items={items}
+              uniqueKey="id"
+              onSelectedItemsChange={onSelectedItemsChange}
+              selectedItems={categories}
+              selectText="Categories"
+              searchInputPlaceholderText="Search"
+              tagRemoveIconColor="#4caf50"
+              tagBorderColor="#4caf50"
+              tagTextColor="#4caf50"
+              selectedItemTextColor="#CCC"
+              selectedItemIconColor="#CCC"
+              itemTextColor="#000"
+              searchInputStyle={{ color: "#CCC" }}
+              submitButtonColor="#4caf50"
+              submitButtonText="Submit"
+              styleMainWrapper={{
+                borderWidth: 1,
+                padding: 2,
+                borderColor: "rgb(203,213,219)",
+                borderRadius: 8,
+                marginBottom: 16,
+              }}
+            />
+
+            <View className="flex-row mb-4">
+              <Pressable
+                className={` flex-1 pl-2 pr-2
+                 pt-2 pb-2 rounded ${
+                   franchise ? "bg-green-800" : "bg-gray-500"
+                 } text-white font-medium`}
+                onPress={() => {
+                  setFranchise((prev) => !prev);
+                }}
+              >
+                <Text style={{ color: "white", textAlign: "center" }}>
+                  Franchise
+                </Text>
+              </Pressable>
+            </View>
+
+            {franchise && (
+              <TextInput
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setFranchiseDetails}
+                value={franchiseDetails}
+                placeholder="Franchise Details"
+              />
+            )}
+            <TouchableOpacity
+              className="bg-green-900 py-3 rounded-lg"
+              onPress={onSubmit}
+            >
+              <Text className="text-white text-center text-lg font-semibold">
+                Register
+              </Text>
+            </TouchableOpacity>
+            <Pressable className="mt-10 mb-4">
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#14532d",
+                  fontSize: 19,
+                }}
+              >
+                Login Instead?
+              </Text>
+            </Pressable>
+          </View>
+        </ImageBackground>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
