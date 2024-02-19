@@ -35,7 +35,7 @@ export default function AdminLogin({ navigation }) {
           console.log(res);
 
           if (res.status == 200) {
-            navigation.navigate("admin-dashboard");
+            navigation.navigate("stall-requests");
             setAccessToken(res);
           }
         })

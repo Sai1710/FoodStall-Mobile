@@ -18,7 +18,6 @@ export default function AdminRegistration({ navigation }) {
 
   const handleSubmit = async () => {
     if (confirmPassword == password) {
-      console.log(email, password);
       try {
         axios
           .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
