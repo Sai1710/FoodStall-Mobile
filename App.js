@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import VendorRegistration from "./screens/Vendor/VendorRegistration";
+import AdminCategories from "./screens/Admin/AdminCategories";
 const StyledView = styled(View);
 const StyledText = styled(Text);
 
@@ -52,12 +53,17 @@ const App = () => {
           component={AdminLogin}
           options={{ headerShown: false }}
         /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="stall-requests"
           component={StallRequests}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
+        <stack.Screen
+          name="admin-categories"
+          component={AdminCategories}
+          options={{ headerShown: false }}
+        />
       </stack.Navigator>
     </NavigationContainer>
   );

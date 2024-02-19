@@ -2,7 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import RequestModal from "../../components/RequestModal";
 import { useState } from "react";
 
-export default function RequestCard({ data }) {
+export default function RequestCard({ data, fetchRequests }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -11,6 +11,7 @@ export default function RequestCard({ data }) {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         data={data}
+        fetchRequests={fetchRequests}
       />
       <View className="flex-row align-middle justify-between my-2 mx-4 bg-white rounded-lg p-3">
         <View>

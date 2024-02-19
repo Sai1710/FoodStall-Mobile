@@ -12,6 +12,7 @@ export default function CategoryCard({ title, link, onPress }) {
           <View style={styles.categoryTextContainer}>
             <Text style={styles.categoryText}>{title}</Text>
           </View>
+          
         </View>
       </Pressable>
     </View>

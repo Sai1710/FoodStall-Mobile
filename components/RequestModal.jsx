@@ -1,7 +1,66 @@
 import React, { useState } from "react";
 import { View, Text, Button, Modal, StyleSheet, Pressable } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DEFAULT_URL from "../config";
+import axios from "axios";
 
-const RequestModal = ({ modalVisible, setModalVisible, data }) => {
+const RequestModal = ({
+  modalVisible,
+  setModalVisible,
+  data,
+  fetchRequests,
+}) => {
+  const handleApprove = async (requestId) => {
+    const token = await AsyncStorage.getItem("access-token");
+
+    try {
+      axios
+        .post(
+          `${DEFAULT_URL}/api/v1/admin/approve_request/${requestId}`,
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("Request approved successfully:", res.data);
+          fetchRequests();
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } catch (error) {
+      console.error("Error approving request:", error);
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    const token = await AsyncStorage.getItem("access-token");
+
+    try {
+      axios
+        .post(
+          `${DEFAULT_URL}/api/v1/admin/reject_request/${requestId}`,
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("Request rejected successfully:", res.data);
+          fetchRequests();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.error("Error rejecting request:", error);
+    }
+  };
   return (
     <View style={styles.container}>
       <Modal
@@ -11,17 +70,17 @@ const RequestModal = ({ modalVisible, setModalVisible, data }) => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
-        onPress={() => {
-          setModalVisible(false);
-        }}
       >
-        <View
+        <Pressable
           className="flex-1
             justify-center
             items-center
             bg-black
             opacity-75
           "
+          onPress={() => {
+            setModalVisible(false);
+          }}
         >
           <View className="bg-white rounded-lg p-8 m-4 w-3/4">
             <View>
@@ -91,27 +150,44 @@ const RequestModal = ({ modalVisible, setModalVisible, data }) => {
             </View>
 
             <View>
-              <View className="flex-row align-middle justify-center">
-                <Pressable
-                  onPress={() => setModalVisible(!modalVisible)}
-                  className="bg-green-900 p-4 rounded flex-1 m-1"
-                >
-                  <Text className="text-center text-white font-bold">
-                    Accept
-                  </Text>
-                </Pressable>
+              {data.status == "pending" ? (
+                <View className="flex-row align-middle justify-center">
+                  <Pressable
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      handleApprove(data.id);
+                    }}
+                    className="bg-green-900 p-4 rounded flex-1 m-1"
+                  >
+                    <Text className="text-center text-white font-bold">
+                      Accept
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      handleReject(data.id);
+                    }}
+                    className="bg-red-900 p-4 rounded flex-1 m-1"
+                  >
+                    <Text className="text-center text-white font-bold">
+                      Reject
+                    </Text>
+                  </Pressable>
+                </View>
+              ) : (
                 <Pressable
                   onPress={() => setModalVisible(!modalVisible)}
                   className="bg-red-900 p-4 rounded flex-1 m-1"
                 >
                   <Text className="text-center text-white font-bold">
-                    Reject
+                    Close
                   </Text>
                 </Pressable>
-              </View>
+              )}
             </View>
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

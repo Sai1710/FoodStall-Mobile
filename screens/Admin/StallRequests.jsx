@@ -147,6 +147,7 @@ export default function StallRequests() {
               data={item}
               key={item.id}
               setModalVisible={setModalVisible}
+              fetchRequests={fetchRequests}
             />
           );
         })}
