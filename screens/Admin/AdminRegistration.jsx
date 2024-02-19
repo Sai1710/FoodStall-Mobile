@@ -46,10 +46,10 @@ export default function AdminRegistration({ navigation }) {
   };
 
   return (
-    <View className="flex-1 justify-center items-center">
+    <View className="flex-1 justify-center items-center bg-green-100">
       <StatusBar backgroundColor={"#fff"}></StatusBar>
 
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../../assets/AdminBack.png")}
         style={{
           flex: 1,
@@ -59,47 +59,47 @@ export default function AdminRegistration({ navigation }) {
           width: 450,
         }}
         blurRadius={5}
-      >
-        <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
-          <Text className="text-2xl font-bold text-center mb-5">
-            Admin Registration
+      > */}
+      <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
+        <Text className="text-2xl font-bold text-center mb-5">
+          Admin Registration
+        </Text>
+        <Text className="text-sm font-semibold text-center mb-5">
+          Welcome to FoodStall !
+        </Text>
+        <TextInput
+          className="border-gray-300 p-3 mb-4 rounded-lg"
+          style={{ borderWidth: 1 }}
+          placeholder="Email"
+          onChangeText={setEmail}
+          value={email}
+        />
+        <TextInput
+          secureTextEntry={true}
+          className="border-gray-300 p-3 mb-4 rounded-lg"
+          style={{ borderWidth: 1 }}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+        />
+        <TextInput
+          secureTextEntry={true}
+          className="border-gray-300 p-3 mb-4 rounded-lg"
+          style={{ borderWidth: 1 }}
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          placeholder="Confirm Password"
+        />
+        <TouchableOpacity
+          className="bg-green-900 py-3 rounded-lg"
+          onPress={handleSubmit}
+        >
+          <Text className="text-white text-center text-lg font-semibold">
+            Register
           </Text>
-          <Text className="text-sm font-semibold text-center mb-5">
-            Welcome to FoodStall !
-          </Text>
-          <TextInput
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            placeholder="Email"
-            onChangeText={setEmail}
-            value={email}
-          />
-          <TextInput
-            secureTextEntry={true}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-          />
-          <TextInput
-            secureTextEntry={true}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-            placeholder="Confirm Password"
-          />
-          <TouchableOpacity
-            className="bg-green-900 py-3 rounded-lg"
-            onPress={handleSubmit}
-          >
-            <Text className="text-white text-center text-lg font-semibold">
-              Register
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
+        </TouchableOpacity>
+      </View>
+      {/* </ImageBackground> */}
     </View>
   );
 }

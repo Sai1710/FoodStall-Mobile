@@ -16,7 +16,7 @@ export default function AdminCategoryCard({
       <DeleteModal
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
-        data={data}
+        id={data.id}
         fetchData={fetchData}
       />
       <View className="flex-row align-middle justify-between my-2 mx-4 bg-white rounded-lg p-3">
@@ -38,7 +38,7 @@ export default function AdminCategoryCard({
         </View>
         <View style={{ flex: 2 }}>
           <Pressable
-            className="bg-red-900 m-auto rounded-lg p-2"
+            className="bg-red-600 m-auto rounded-lg p-2"
             onPress={() => {
               setModalVisible((prev) => !prev);
             }}
