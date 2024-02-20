@@ -134,11 +134,12 @@ const RequestModal = ({
                 <Text className="font-bold">{data.franchise_details}</Text>
               </View>
             )}
+
             <View className="flex align-middle justify-between m-2">
               <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
                 Categories:
               </Text>
-              <View className="flex-row">
+              <View className="flex-col">
                 {data.type_of_categories.map((item) => {
                   return (
                     <Text key={item} className="mr-1 font-bold">

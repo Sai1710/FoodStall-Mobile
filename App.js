@@ -50,18 +50,18 @@ const App = () => {
           name="admin-login"
           component={AdminLogin}
           options={{ headerShown: false }}
-        /> */}
-        {/* <stack.Screen
+        />*/}
+        <stack.Screen
           name="stall-requests"
           component={StallRequests}
           options={{ headerShown: false }}
-        /> */}
+        />
         {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="admin-categories"
           component={AdminCategories}
           options={{ headerShown: false }}
-        />
+        /> */}
       </stack.Navigator>
     </NavigationContainer>
   );

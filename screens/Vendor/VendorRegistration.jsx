@@ -16,13 +16,14 @@ import {
   FlatList,
 } from "react-native";
 import axios from "axios";
-import { xorBy } from "lodash";
 import { CheckBox } from "react-native-btr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CATEGORIES } from "../../data/dummy-data";
 import MultiSelect from "react-native-multiple-select";
-// import * as ImagePicker from "expo-image-picker";
 import ModalDropdown from "react-native-modal-dropdown";
+import DEFAULT_URL from "../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function VendorRegistration() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -35,19 +36,33 @@ export default function VendorRegistration() {
   const [franchiseDetails, setFranchiseDetails] = useState("");
   const [error, setError] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [fetchedCategories, setFetchedCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    const token = await AsyncStorage.getItem("access-token");
+    try {
+      axios
+        .get(`${DEFAULT_URL}/api/v1/admin/categories`, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "ngrok-skip-browser-warning": true,
+          },
+        })
+        .then((response) => {
+          const categories = response.data.categories || [];
+
+          setFetchedCategories(categories);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const onSubmit = async () => {
-    console.log(
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-      categories,
-      franchise,
-      franchiseDetails,
-      confirmPassword
-    );
     if (confirmPassword == password) {
       axios
         .post(
@@ -105,36 +120,6 @@ export default function VendorRegistration() {
     setCategories(categories);
   };
 
-  const fetchedCategories = [
-    {
-      id: "c1",
-      name: "Chinese",
-    },
-    {
-      id: "c2",
-      name: "Burgers",
-    },
-    {
-      id: "c3",
-      name: "South Indian",
-    },
-    {
-      id: "c4",
-      name: "Punjabi",
-    },
-    {
-      id: "c5",
-      name: "Mexican",
-    },
-    {
-      id: "c6",
-      name: "Breakfast",
-    },
-    {
-      id: "c7",
-      name: "French",
-    },
-  ];
   return (
     <ScrollView>
       <StatusBar backgroundColor={"#fff"}></StatusBar>
@@ -213,7 +198,7 @@ export default function VendorRegistration() {
             /> */}
           <MultiSelect
             items={fetchedCategories}
-            uniqueKey="id"
+            uniqueKey="name"
             onSelectedItemsChange={onSelectedItemsChange}
             selectedItems={categories}
             selectText="Categories"
