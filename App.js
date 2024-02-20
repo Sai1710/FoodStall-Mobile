@@ -8,10 +8,8 @@ import StallRequests from "./screens/Admin/StallRequests";
 import CategoryPage from "./screens/CategoryPage";
 import VendorLogin from "./screens/Vendor/VendorLogin";
 import AdminLogin from "./screens/Admin/AdminLogin";
-import AdminStalls from "./screens/Admin/AdminStalls";
 import MenuScreen from "./screens/MenuScreen";
 import HomeScreen from "./screens/HomeScreen";
-import Navbar from "./components/Navbar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import VendorRegistration from "./screens/Vendor/VendorRegistration";
@@ -25,9 +23,9 @@ const App = () => {
   return (
     <NavigationContainer>
       <stack.Navigator>
-        {/* <stack.Screen name="Home" component={HomeScreen} /> */}
-        {/* <stack.Screen name="List" component={CategoryPage} /> */}
-        {/* <stack.Screen name="menu" component={MenuScreen} /> */}
+        {/* <stack.Screen name="Home" component={HomeScreen} />
+        <stack.Screen name="List" component={CategoryPage} />
+        <stack.Screen name="menu" component={MenuScreen} /> */}
         {/* <stack.Screen
           name="vendor-login"
           component={VendorLogin}
@@ -38,32 +36,32 @@ const App = () => {
           component={VendorRegistration}
           options={{ headerShown: false }}
         /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="admin-registration"
           component={AdminRegistration}
           options={{ headerShown: false }}
-        />
-        <stack.Screen
+        /> */}
+        {/* <stack.Screen
           name="admin-dashboard"
           component={AdminDashboard}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <stack.Screen
           name="admin-login"
           component={AdminLogin}
           options={{ headerShown: false }}
         /> */}
-        <stack.Screen
+        {/* <stack.Screen
           name="stall-requests"
           component={StallRequests}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <stack.Screen name="admin-stalls" component={AdminStalls} /> */}
-        {/* <stack.Screen
+        <stack.Screen
           name="admin-categories"
           component={AdminCategories}
           options={{ headerShown: false }}
-        /> */}
+        />
       </stack.Navigator>
     </NavigationContainer>
   );

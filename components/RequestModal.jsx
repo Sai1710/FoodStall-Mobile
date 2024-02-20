@@ -114,7 +114,7 @@ const RequestModal = ({
             </View>
             <View className="flex-row align-middle justify-between m-2">
               <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Satus:
+                Status:
               </Text>
               <Text className="font-bold">{data.status}</Text>
             </View>

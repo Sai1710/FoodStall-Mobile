@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";
 import axios from "axios";
 
-const DeleteModal = ({ modalVisible, setModalVisible, id, fetchData }) => {
+const DeleteModal = ({ modalVisible, setModalVisible, data, fetchData }) => {
   const handleDelete = async (id) => {
     const token = await AsyncStorage.getItem("access-token");
     try {
@@ -39,12 +39,12 @@ const DeleteModal = ({ modalVisible, setModalVisible, id, fetchData }) => {
         <View
           className="flex-1
             justify-center
-            items-center opacity-75"
+            items-center bg-black opacity-75"
         >
           <View className="bg-gray-100 rounded-lg p-8 m-4 w-3/4">
             <View className="m-2">
-              <Text className="font-bold text-xl">
-                Are you sure you want to delete?
+              <Text style={{ fontWeight: "bold" }} className="text-xl">
+                Are you sure you want to delete ?
               </Text>
             </View>
             <View>
@@ -62,7 +62,7 @@ const DeleteModal = ({ modalVisible, setModalVisible, id, fetchData }) => {
                 <Pressable
                   onPress={() => {
                     setModalVisible(!modalVisible);
-                    handleDelete(id);
+                    handleDelete(data);
                   }}
                   className="bg-red-900 p-4 rounded flex-1 m-1"
                 >

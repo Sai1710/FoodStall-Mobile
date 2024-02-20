@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import RequestModal from "../../components/RequestModal";
+import RequestModal from "./RequestModal";
 import { useState } from "react";
 
 export default function RequestCard({ data, fetchRequests }) {

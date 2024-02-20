@@ -5,16 +5,23 @@ import {
   ScrollView,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AdminCategoryCard from "../../components/AdminCategoryCard";
+import DeleteModal from "../../components/DeleteModal";
+import CategoryModal from "../../components/CategoryModal";
+
+
 
 export default function AdminCategories() {
   const [categoryData, setCategoryData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const fetchData = async () => {
     const token = await AsyncStorage.getItem("access-token");
@@ -27,9 +34,8 @@ export default function AdminCategories() {
           },
         })
         .then((response) => {
-          console.log(response.data);
           const categories = response.data.categories || [];
-          console.log(categories);
+
           setCategoryData(categories);
         });
     } catch (error) {
@@ -41,45 +47,81 @@ export default function AdminCategories() {
     fetchData();
   }, []);
   return (
-    <View className="flex-1 bg-green-100 mt-12">
-      <View className="flex justify-between bg-green-100">
-        <View style={styles.navbar} className="bg-green-900">
-          <View style={styles.logoContainer}>
-            <Text style={{ color: "white", fontWeight: "900", fontSize: 24 }}>
-              FoodM
-            </Text>
-          </View>
-          <View style={styles.menuContainer}>
-            <Pressable>
-              <Text style={{ color: "white", fontWeight: "900", fontSize: 16 }}>
-                Menu
+    <>
+      {/* <DeleteModal
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        fetchData={fetchData}
+      />
+      <CategoryModal
+        setAddModalVisible={setAddModalVisible}
+        addModalVisible={addModalVisible}
+        fetchData={fetchData}
+      /> */}
+      <View className="flex-1 bg-green-100 mt-12">
+        <View className="flex justify-between bg-green-100">
+          <View style={styles.navbar} className="bg-green-900">
+            <View style={styles.logoContainer}>
+              <Text style={{ color: "white", fontWeight: "900", fontSize: 24 }}>
+                FoodM
               </Text>
+            </View>
+            <View style={styles.menuContainer}>
+              <Pressable>
+                <Text
+                  style={{ color: "white", fontWeight: "900", fontSize: 16 }}
+                >
+                  Menu
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View className="flex-row justify-between m-4 mt-8">
+            <Text
+              className="flex-1 text-3xl font-bold"
+              style={{ color: "rgb(20, 83, 45)" }}
+            >
+              Categories
+            </Text>
+            <Pressable
+              className="flex-1 p-2 m-2rounded-lg"
+              onPress={() => {
+                setAddModalVisible((prev) => !prev);
+              }}
+            >
+              <Text className="font-bold text-center text-green-900">Add</Text>
             </Pressable>
           </View>
         </View>
-        <View className="flex justify-between ml-4 mt-8">
-          <Text
-            className="text-3xl font-bold"
-            style={{ color: "rgb(20, 83, 45)" }}
-          >
-            Categories
-          </Text>
-        </View>
+        <ScrollView>
+          <DeleteModal
+            setModalVisible={setModalVisible}
+            modalVisible={modalVisible}
+            fetchData={fetchData}
+            data={selectedCategory}
+          />
+          <CategoryModal
+            setAddModalVisible={setAddModalVisible}
+            addModalVisible={addModalVisible}
+            fetchData={fetchData}
+          />
+          {categoryData.map((item) => {
+            return (
+              <AdminCategoryCard
+                data={item}
+                key={item.id}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                addModalVisible={addModalVisible}
+                setAddModalVisible={setAddModalVisible}
+                fetchData={fetchData}
+                setSelectedCategory={setSelectedCategory}
+              />
+            );
+          })}
+        </ScrollView>
       </View>
-      <ScrollView>
-        {categoryData.map((item) => {
-          return (
-            <AdminCategoryCard
-              data={item}
-              key={item.id}
-              modalVisible={modalVisible}
-              setModalVisible={setModalVisible}
-              fetchData={fetchData}
-            />
-          );
-        })}
-      </ScrollView>
-    </View>
+    </>
   );
 }
 

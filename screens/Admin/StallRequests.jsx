@@ -11,7 +11,7 @@ import axios from "axios";
 import DashboardCard from "./AdminCategories";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import RequestCard from "./RequestCard";
+import RequestCard from "../../components/RequestCard";
 import RequestModal from "../../components/RequestModal";
 
 export default function StallRequests() {

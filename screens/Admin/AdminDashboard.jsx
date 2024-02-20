@@ -17,7 +17,7 @@ const AdminDashboard = ({ navigation }) => {
           <DashboardCard
             title="Categories"
             description="20"
-            page="categories"
+            page="admin-categories"
             handlePress={handlePress}
           />
           <DashboardCard

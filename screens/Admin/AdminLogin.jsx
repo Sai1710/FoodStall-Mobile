@@ -49,9 +49,9 @@ export default function AdminLogin({ navigation }) {
     }
   };
   return (
-    <View className="flex-1 justify-center items-center">
+    <View className="flex-1 justify-center items-center bg-green-100">
       <StatusBar backgroundColor={"#000"}></StatusBar>
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../../assets/AdminBack.png")}
         style={{
           flex: 1,
@@ -61,39 +61,37 @@ export default function AdminLogin({ navigation }) {
           width: 450,
         }}
         blurRadius={5}
-      >
-        <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
-          <Text className="text-2xl font-bold text-center mb-5">
-            Admin Login
+      > */}
+      <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
+        <Text className="text-2xl font-bold text-center mb-5">Admin Login</Text>
+        <Text className="text-sm font-semibold text-center mb-5">
+          Enter your Credentials to access your account
+        </Text>
+        <TextInput
+          className="border-gray-300 p-3 mb-4 rounded-lg"
+          style={{ borderWidth: 1 }}
+          placeholder="Email"
+          onChangeText={setEmail}
+          value={email}
+        />
+        <TextInput
+          secureTextEntry={true}
+          className="border-gray-300 p-3 mb-4 rounded-lg"
+          style={{ borderWidth: 1 }}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+        />
+        <TouchableOpacity
+          className="bg-green-900 py-3 rounded-lg"
+          onPress={handleLogin}
+        >
+          <Text className="text-white text-center text-lg font-semibold">
+            Login
           </Text>
-          <Text className="text-sm font-semibold text-center mb-5">
-            Enter your Credentials to access your account
-          </Text>
-          <TextInput
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            placeholder="Email"
-            onChangeText={setEmail}
-            value={email}
-          />
-          <TextInput
-            secureTextEntry={true}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-          />
-          <TouchableOpacity
-            className="bg-green-900 py-3 rounded-lg"
-            onPress={handleLogin}
-          >
-            <Text className="text-white text-center text-lg font-semibold">
-              Login
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
+        </TouchableOpacity>
+      </View>
+      {/* </ImageBackground> */}
     </View>
   );
 }
