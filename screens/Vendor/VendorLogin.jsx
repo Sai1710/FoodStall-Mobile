@@ -11,12 +11,18 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function VendorLogin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setAccessToken = async (res) => {
+    await AsyncStorage.setItem("access-token", res.data.vendor.access_token);
+  };
+
   async function handleSubmit() {
+    const token = await AsyncStorage.getItem("access-token");
     try {
       const formData = new FormData();
       formData.append("vendor[email]", email);
@@ -29,19 +35,25 @@ export default function VendorLogin({ navigation }) {
       axios
         .post(
           `${DEFAULT_URL}/api/v1/vendor/login`,
-          formData,
+          {
+            vendor: {
+              email: email,
+              password: password,
+            },
+            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+          },
 
           {
             headers: {
-              Authorization: "Bearer " + localStorage.getItem("access-token"),
+              Authorization: "Bearer " + token,
             },
           }
         )
         .then((res) => {
           if (res.status == 200) {
             console.log(res);
-            navigation.naviagate("stall-requests");
-            localStorage.setItem("access-token", res.data.vendor.access_token);
+            navigation.navigate("vendor-menu");
+            setAccessToken(res);
           }
         })
         .catch((err) => {

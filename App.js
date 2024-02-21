@@ -6,6 +6,7 @@ import { styled } from "nativewind";
 import AdminDashboard from "./screens/Admin/AdminDashboard";
 import StallRequests from "./screens/Admin/StallRequests";
 import CategoryPage from "./screens/CategoryPage";
+import EditItem from "./screens/Vendor/EditItem";
 import VendorLogin from "./screens/Vendor/VendorLogin";
 import AdminLogin from "./screens/Admin/AdminLogin";
 import MenuScreen from "./screens/MenuScreen";
@@ -14,6 +15,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import VendorRegistration from "./screens/Vendor/VendorRegistration";
 import AdminCategories from "./screens/Admin/AdminCategories";
+import VendorOrders from "./screens/Vendor/VendorOrders";
+import VendorMenu from "./screens/Vendor/VendorMenu";
+import AddItem from "./screens/Vendor/AddItem";
 const StyledView = styled(View);
 const StyledText = styled(Text);
 
@@ -36,6 +40,22 @@ const App = () => {
           component={VendorRegistration}
           options={{ headerShown: false }}
         /> */}
+
+        {/* <stack.Screen
+          name="add-item"
+          component={AddItem}
+          options={{ headerShown: false }}
+        /> */}
+        {/* <stack.Screen
+          name="edit-item"
+          component={EditItem}
+          options={{ headerShown: false }}
+        /> */}
+        {/* <stack.Screen
+          name="vendor-menu"
+          component={VendorMenu}
+          options={{ headerShown: false }}
+        /> */}
         {/* <stack.Screen
           name="admin-registration"
           component={AdminRegistration}
@@ -50,7 +70,13 @@ const App = () => {
           name="admin-login"
           component={AdminLogin}
           options={{ headerShown: false }}
-        />*/}
+        /> */}
+
+        <stack.Screen
+          name="vendor-orders"
+          component={VendorOrders}
+          options={{ headerShown: false }}
+        />
         <stack.Screen
           name="stall-requests"
           component={StallRequests}
