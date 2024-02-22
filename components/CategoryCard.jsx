@@ -1,18 +1,20 @@
 import { Pressable, View, Text, StyleSheet, Image } from "react-native";
 
-export default function CategoryCard({ title, link, onPress }) {
+export default function CategoryCard({ data, onPress }) {
   function pressHandler() {}
   return (
     <View style={styles.container}>
       <Pressable onPress={onPress}>
         <View style={styles.innerContainer}>
           <View style={styles.imgContainer}>
-            <Image source={{ uri: link }} style={styles.image} />
+            <Image
+              source={require("../assets/ChineseFood.jpg")}
+              style={styles.image}
+            />
           </View>
           <View style={styles.categoryTextContainer}>
-            <Text style={styles.categoryText}>{title}</Text>
+            <Text style={styles.categoryText}>{data.name.toUpperCase()}</Text>
           </View>
-          
         </View>
       </Pressable>
     </View>
@@ -23,13 +25,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#aab880",
     padding: 10,
-    margin: 10,
-    borderRadius: 10,
+    paddingBottom: 15,
+    margin: 12,
+    borderRadius: 6,
     flex: 1,
   },
   image: {
     height: 160,
-    flex: 1,
+    width: "100%",
   },
   categoryTextContainer: {
     justifyContent: "center",
@@ -45,8 +48,5 @@ const styles = StyleSheet.create({
   imgContainer: {
     flex: 1,
     marginBottom: 8,
-  },
-  innerContainer: {
-    flex: 1,
   },
 });

@@ -19,6 +19,7 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
 
   const handleCategory = async () => {
     const token = await AsyncStorage.getItem("access-token");
+    setAddModalVisible(false);
 
     axios
       .post(
@@ -46,6 +47,7 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
       .catch((err) => {
         console.log(err.message);
       });
+    setCategory("");
   };
 
   return (
@@ -58,45 +60,37 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
           transparent={true}
           visible={addModalVisible}
           onRequestClose={() => {
-            setAddModalVisible(!addModalVisible);
+            setAddModalVisible(false);
           }}
         >
-          <View
-            className="flex-1
-            justify-center
-            items-center bg-black opacity-75"
-          >
-            <View className="bg-gray-100 rounded-lg p-8 m-4 w-3/4">
-              <View className="m-2">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.inputContainer}>
                 <TextInput
-                  className="border-gray-300 p-3 mb-4 rounded-lg"
-                  style={{ borderWidth: 1 }}
+                  style={styles.input}
                   placeholder="New Category"
                   onChangeText={setCategory}
                   value={category}
                 />
               </View>
-              <View>
-                <View className="flex-row align-middle justify-center">
-                  <Pressable
-                    onPress={() => {
-                      setAddModalVisible(!addModalVisible);
-                    }}
-                    className="bg-white p-4 rounded flex-1 m-1"
-                  >
-                    <Text className="text-center text-red-900 font-bold">
-                      Cancel
-                    </Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleCategory}
-                    className="bg-green-900 p-4 rounded flex-1 m-1"
-                  >
-                    <Text className="text-center text-white font-bold">
-                      Add
-                    </Text>
-                  </Pressable>
-                </View>
+              <View style={styles.buttonContainer}>
+                <Pressable
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => {
+                    setAddModalVisible(false);
+                    setCategory("");
+                  }}
+                >
+                  <Text style={{ color: "darkred", fontWeight: "bold" }}>
+                    Cancel
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.addButton]}
+                  onPress={handleCategory}
+                >
+                  <Text style={styles.buttonText}>Add</Text>
+                </Pressable>
               </View>
             </View>
           </View>
@@ -109,9 +103,49 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  modalContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  modalContent: {
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    padding: 20,
+    width: "75%",
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    alignItems: "center",
+  },
+  cancelButton: {
     backgroundColor: "#fff",
+    marginRight: 10,
+  },
+  addButton: {
+    backgroundColor: "#14532D",
+    marginLeft: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

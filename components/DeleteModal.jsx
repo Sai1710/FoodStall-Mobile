@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Button, Modal, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";
@@ -36,41 +36,33 @@ const DeleteModal = ({ modalVisible, setModalVisible, data, fetchData }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <View
-          className="flex-1
-            justify-center
-            items-center bg-black opacity-75"
-        >
-          <View className="bg-gray-100 rounded-lg p-8 m-4 w-3/4">
-            <View className="m-2">
-              <Text style={{ fontWeight: "bold" }} className="text-xl">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View style={styles.messageContainer}>
+              <Text style={styles.messageText}>
                 Are you sure you want to delete ?
               </Text>
             </View>
-            <View>
-              <View className="flex-row align-middle justify-center">
-                <Pressable
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}
-                  className="bg-white p-4 rounded flex-1 m-1"
-                >
-                  <Text className="text-center text-red-900 font-bold">
-                    Cancel
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                    handleDelete(data);
-                  }}
-                  className="bg-red-900 p-4 rounded flex-1 m-1"
-                >
-                  <Text className="text-center text-white font-bold">
-                    Delete
-                  </Text>
-                </Pressable>
-              </View>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={[styles.button, styles.cancelButton]}
+              >
+                <Text style={{ fontWeight: "bold", color: "darkred" }}>
+                  Cancel
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  handleDelete(data);
+                }}
+                style={[styles.button, styles.deleteButton]}
+              >
+                <Text style={styles.buttonText}>Delete</Text>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -85,6 +77,49 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  modalContent: {
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    padding: 20,
+    width: "75%",
+  },
+  messageContainer: {
+    marginBottom: 20,
+  },
+  messageText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#fff",
+    marginRight: 10,
+  },
+  deleteButton: {
+    backgroundColor: "#ff0000",
+    marginLeft: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

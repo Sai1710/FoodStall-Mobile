@@ -1,57 +1,60 @@
+import { useState } from "react";
 import {
-  View,
   TextInput,
   Text,
-  Pressable,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
+  View,
+  Pressable,
+  ImageBackground,
+  StatusBar,
   Image,
 } from "react-native";
-import axios from "axios";
 import DEFAULT_URL from "../../config";
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-export default function AdminRegistration({ navigation }) {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
+export default function CustomerLogin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = async () => {
-    if (confirmPassword == password) {
-      try {
-        axios
-          .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
-            admin: {
-              email: email,
-              password: password,
-            },
-            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-          })
-          .then((res) => {
-            console.log(res);
-            navigation.navigate("admin-login");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (error) {
-        console.error("Error logging in:", error);
-      }
-    } else {
-      alert("Passwords don't match");
+  const setAccessToken = async (res) => {
+    await AsyncStorage.setItem("access-token", res.data.customer.access_token);
+  };
+
+  const handleLogin = async () => {
+    try {
+      axios
+        .post(`${DEFAULT_URL}/api/v1/customer/login`, {
+          customer: {
+            email: email,
+            password: password,
+          },
+          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        })
+        .then((res) => {
+          console.log(res);
+
+          if (res.status == 200) {
+            navigation.navigate("home-screen");
+            setAccessToken(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.error("Error logging in:", error);
     }
     setEmail("");
     setPassword("");
-    setConfirmPassword("");
   };
-
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={"#fff"} />
+      <StatusBar backgroundColor={"#FFFFFF"} />
       <View style={styles.card}>
-        <Text style={styles.title}>Admin Registration</Text>
-        <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
+        <Text style={styles.title}>Customer Login</Text>
+        <Text style={styles.subtitle}>What are you craving today?</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -65,15 +68,8 @@ export default function AdminRegistration({ navigation }) {
           value={password}
           placeholder="Password"
         />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Register</Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
@@ -96,9 +92,9 @@ export default function AdminRegistration({ navigation }) {
         </View>
         <TouchableOpacity
           style={styles.signupLink}
-          onPress={() => navigation.navigate("admin-login")}
+          onPress={() => navigation.navigate("customer-registration")}
         >
-          <Text style={styles.signupText}>Login Instead?</Text>
+          <Text style={styles.signupText}>Sign Up Instead?</Text>
         </TouchableOpacity>
       </View>
     </View>

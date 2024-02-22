@@ -45,172 +45,58 @@ export default function AdminLogin({ navigation }) {
         });
     } catch (error) {
       console.error("Error logging in:", error);
-      setEmail("");
-      setPassword("");
     }
+    setEmail("");
+    setPassword("");
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#E5FFEC",
-      }}
-    >
+    <View style={styles.container}>
       <StatusBar backgroundColor={"#FFFFFF"} />
-      <View
-        style={{
-          width: "80%",
-          backgroundColor: "#FFFFFF",
-          padding: 20,
-          borderRadius: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: 10,
-          }}
-        >
-          Admin Login
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "600",
-            textAlign: "center",
-            marginBottom: 10,
-          }}
-        >
+      <View style={styles.card}>
+        <Text style={styles.title}>Admin Login</Text>
+        <Text style={styles.subtitle}>
           Enter your Credentials to access your account
         </Text>
         <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: "#D1D5DB",
-            borderRadius: 5,
-            padding: 10,
-            marginBottom: 10,
-          }}
+          style={styles.input}
           placeholder="Email"
           onChangeText={setEmail}
           value={email}
         />
         <TextInput
           secureTextEntry={true}
-          style={{
-            borderWidth: 1,
-            borderColor: "#D1D5DB",
-            borderRadius: 5,
-            padding: 10,
-            marginBottom: 10,
-          }}
+          style={styles.input}
           onChangeText={setPassword}
           value={password}
           placeholder="Password"
         />
-        <TouchableOpacity
-          style={{ backgroundColor: "#047857", padding: 12, borderRadius: 8 }}
-          onPress={handleLogin}
-        >
-          <Text
-            style={{
-              color: "#FFFFFF",
-              fontSize: 18,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Login
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "#333",
-              height: 1,
-              flex: 1,
-              marginHorizontal: 5,
-            }}
-          />
-          <Text style={{ fontWeight: "600", marginHorizontal: 5 }}>
-            Or Login with
-          </Text>
-          <View
-            style={{
-              backgroundColor: "#333",
-              height: 1,
-              flex: 1,
-              marginHorizontal: 5,
-            }}
-          />
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Or Login with</Text>
+          <View style={styles.dividerLine} />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        >
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#778CA3",
-              padding: 10,
-              borderRadius: 20,
-              marginHorizontal: 5,
-            }}
-          >
+        <View style={styles.socialLogin}>
+          <TouchableOpacity style={styles.socialButton}>
             <Image
               source={require("../../assets/google.png")}
-              style={{ width: 20, height: 20 }}
+              style={styles.socialIcon}
             />
-          </View>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#778CA3",
-              padding: 10,
-              borderRadius: 20,
-              marginHorizontal: 5,
-            }}
-          >
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
             <Image
               source={require("../../assets/apple.png")}
-              style={{ width: 20, height: 20 }}
+              style={styles.socialIcon}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
-          style={{ marginTop: 20 }}
+          style={styles.signupLink}
           onPress={() => navigation.navigate("admin-registration")}
         >
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "bold",
-              color: "#047857",
-              textAlign: "center",
-            }}
-          >
-            Sign Up Instead?
-          </Text>
+          <Text style={styles.signupText}>Sign Up Instead?</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -218,10 +104,93 @@ export default function AdminLogin({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E5FFEC",
+  },
+  card: {
+    width: "80%",
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 10,
+  },
   input: {
-    height: 40,
-    margin: 12,
     borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 5,
     padding: 10,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#047857",
+    padding: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  dividerLine: {
+    backgroundColor: "#333",
+    height: 1,
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  dividerText: {
+    fontWeight: "600",
+    marginHorizontal: 5,
+  },
+  socialLogin: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  socialButton: {
+    borderWidth: 1,
+    borderColor: "#778CA3",
+    padding: 10,
+    borderRadius: 20,
+    marginHorizontal: 5,
+  },
+  socialIcon: {
+    width: 20,
+    height: 20,
+  },
+  signupLink: {
+    marginTop: 20,
+  },
+  signupText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#047857",
+    textAlign: "center",
   },
 });

@@ -3,23 +3,24 @@ import { withExpoSnack } from "nativewind";
 import AdminRegistration from "./screens/Admin/AdminRegistration";
 import { Text, View } from "react-native";
 import { styled } from "nativewind";
-import AdminDashboard from "./screens/Admin/AdminDashboard";
 import StallRequests from "./screens/Admin/StallRequests";
-import CategoryPage from "./screens/CategoryPage";
+import StallsList from "./screens/Customer/StallsList";
 import OrderPage from "./screens/Vendor/OrderPage";
 import EditItem from "./screens/Vendor/EditItem";
 import VendorLogin from "./screens/Vendor/VendorLogin";
 import AdminLogin from "./screens/Admin/AdminLogin";
 import MenuScreen from "./screens/MenuScreen";
-import HomeScreen from "./screens/HomeScreen";
+import CustomerDashboard from "./screens/Customer/CustomerDashboard";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import VendorRegistration from "./screens/Vendor/VendorRegistration";
 import AdminCategories from "./screens/Admin/AdminCategories";
 import VendorOrders from "./screens/Vendor/VendorOrders";
 import VendorMenu from "./screens/Vendor/VendorMenu";
+import CustomerLogin from "./screens/Customer/CustomerLogin";
 import AddItem from "./screens/Vendor/AddItem";
 import HomePage from "./screens/HomePage";
+import CustomerRegistration from "./screens/Customer/CustomerRegistration";
 const StyledView = styled(View);
 const StyledText = styled(Text);
 
@@ -29,13 +30,18 @@ const App = () => {
   return (
     <NavigationContainer>
       <stack.Navigator>
-        <stack.Screen
+        {/* <stack.Screen
           name="home-page"
           component={HomePage}
           options={{ headerShown: false }}
+        /> */}
+        <stack.Screen
+          name="home-screen"
+          component={CustomerDashboard}
+          options={{ headerShown: false }}
         />
-        {/* <stack.Screen name="Home" component={HomeScreen} />
-        <stack.Screen name="List" component={CategoryPage} />
+
+        {/*   <stack.Screen name="List" component={StallsList} />
         <stack.Screen name="menu" component={MenuScreen} /> */}
         <stack.Screen
           name="vendor-login"
@@ -59,6 +65,17 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <stack.Screen
+          name="customer-login"
+          component={CustomerLogin}
+          options={{ headerShown: false }}
+        />
+        <stack.Screen
+          name="customer-registration"
+          component={CustomerRegistration}
+          options={{ headerShown: false }}
+        />
+
+        <stack.Screen
           name="vendor-menu"
           component={VendorMenu}
           options={{ headerShown: false }}
@@ -76,12 +93,6 @@ const App = () => {
         <stack.Screen
           name="edit-item"
           component={EditItem}
-          options={{ headerShown: false }}
-        />
-
-        <stack.Screen
-          name="admin-dashboard"
-          component={AdminDashboard}
           options={{ headerShown: false }}
         />
 

@@ -8,7 +8,7 @@ import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 
 const HomePage = ({ navigation }) => {
   const handleCustomerLogin = () => {
-    console.log("Customer Logged in");
+    navigation.navigate("customer-login");
   };
 
   const handleVendorLogin = () => {

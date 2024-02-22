@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
-import DashboardCard from "../../components/DashboardCard";
 import OrderCard from "../../components/OrderCard";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";

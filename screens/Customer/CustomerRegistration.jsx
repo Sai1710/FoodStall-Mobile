@@ -12,17 +12,19 @@ import axios from "axios";
 import DEFAULT_URL from "../../config";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-export default function AdminRegistration({ navigation }) {
+export default function CustomerRegistration({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async () => {
     if (confirmPassword == password) {
       try {
         axios
-          .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
-            admin: {
+          .post(`${DEFAULT_URL}/api/v1/customer/sign_up`, {
+            customer: {
+              name: name,
               email: email,
               password: password,
             },
@@ -30,7 +32,7 @@ export default function AdminRegistration({ navigation }) {
           })
           .then((res) => {
             console.log(res);
-            navigation.navigate("admin-login");
+            navigation.navigate("customer-login");
           })
           .catch((err) => {
             console.log(err);
@@ -50,8 +52,14 @@ export default function AdminRegistration({ navigation }) {
     <View style={styles.container}>
       <StatusBar backgroundColor={"#fff"} />
       <View style={styles.card}>
-        <Text style={styles.title}>Admin Registration</Text>
+        <Text style={styles.title}>Customer Registration</Text>
         <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          onChangeText={setName}
+          value={name}
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -96,7 +104,7 @@ export default function AdminRegistration({ navigation }) {
         </View>
         <TouchableOpacity
           style={styles.signupLink}
-          onPress={() => navigation.navigate("admin-login")}
+          onPress={() => navigation.navigate("customer-login")}
         >
           <Text style={styles.signupText}>Login Instead?</Text>
         </TouchableOpacity>

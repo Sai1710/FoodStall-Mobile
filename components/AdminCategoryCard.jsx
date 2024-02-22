@@ -17,24 +17,16 @@ export default function AdminCategoryCard({
 }) {
   return (
     <>
-      <View className="flex-row align-middle justify-between my-2 mx-4 bg-white rounded-lg p-3">
-        <View style={{ flex: 1 }}>
+      <View className="flex-row align-middle my-2 mx-4 bg-white rounded-lg p-3 justify-between">
+        <View>
           <Text
             className="m-auto p-2 font-extrabold"
             style={{ color: "rgb(20,83,45)" }}
           >
-            {data.id}
+            {data.name.toUpperCase()}
           </Text>
         </View>
-        <View style={{ flex: 4 }}>
-          <Text
-            className="m-auto p-2 font-extrabold"
-            style={{ color: "rgb(20,83,45)" }}
-          >
-            {data.name}
-          </Text>
-        </View>
-        <View style={{ flex: 2 }}>
+        <View>
           <Pressable
             className="bg-red-600 m-auto rounded-lg p-2"
             onPress={() => {

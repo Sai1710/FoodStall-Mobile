@@ -1,33 +1,54 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-export default function Navbar() {
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import Menu from "./Menu";
+import { useNavigation } from "@react-navigation/native";
+
+export default function Navbar({ options, activeOption }) {
   const [menuVisibles, setMenuVisible] = useState(false);
+  const navigation = useNavigation();
+
   return (
     <>
       <View
         style={[
           styles.navbar,
-          { flexDirection: "row", backgroundColor: "#047857" },
+          { flexDirection: "row", backgroundColor: "#047857", marginBottom: 0 },
         ]}
       >
-        <View style={styles.logoContainer}>
+        <TouchableOpacity
+          style={styles.logoContainer}
+          onPress={() => {
+            navigation.navigate("home-page");
+          }}
+        >
           <Text style={{ color: "white", fontWeight: "900", fontSize: 24 }}>
             FoodM
           </Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.menuContainer}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
-              setMenuVisible(true);
+              setMenuVisible((prev) => !prev);
             }}
           >
             <Text style={{ color: "white", fontWeight: "900", fontSize: 16 }}>
-              <FontAwesome name="navicon" size={20} color="#fff" />
+              {!menuVisibles ? (
+                <FontAwesome name="navicon" size={20} color="#fff" />
+              ) : (
+                <AntDesign name="close" size={20} color="#fff" />
+              )}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
-      {menuVisibles && <Menu />}
+      {menuVisibles && <Menu options={options} activeOption={activeOption} />}
     </>
   );
 }
@@ -48,6 +69,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   menuContainer: {
-    margin: 10,
+    marginRight: 25,
   },
 });

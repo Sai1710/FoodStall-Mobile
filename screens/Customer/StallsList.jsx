@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
-import StallCard from "../components/StallCard";
-import { dummyStalls } from "../data/dummy-data";
+import StallCard from "../../components/StallCard";
+import { dummyStalls } from "../../data/dummy-data";
 
 function renderCategoryItem(itemData) {
   return <StallCard title={itemData.item.title} link={itemData.item.link} />;
 }
 
-function CategoryPage() {
+function StallsList() {
   return (
     <View>
       <View style={styles.stallHeading}>
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryPage;
+export default StallsList;

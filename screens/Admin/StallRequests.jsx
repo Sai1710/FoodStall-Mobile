@@ -21,6 +21,12 @@ export default function StallRequests() {
   const [requestCategory, setRequestCategory] = useState("pending");
   const [modalVisible, setModalVisible] = useState(false);
 
+  const options = [
+    { Name: "Stall Requests", page: "stall-requests" },
+    { Name: "Categories", page: "admin-categories" },
+  ];
+
+  const [menuVisible, setMenuVisible] = useState(false);
   const [displayedRequests, setDisplayedRequests] = useState([]);
 
   function categorizeRequests(category) {
@@ -35,7 +41,6 @@ export default function StallRequests() {
     console.log(itemData.item);
     return <RequestCard data={itemData.item} />;
   }
-  function handlePress() {}
   const fetchRequests = async () => {
     const token = await AsyncStorage.getItem("access-token");
     try {
@@ -68,7 +73,12 @@ export default function StallRequests() {
   return (
     <View style={{ flex: 1, backgroundColor: "#EDF7ED", marginTop: 48 }}>
       <StatusBar backgroundColor="#fff" />
-      <Navbar />
+      <Navbar
+        options={options}
+        activeOption="Stall Requests"
+        menuVisible={menuVisible}
+        setMenuVisible={setMenuVisible}
+      />
       <View style={styles.titleContainer}>
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "#14532D" }}>
           Requests
