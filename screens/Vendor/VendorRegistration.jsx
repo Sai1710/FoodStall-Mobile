@@ -24,7 +24,7 @@ import ModalDropdown from "react-native-modal-dropdown";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function VendorRegistration() {
+export default function VendorRegistration({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -85,6 +85,7 @@ export default function VendorRegistration() {
         )
         .then((res) => {
           console.log(res);
+          navigation.navigate("vendor-login");
         })
         .catch((err) => {
           console.error("Error in Axios request:", err.message);
@@ -254,7 +255,12 @@ export default function VendorRegistration() {
               Register
             </Text>
           </TouchableOpacity>
-          <Pressable className="mt-10 mb-4">
+          <Pressable
+            className="mt-10 mb-4"
+            onPress={() => {
+              navigation.navigate("vendor-login");
+            }}
+          >
             <Text
               style={{
                 textAlign: "center",

@@ -65,110 +65,168 @@ export default function VendorLogin({ navigation }) {
   }
 
   return (
-    <View className="flex-1 justify-center items-center bg-green-100">
-      {/* <ImageBackground */}
-      {/* source={require("../../assets/VendorLoginBack.png")}
-      style=
-      {{
+    <View
+      style={{
         flex: 1,
-        resizeMode: "cover",
         justifyContent: "center",
         alignItems: "center",
-        width: 450,
-      }} 
-      blurRadius={5}>*/}
-      <View className="w-4/5 bg-white p-5 rounded-lg shadow-md">
-        <Text className="text-2xl font-bold text-center mb-5">
+        backgroundColor: "#E5FFEC",
+      }}
+    >
+      <View
+        style={{
+          width: "80%",
+          backgroundColor: "#FFFFFF",
+          padding: 20,
+          borderRadius: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            textAlign: "center",
+            marginBottom: 10,
+          }}
+        >
           Welcome Back!
         </Text>
-        <Text className="text-sm font-semibold text-center mb-5">
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "600",
+            textAlign: "center",
+            marginBottom: 10,
+          }}
+        >
           Enter your Credentials
         </Text>
         <TextInput
-          className="border-gray-300 p-3 mb-4 rounded-lg"
-          style={{ borderWidth: 1 }}
+          style={{
+            borderWidth: 1,
+            borderColor: "#D1D5DB",
+            borderRadius: 5,
+            padding: 10,
+            marginBottom: 10,
+          }}
           placeholder="Email"
           onChangeText={setEmail}
           value={email}
         />
         <TextInput
-          className="border-gray-300 p-3 mb-6 rounded-lg"
-          style={{ borderWidth: 1 }}
+          style={{
+            borderWidth: 1,
+            borderColor: "#D1D5DB",
+            borderRadius: 5,
+            padding: 10,
+            marginBottom: 20,
+          }}
           placeholder="Password"
           secureTextEntry
           onChangeText={setPassword}
           value={password}
         />
         <TouchableOpacity
-          className="bg-green-900 py-3 rounded-lg"
+          style={{ backgroundColor: "#047857", padding: 12, borderRadius: 8 }}
           onPress={handleSubmit}
         >
-          <Text className="text-white text-center text-lg font-semibold">
+          <Text
+            style={{
+              color: "#FFFFFF",
+              fontSize: 18,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
             Login
           </Text>
         </TouchableOpacity>
-        <View className="flex-row items-center justify-center mt-5">
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        >
           <View
             style={{
               backgroundColor: "#333",
               height: 1,
               flex: 1,
+              marginHorizontal: 5,
             }}
-            className="m-2"
-          ></View>
-          <Text className="mb-3 font-semibold">Or Login with</Text>
+          />
+          <Text style={{ fontWeight: "600", marginHorizontal: 5 }}>
+            Or Login with
+          </Text>
           <View
-            style={{ backgroundColor: "#333", height: 1, flex: 1 }}
-            className="m-2"
-          ></View>
+            style={{
+              backgroundColor: "#333",
+              height: 1,
+              flex: 1,
+              marginHorizontal: 5,
+            }}
+          />
         </View>
-
-        <View className="flex-row justify-center items-center mt-10 gap-7">
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        >
           <View
-            className="flex border-solid border-slate-400 p-3 hover:cursor-pointer rounded-full"
             style={{
               borderWidth: 1,
-              flexDirection: "row",
-              alignItems: "center",
+              borderColor: "#778CA3",
+              padding: 10,
+              borderRadius: 20,
+              marginHorizontal: 5,
             }}
           >
-            <View className="mr-1 ">
-              <Image
-                source={require("../../assets/google.png")}
-                style={{ height: 16, width: 16 }}
-              />
-            </View>
+            <Image
+              source={require("../../assets/google.png")}
+              style={{ width: 20, height: 20 }}
+            />
           </View>
           <View
-            className="flex border-solid border-slate-400 p-3  hover:cursor-pointer rounded-full"
             style={{
               borderWidth: 1,
-              flexDirection: "row",
-              alignItems: "center",
+              borderColor: "#778CA3",
+              padding: 10,
+              borderRadius: 20,
+              marginHorizontal: 5,
             }}
           >
-            <View className="mr-1">
-              <Image
-                source={require("../../assets/apple.png")}
-                style={{ width: 16, height: 16 }}
-              />
-            </View>
+            <Image
+              source={require("../../assets/apple.png")}
+              style={{ width: 20, height: 20 }}
+            />
           </View>
         </View>
-        <Pressable className="mt-10 mb-4">
+        <TouchableOpacity
+          style={{ marginTop: 20 }}
+          onPress={() => navigation.navigate("vendor-registration")}
+        >
           <Text
             style={{
-              textAlign: "center",
+              fontSize: 18,
               fontWeight: "bold",
-              color: "#14532d",
-              fontSize: 19,
+              color: "#047857",
+              textAlign: "center",
             }}
           >
-            SignUp Instead?
+            Sign Up Instead?
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
-      {/* </ImageBackground> */}
     </View>
   );
 }

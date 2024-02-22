@@ -72,118 +72,85 @@ const RequestModal = ({
         }}
       >
         <Pressable
-          className="flex-1
-            justify-center
-            items-center
-            bg-black
-            opacity-75
-          "
+          style={styles.modalOverlay}
           onPress={() => {
             setModalVisible(false);
           }}
         >
-          <View className="bg-white rounded-lg p-8 m-4 w-3/4">
+          <View style={styles.modalContent}>
             <View>
-              <Text
-                className="text-center text-2xl font-bold mb-4"
-                style={{ color: "rgb(20,83,45)" }}
-              >
-                Stall Request
+              <Text style={styles.modalTitle}>Stall Request</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Email:</Text>
+              <Text style={styles.infoValue}>{data.email}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Name:</Text>
+              <Text style={styles.infoValue}>
+                {data.first_name + " " + data.last_name}
               </Text>
             </View>
-            <View className="flex-row align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Email:
-              </Text>
-              <Text className="font-bold">{data.email}</Text>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Phone:</Text>
+              <Text style={styles.infoValue}>{data.phone_number}</Text>
             </View>
-            <View className="flex-row align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Name:
-              </Text>
-              <Text className="font-bold">
-                {data.first_name + " "}
-                {data.last_name}
-              </Text>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Status:</Text>
+              <Text style={styles.infoValue}>{data.status}</Text>
             </View>
-            <View className="flex-row align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Phone:
-              </Text>
-              <Text className="font-bold">{data.phone_number}</Text>
-            </View>
-            <View className="flex-row align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Status:
-              </Text>
-              <Text className="font-bold">{data.status}</Text>
-            </View>
-            <View className="flex-row align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Franchise:
-              </Text>
-              <Text className="font-bold">
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Franchise:</Text>
+              <Text style={styles.infoValue}>
                 {data.franchise ? "True" : "False"}
               </Text>
             </View>
             {data.franchise && (
-              <View className="flex align-middle justify-between m-2">
-                <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                  Franchise Details:
-                </Text>
-                <Text className="font-bold">{data.franchise_details}</Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Franchise Details:</Text>
+                <Text style={styles.infoValue}>{data.franchise_details}</Text>
               </View>
             )}
-
-            <View className="flex align-middle justify-between m-2">
-              <Text className="font-bold" style={{ color: "rgb(20,83,45)" }}>
-                Categories:
-              </Text>
-              <View className="flex-col">
+            <View style={(styles.infoRow, { flexDirection: "column" })}>
+              <Text style={styles.infoLabel}>Categories:</Text>
+              <View style={styles.categoriesContainer}>
                 {data.type_of_categories.map((item) => {
                   return (
-                    <Text key={item} className="mr-1 font-bold">
+                    <Text key={item} style={styles.categoryItem}>
                       {item}
                     </Text>
                   );
                 })}
               </View>
             </View>
-
             <View>
               {data.status == "pending" ? (
-                <View className="flex-row align-middle justify-center">
+                <View style={styles.buttonContainer}>
                   <Pressable
                     onPress={() => {
                       setModalVisible(!modalVisible);
                       handleApprove(data.id);
                     }}
-                    className="bg-green-900 p-4 rounded flex-1 m-1"
+                    style={[styles.actionButton, styles.acceptButton]}
                   >
-                    <Text className="text-center text-white font-bold">
-                      Accept
-                    </Text>
+                    <Text style={styles.buttonText}>Accept</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => {
                       setModalVisible(!modalVisible);
                       handleReject(data.id);
                     }}
-                    className="bg-red-900 p-4 rounded flex-1 m-1"
+                    style={[styles.actionButton, styles.rejectButton]}
                   >
-                    <Text className="text-center text-white font-bold">
-                      Reject
-                    </Text>
+                    <Text style={styles.buttonText}>Reject</Text>
                   </Pressable>
                 </View>
               ) : (
                 <Pressable
                   onPress={() => setModalVisible(!modalVisible)}
-                  className="bg-red-900 p-4 rounded flex-1 m-1"
+                  style={[styles.actionButton, styles.closeButton]}
                 >
-                  <Text className="text-center text-white font-bold">
-                    Close
-                  </Text>
+                  <Text style={styles.buttonText}>Close</Text>
                 </Pressable>
               )}
             </View>
@@ -200,6 +167,73 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  container: {
+    flex: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    padding: 20,
+    margin: 20,
+    width: "90%",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#14532d",
+    textAlign: "center",
+  },
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  infoLabel: {
+    fontWeight: "bold",
+    color: "#14532d",
+  },
+  infoValue: {
+    fontWeight: "bold",
+  },
+  categoriesContainer: {
+    flexDirection: "column",
+    flexWrap: "wrap",
+  },
+  categoryItem: {
+    marginRight: 5,
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  actionButton: {
+    padding: 10,
+    borderRadius: 5,
+    margin: 5,
+  },
+  acceptButton: {
+    backgroundColor: "#047857",
+  },
+  rejectButton: {
+    backgroundColor: "#FF0000",
+  },
+  closeButton: {
+    backgroundColor: "#FF0000",
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

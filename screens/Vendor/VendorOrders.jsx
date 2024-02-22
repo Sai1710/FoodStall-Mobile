@@ -6,9 +6,6 @@ import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 
 const VendorOrders = ({ navigation }) => {
-  function handlePress(page) {
-    navigation.navigate(page);
-  }
   const customersData = [
     {
       name: "John Doe",
@@ -101,9 +98,9 @@ const VendorOrders = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={{ backgroundColor: "#E5FFEC", flex: 1, marginTop: 30 }}>
+    <View style={{ backgroundColor: "#E5FFEC", flex: 1, marginTop: 48 }}>
       <StatusBar backgroundColor="#fff" />
-      <View style={{ flex: 1, padding: 16, marginTop: 32 }}>
+      <View style={{ padding: 16, marginTop: 32 }}>
         <View
           style={{ flexDirection: "column", justifyContent: "space-between" }}
         >
@@ -184,13 +181,13 @@ const VendorOrders = ({ navigation }) => {
               </Text>
             </Pressable>
           </View>
-          <ScrollView style={{ marginTop: 16 }}>
-            {displayedOrders.map((item) => {
-              return <OrderCard data={item} />;
-            })}
-          </ScrollView>
         </View>
       </View>
+      <ScrollView>
+        {displayedOrders.map((item) => {
+          return <OrderCard key={item.date_time} data={item} />;
+        })}
+      </ScrollView>
     </View>
   );
 };

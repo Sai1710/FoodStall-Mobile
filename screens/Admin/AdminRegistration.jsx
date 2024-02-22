@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
@@ -98,8 +99,87 @@ export default function AdminRegistration({ navigation }) {
             Register
           </Text>
         </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#333",
+              height: 1,
+              flex: 1,
+              marginHorizontal: 5,
+            }}
+          />
+          <Text style={{ fontWeight: "600", marginHorizontal: 5 }}>
+            Or Login with
+          </Text>
+          <View
+            style={{
+              backgroundColor: "#333",
+              height: 1,
+              flex: 1,
+              marginHorizontal: 5,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: "#778CA3",
+              padding: 10,
+              borderRadius: 20,
+              marginHorizontal: 5,
+            }}
+          >
+            <Image
+              source={require("../../assets/google.png")}
+              style={{ width: 20, height: 20 }}
+            />
+          </View>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: "#778CA3",
+              padding: 10,
+              borderRadius: 20,
+              marginHorizontal: 5,
+            }}
+          >
+            <Image
+              source={require("../../assets/apple.png")}
+              style={{ width: 20, height: 20 }}
+            />
+          </View>
+        </View>
+        <TouchableOpacity
+          style={{ marginTop: 20 }}
+          onPress={() => navigation.navigate("admin-login")}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: "#047857",
+              textAlign: "center",
+            }}
+          >
+            Login Instead?
+          </Text>
+        </TouchableOpacity>
       </View>
-      {/* </ImageBackground> */}
     </View>
   );
 }
