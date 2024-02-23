@@ -9,7 +9,7 @@ import OrderPage from "./screens/Vendor/OrderPage";
 import EditItem from "./screens/Vendor/EditItem";
 import VendorLogin from "./screens/Vendor/VendorLogin";
 import AdminLogin from "./screens/Admin/AdminLogin";
-import MenuScreen from "./screens/MenuScreen";
+import StallMenu from "./screens/Customer/StallMenu";
 import CustomerDashboard from "./screens/Customer/CustomerDashboard";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -30,19 +30,32 @@ const App = () => {
   return (
     <NavigationContainer>
       <stack.Navigator>
-        {/* <stack.Screen
+        <stack.Screen
           name="home-page"
           component={HomePage}
           options={{ headerShown: false }}
-        /> */}
+        />
+        <stack.Screen
+          name="customer-login"
+          component={CustomerLogin}
+          options={{ headerShown: false }}
+        />
         <stack.Screen
           name="home-screen"
           component={CustomerDashboard}
           options={{ headerShown: false }}
         />
 
-        {/*   <stack.Screen name="List" component={StallsList} />
-        <stack.Screen name="menu" component={MenuScreen} /> */}
+        <stack.Screen
+          name="List"
+          component={StallsList}
+          options={{ headerShown: false }}
+        />
+        <stack.Screen
+          name="menu"
+          component={StallMenu}
+          options={{ headerShown: false }}
+        />
         <stack.Screen
           name="vendor-login"
           component={VendorLogin}
@@ -64,11 +77,7 @@ const App = () => {
           component={AdminRegistration}
           options={{ headerShown: false }}
         />
-        <stack.Screen
-          name="customer-login"
-          component={CustomerLogin}
-          options={{ headerShown: false }}
-        />
+
         <stack.Screen
           name="customer-registration"
           component={CustomerRegistration}

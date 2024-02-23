@@ -1,15 +1,24 @@
 import { Pressable, View, Text, StyleSheet, Image } from "react-native";
 
-export default function StallCard({ title, link }) {
+import { useNavigation } from "@react-navigation/native";
+
+export default function StallCard({ data, categoryId }) {
+  const link = "https://www.happyeater.com/images/default-food-image.jpg";
+  const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.navigate("menu", { vendor: data, categoryId: categoryId });
+  };
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Pressable onPress={handlePress}>
         <View style={styles.innerContainer}>
           <View style={styles.imgContainer}>
             <Image source={{ uri: link }} style={styles.image} />
           </View>
           <View style={styles.titleContainer}>
-            <Text style={{ color: "white", fontWeight: "700" }}>{title}</Text>
+            <Text style={{ color: "white", fontWeight: "700" }}>
+              {data.first_name}
+            </Text>
           </View>
           <View style={styles.categoryTextContainer}>
             <Text style={styles.categoryText}>Explore</Text>

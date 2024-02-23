@@ -36,7 +36,7 @@ export default function CustomerLogin({ navigation }) {
           console.log(res);
 
           if (res.status == 200) {
-            navigation.navigate("home-screen");
+            navigation.navigate("home-screen", { data: res.data.customer });
             setAccessToken(res);
           }
         })

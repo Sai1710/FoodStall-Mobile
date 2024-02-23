@@ -12,9 +12,13 @@ import {
   TextInput,
 } from "react-native";
 import axios from "axios";
+import CustomerNavbar from "../../components/CustomerNavbar";
+import Loading from "../../components/Loading";
 
-function CustomerDashboard({ navigation }) {
+function CustomerDashboard({ route, navigation }) {
   const [categoryData, setCategoryData] = useState([]);
+  // const { data } = route.params;
+  // console.log(data);
   const [displayedCategories, setDisplayedCategories] = useState([]);
 
   const handleSearch = (searchText) => {
@@ -50,7 +54,10 @@ function CustomerDashboard({ navigation }) {
       <CategoryCard
         data={itemData.item}
         onPress={() => {
-          console.log(item);
+          navigation.navigate("List", {
+            data: itemData.item.vendors,
+            id: itemData.item.id,
+          });
         }}
       />
     );
@@ -58,12 +65,16 @@ function CustomerDashboard({ navigation }) {
   useState(() => {
     fetchCategories();
   });
+  // let index = data.name.indexOf(" ");
+  // let name = data.name.substring(0, index + 1);
+  let name = "Saikiriti";
 
   return (
     <View style={styles.container}>
+      <CustomerNavbar />
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>
-          What would you like to eat today?
+          What are you craving today, {name}?
         </Text>
       </View>
       <View style={styles.seaarchContainer}>
@@ -75,13 +86,15 @@ function CustomerDashboard({ navigation }) {
           }}
         />
       </View>
-      {displayedCategories && (
+      {displayedCategories ? (
         <FlatList
           data={displayedCategories}
           keyExtractor={(item) => item.id}
           renderItem={renderCategoryItem}
           numColumns={2}
         />
+      ) : (
+        <Loading />
       )}
     </View>
   );
@@ -94,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headingContainer: {
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 20,
   },
   headingText: {
