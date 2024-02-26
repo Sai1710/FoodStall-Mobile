@@ -27,7 +27,7 @@ const HomePage = ({ navigation }) => {
       }}
     >
       <StatusBar backgroundColor="#fff" />
-      <ImageBackground
+      <View
         source={require("../assets/VendorRegistrationBack.png")}
         style={{
           flex: 1,
@@ -42,7 +42,7 @@ const HomePage = ({ navigation }) => {
             style={{
               fontSize: 48,
               fontWeight: "bold",
-              color: "#fff",
+              color: "#000",
               textAlign: "center",
             }}
           >
@@ -144,7 +144,7 @@ const HomePage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 };

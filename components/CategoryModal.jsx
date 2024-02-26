@@ -10,7 +10,12 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";
-import Container, { Toast } from "toastify-react-native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 import axios from "axios";
 
@@ -41,7 +46,12 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
         if (res.status === 201) {
           setAddModalVisible(!addModalVisible);
           fetchData();
-          Toast.success("Category created successfully");
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Category Successfuly Added",
+            button: "Close",
+          });
         }
       })
       .catch((err) => {
@@ -52,8 +62,6 @@ const CategoryModal = ({ addModalVisible, setAddModalVisible, fetchData }) => {
 
   return (
     <>
-      <Container position="top" />
-
       <View style={styles.container}>
         <Modal
           animationType="slide"

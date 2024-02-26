@@ -3,6 +3,12 @@ import { View, Text, Button, Modal, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";
 import axios from "axios";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 const RequestModal = ({
   modalVisible,
@@ -27,6 +33,12 @@ const RequestModal = ({
         .then((res) => {
           console.log("Request approved successfully:", res.data);
           fetchRequests();
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Vendor Approved",
+            button: "Close",
+          });
         })
         .catch((err) => {
           console.log(err.message);

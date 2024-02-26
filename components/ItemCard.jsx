@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import ItemModal from "./ItemModal";
+import ItemDetailsModal from "./ItemsDetailsModal";
 
 export default function ItemCard({ data, fetchMenu, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);

@@ -13,6 +13,7 @@ import {
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Container, { Toast } from "toastify-react-native";
 
 export default function AdminLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -36,6 +37,7 @@ export default function AdminLogin({ navigation }) {
           console.log(res);
 
           if (res.status == 200) {
+            Toast.success("Log in successfull");
             navigation.navigate("stall-requests");
             setAccessToken(res);
           }
@@ -52,6 +54,7 @@ export default function AdminLogin({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#FFFFFF"} />
+      <Container position="top" />
       <View style={styles.card}>
         <Text style={styles.title}>Admin Login</Text>
         <Text style={styles.subtitle}>

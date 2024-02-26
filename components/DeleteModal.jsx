@@ -3,6 +3,12 @@ import { View, Text, Button, Modal, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";
 import axios from "axios";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 const DeleteModal = ({ modalVisible, setModalVisible, data, fetchData }) => {
   const handleDelete = async (id) => {
@@ -17,6 +23,12 @@ const DeleteModal = ({ modalVisible, setModalVisible, data, fetchData }) => {
         })
         .then((res) => {
           fetchData();
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Category Deleted",
+            button: "Close",
+          });
         })
         .catch((error) => {
           console.error("Error deleting category:", error);
@@ -27,47 +39,49 @@ const DeleteModal = ({ modalVisible, setModalVisible, data, fetchData }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.messageContainer}>
-              <Text style={styles.messageText}>
-                Are you sure you want to delete ?
-              </Text>
-            </View>
-            <View style={styles.buttonContainer}>
-              <Pressable
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-                style={[styles.button, styles.cancelButton]}
-              >
-                <Text style={{ fontWeight: "bold", color: "darkred" }}>
-                  Cancel
+    <AlertNotificationRoot>
+      <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.messageContainer}>
+                <Text style={styles.messageText}>
+                  Are you sure you want to delete ?
                 </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  handleDelete(data);
-                }}
-                style={[styles.button, styles.deleteButton]}
-              >
-                <Text style={styles.buttonText}>Delete</Text>
-              </Pressable>
+              </View>
+              <View style={styles.buttonContainer}>
+                <Pressable
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                  style={[styles.button, styles.cancelButton]}
+                >
+                  <Text style={{ fontWeight: "bold", color: "darkred" }}>
+                    Cancel
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    handleDelete(data);
+                  }}
+                  style={[styles.button, styles.deleteButton]}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </AlertNotificationRoot>
   );
 };
 

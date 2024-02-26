@@ -8,18 +8,31 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import { useState } from "react";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
+import Navbar from "../../components/Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Toast } from "toastify-react-native";
 
 export default function VendorLogin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().label("Name").required(),
+    email: Yup.string().label("Email").email().required(),
+  });
 
   const setAccessToken = async (res) => {
     await AsyncStorage.setItem("access-token", res.data.vendor.access_token);
   };
+
+  const options = [
+    { Name: "Vendor Orders", page: "vendor-orders" },
+    { Name: "Vendor Menu", page: "vendor-menu" },
+  ];
 
   async function handleSubmit() {
     const token = await AsyncStorage.getItem("access-token");
@@ -54,6 +67,7 @@ export default function VendorLogin({ navigation }) {
             console.log(res);
             navigation.navigate("vendor-menu");
             setAccessToken(res);
+            Toast;
           }
         })
         .catch((err) => {
@@ -106,6 +120,7 @@ export default function VendorLogin({ navigation }) {
         >
           Enter your Credentials
         </Text>
+
         <TextInput
           style={{
             borderWidth: 1,
@@ -237,5 +252,9 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
 });

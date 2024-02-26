@@ -1,5 +1,3 @@
-// import SelectBox from "react-native-multi-selectbox";
-
 import {
   View,
   Text,
@@ -15,6 +13,12 @@ import {
   VirtualizedList,
   FlatList,
 } from "react-native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -117,7 +121,14 @@ export default function AddItem({ navigation }) {
         )
         .then((res) => {
           console.log("Item added successfully");
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Item Addded",
+            button: "Close",
+          });
           navigation.navigate("vendor-menu");
+
           console.log(res);
         });
     } catch (error) {

@@ -15,6 +15,7 @@ import AdminCategoryCard from "../../components/AdminCategoryCard";
 import DeleteModal from "../../components/DeleteModal";
 import CategoryModal from "../../components/CategoryModal";
 import Navbar from "../../components/Navbar";
+import Loading from "../../components/Loading";
 
 export default function AdminCategories() {
   const [categoryData, setCategoryData] = useState([]);
@@ -92,18 +93,22 @@ export default function AdminCategories() {
             addModalVisible={addModalVisible}
             fetchData={fetchData}
           />
-          {categoryData.map((item) => (
-            <AdminCategoryCard
-              data={item}
-              key={item.id}
-              modalVisible={modalVisible}
-              setModalVisible={setModalVisible}
-              addModalVisible={addModalVisible}
-              setAddModalVisible={setAddModalVisible}
-              fetchData={fetchData}
-              setSelectedCategory={setSelectedCategory}
-            />
-          ))}
+          {categoryData ? (
+            categoryData.map((item) => (
+              <AdminCategoryCard
+                data={item}
+                key={item.id}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                addModalVisible={addModalVisible}
+                setAddModalVisible={setAddModalVisible}
+                fetchData={fetchData}
+                setSelectedCategory={setSelectedCategory}
+              />
+            ))
+          ) : (
+            <Loading />
+          )}
         </ScrollView>
       </View>
     </>

@@ -1,4 +1,4 @@
 const DEFAULT_URL =
-  "https://2c31-2401-4900-1f3f-c980-b082-f55c-f2b0-e5f4.ngrok-free.app/";
+  "https://e706-2401-4900-1f3f-b4c5-57c9-63cd-70a4-d0c8.ngrok-free.app/";
 
 export default DEFAULT_URL;

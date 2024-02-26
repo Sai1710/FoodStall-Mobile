@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import OrderCard from "../../components/OrderCard";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import Navbar from "../../components/Navbar";
 
 const VendorOrders = ({ navigation }) => {
   const customersData = [
@@ -83,6 +84,10 @@ const VendorOrders = ({ navigation }) => {
     },
     // Add more customers as needed
   ];
+  const options = [
+    { Name: "Vendor Menu", page: "vendor-menu" },
+    { Name: "Vendor Orders", page: "vendor-orders" },
+  ];
   const [requestCategory, setRequestCategory] = useState("pending");
   const [displayedOrders, setDisplayedOrders] = useState([]);
 
@@ -98,6 +103,8 @@ const VendorOrders = ({ navigation }) => {
 
   return (
     <View style={{ backgroundColor: "#E5FFEC", flex: 1, marginTop: 48 }}>
+      <Navbar options={options} activeOption="Vendor Orders" />
+
       <StatusBar backgroundColor="#fff" />
       <View style={{ padding: 16, marginTop: 32 }}>
         <View

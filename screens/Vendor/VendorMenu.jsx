@@ -5,11 +5,16 @@ import axios from "axios";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
+import Navbar from "../../components/Navbar";
 
 const VendorMenu = ({ navigation }) => {
   const [requestCategory, setRequestCategory] = useState("pending");
   const [menu, setMenu] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const options = [
+    { Name: "Vendor Menu", page: "vendor-menu" },
+    { Name: "Vendor Orders", page: "vendor-orders" },
+  ];
 
   const fetchMenu = async () => {
     const token = await AsyncStorage.getItem("access-token");
@@ -38,6 +43,7 @@ const VendorMenu = ({ navigation }) => {
   }, []);
   return (
     <View style={{ backgroundColor: "#E6FFEC", flex: 1, marginTop: 48 }}>
+      <Navbar options={options} activeOption="Vendor Menu" />
       <StatusBar backgroundColor="white" />
       <View style={{ flex: 1, padding: 16, marginTop: 8 }}>
         <View
