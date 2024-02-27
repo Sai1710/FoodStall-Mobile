@@ -10,10 +10,13 @@ import {
   StatusBar,
   Image,
 } from "react-native";
+import { Formik } from "formik";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Container, { Toast } from "toastify-react-native";
+import validationSchema from "../../Schemas/ValidationSchema";
+import { AdminLoginValidationSchema } from "../../Schemas/ValidationSchema";
 
 export default function AdminLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -23,13 +26,13 @@ export default function AdminLogin({ navigation }) {
     await AsyncStorage.setItem("access-token", res.data.admin.access_token);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (values) => {
     try {
       axios
         .post(`${DEFAULT_URL}/api/v1/admin/login`, {
           admin: {
-            email: email,
-            password: password,
+            email: values.email,
+            password: values.password,
           },
           client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
         })
@@ -60,22 +63,48 @@ export default function AdminLogin({ navigation }) {
         <Text style={styles.subtitle}>
           Enter your Credentials to access your account
         </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={validationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                secureTextEntry
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>Or Login with</Text>
@@ -123,6 +152,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
   title: {
     fontSize: 24,

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import validationSchema from "../../Schemas/ValidationSchema";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
@@ -20,10 +21,6 @@ import { Toast } from "toastify-react-native";
 export default function VendorLogin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().label("Name").required(),
-    email: Yup.string().label("Email").email().required(),
-  });
 
   const setAccessToken = async (res) => {
     await AsyncStorage.setItem("access-token", res.data.vendor.access_token);
@@ -34,40 +31,22 @@ export default function VendorLogin({ navigation }) {
     { Name: "Vendor Menu", page: "vendor-menu" },
   ];
 
-  async function handleSubmit() {
+  async function handleLogin(values) {
     const token = await AsyncStorage.getItem("access-token");
     try {
-      const formData = new FormData();
-      formData.append("vendor[email]", email);
-      formData.append("vendor[password]", password);
-      formData.append(
-        "client_id",
-        "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI"
-      );
-
       axios
-        .post(
-          `${DEFAULT_URL}/api/v1/vendor/login`,
-          {
-            vendor: {
-              email: email,
-              password: password,
-            },
-            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        .post(`${DEFAULT_URL}/api/v1/vendor/login`, {
+          vendor: {
+            email: values.email,
+            password: values.password,
           },
-
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        )
+          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        })
         .then((res) => {
           if (res.status == 200) {
             console.log(res);
             navigation.navigate("vendor-menu");
             setAccessToken(res);
-            Toast;
           }
         })
         .catch((err) => {
@@ -120,47 +99,48 @@ export default function VendorLogin({ navigation }) {
         >
           Enter your Credentials
         </Text>
-
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: "#D1D5DB",
-            borderRadius: 5,
-            padding: 10,
-            marginBottom: 10,
-          }}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: "#D1D5DB",
-            borderRadius: 5,
-            padding: 10,
-            marginBottom: 20,
-          }}
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword}
-          value={password}
-        />
-        <TouchableOpacity
-          style={{ backgroundColor: "#047857", padding: 12, borderRadius: 8 }}
-          onPress={handleSubmit}
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={validationSchema}
         >
-          <Text
-            style={{
-              color: "#FFFFFF",
-              fontSize: 18,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Login
-          </Text>
-        </TouchableOpacity>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                secureTextEntry
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
         <View
           style={{
             flexDirection: "row",
@@ -248,10 +228,22 @@ export default function VendorLogin({ navigation }) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    margin: 12,
     borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 5,
     padding: 10,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#047857",
+    padding: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   error: {
     color: "red",

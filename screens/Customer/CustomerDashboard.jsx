@@ -10,6 +10,8 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Image,
+  ImageBackground,
 } from "react-native";
 import axios from "axios";
 import CustomerNavbar from "../../components/CustomerNavbar";
@@ -89,6 +91,15 @@ function CustomerDashboard({ route, navigation }) {
           }}
         />
       </View>
+      {/* <View style={styles.headingImgContainer}>
+        <ImageBackground
+          source={require("../../assets/VendorLoginBack.png")}
+          imageStyle={styles.headingImage}
+          style={{ height: "100%", width: "100%" }}
+          resizeMode="cover"
+          blurRadius={3}
+        ></ImageBackground>
+      </View> */}
       {loading ? (
         <Loading />
       ) : (
@@ -109,9 +120,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
   },
+  headingImgContainer: {
+    width: "100%",
+    height: 400, // Adjust the height as needed
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#047857",
+    shadowOffset: { width: 10, height: 2 },
+    shadowOpacity: 0.75,
+    shadowRadius: 3.84,
+    elevation: 10,
+  },
   headingContainer: {
     marginTop: 10,
     marginLeft: 20,
+  },
+  headingImage: {
+    height: "100%",
+    width: "100%",
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 100,
+    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    overflow: "hidden",
   },
   headingText: {
     fontSize: 20,

@@ -11,35 +11,34 @@ import {
 import axios from "axios";
 import DEFAULT_URL from "../../config";
 import { useState } from "react";
+import { Formik } from "formik";
 import { StatusBar } from "expo-status-bar";
+import AdminRegistrationValidationSchema from "../../Schemas/ValidationSchema";
 export default function AdminRegistration({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = async () => {
-    if (confirmPassword == password) {
-      try {
-        axios
-          .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
-            admin: {
-              email: email,
-              password: password,
-            },
-            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-          })
-          .then((res) => {
-            console.log(res);
-            navigation.navigate("admin-login");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (error) {
-        console.error("Error logging in:", error);
-      }
-    } else {
-      alert("Passwords don't match");
+  const handleRegister = async (values) => {
+    console.log(values);
+    try {
+      axios
+        .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
+          admin: {
+            email: values.email,
+            password: values.password,
+          },
+          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        })
+        .then((res) => {
+          console.log(res);
+          navigation.navigate("admin-login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.error("Error logging in:", error);
     }
     setEmail("");
     setPassword("");
@@ -52,29 +51,63 @@ export default function AdminRegistration({ navigation }) {
       <View style={styles.card}>
         <Text style={styles.title}>Admin Registration</Text>
         <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
+        <Formik
+          initialValues={{ email: "", password: "", confirmPassword: "" }}
+          validationSchema={AdminRegistrationValidationSchema}
+          onSubmit={handleRegister}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                keyboardType="email-address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+
+              <TextInput
+                secureTextEntry
+                style={styles.input}
+                placeholder="Password"
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <TextInput
+                secureTextEntry
+                style={styles.input}
+                placeholder="Confirm Password"
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
+                value={values.confirmPassword}
+              />
+              {touched.confirmPassword && errors.confirmPassword && (
+                <Text style={styles.error}>{errors.confirmPassword}</Text>
+              )}
+
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Register</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>Or Login with</Text>
@@ -111,6 +144,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E5FFEC",
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
   card: {
     width: "80%",
