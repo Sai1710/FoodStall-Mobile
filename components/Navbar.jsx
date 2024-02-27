@@ -19,7 +19,7 @@ export default function Navbar({ options, activeOption }) {
       <View
         style={[
           styles.navbar,
-          { flexDirection: "row", backgroundColor: "#047857", marginBottom: 0 },
+          { flexDirection: "row", backgroundColor: "#fff", marginBottom: 0 },
         ]}
       >
         <TouchableOpacity

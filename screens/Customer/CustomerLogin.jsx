@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   TextInput,
   Text,
@@ -10,9 +10,18 @@ import {
   StatusBar,
   Image,
 } from "react-native";
+import validationSchema from "../../Schemas/ValidationSchema";
+import { Formik } from "formik";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { AuthContext } from "../../Schemas/AuthContext";
 
 export default function CustomerLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -22,19 +31,20 @@ export default function CustomerLogin({ navigation }) {
     await AsyncStorage.setItem("access-token", res.data.customer.access_token);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (values) => {
     try {
       axios
         .post(`${DEFAULT_URL}/api/v1/customer/login`, {
           customer: {
-            email: email,
-            password: password,
+            email: values.email,
+            password: values.password,
           },
           client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
         })
         .then((res) => {
           console.log(res);
-
+          setEmail("");
+          setPassword("");
           if (res.status == 200) {
             navigation.navigate("home-screen", { data: res.data.customer });
             setAccessToken(res);
@@ -42,9 +52,21 @@ export default function CustomerLogin({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            title: "Sign In Failed",
+            textBody: "Invalid Credentials",
+            button: "Close",
+          });
         });
     } catch (error) {
       console.error("Error logging in:", error);
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Sign In Failed",
+        textBody: "Invalid Credentials",
+        button: "Close",
+      });
     }
     setEmail("");
     setPassword("");
@@ -54,23 +76,51 @@ export default function CustomerLogin({ navigation }) {
       <StatusBar backgroundColor={"#FFFFFF"} />
       <View style={styles.card}>
         <Text style={styles.title}>Customer Login</Text>
-        <Text style={styles.subtitle}>What are you craving today?</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        <Text style={styles.subtitle}>
+          Explore food from different cuisines !!!
+        </Text>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={validationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                secureTextEntry
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>Or Login with</Text>
@@ -106,30 +156,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#E5FFEC",
+    backgroundColor: "#FaFaFa",
   },
   card: {
     width: "80%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
+    shadowColor: "#047857",
+    shadowOffset: { width: 10, height: 2 },
+    shadowOpacity: 0.75,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
+    color: "#000",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   input: {
     borderWidth: 1,
@@ -190,5 +241,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#047857",
     textAlign: "center",
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
 });

@@ -18,7 +18,7 @@ export default function CustomerNavbar({ options, activeOption }) {
       <View
         style={[
           styles.navbar,
-          { flexDirection: "row", backgroundColor: "#4caf50", marginBottom: 0 },
+          { flexDirection: "row", backgroundColor: "#fff", marginBottom: 0 },
         ]}
       >
         <TouchableOpacity
@@ -27,7 +27,7 @@ export default function CustomerNavbar({ options, activeOption }) {
             navigation.navigate("home-page");
           }}
         >
-          <Text style={{ color: "white", fontWeight: "900", fontSize: 24 }}>
+          <Text style={{ color: "#2F855A", fontWeight: "900", fontSize: 24 }}>
             FoodM
           </Text>
         </TouchableOpacity>
@@ -46,7 +46,7 @@ export default function CustomerNavbar({ options, activeOption }) {
               <Ionicons
                 name="person"
                 size={20}
-                color="#4caf50"
+                color="#2F855A"
                 style={{ padding: 7 }}
               />
             </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   logoContainer: {
-    margin: 10,
+    marginLeft: 20,
   },
   titleContainer: {
     marginLeft: 20,

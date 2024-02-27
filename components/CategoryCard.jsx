@@ -23,26 +23,33 @@ export default function CategoryCard({ data, onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#aab880",
+    backgroundColor: "#fff",
     padding: 10,
     paddingBottom: 15,
     margin: 12,
     borderRadius: 6,
+    shadowColor: "#047857",
+    shadowOffset: { width: 10, height: 2 },
+    shadowOpacity: 0.75,
+    shadowRadius: 3.84,
+    elevation: 10,
     flex: 1,
   },
   image: {
     height: 160,
     width: "100%",
+    alignSelf: "center",
+    borderRadius: 100,
+    
   },
   categoryTextContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#4caf50",
     borderRadius: 5,
     height: 25,
   },
   categoryText: {
-    color: "white",
+    color: "#2F855A",
     fontWeight: "bold",
   },
   imgContainer: {

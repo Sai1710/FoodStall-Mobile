@@ -5,12 +5,15 @@ import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
+import { useContext } from "react";
+import { AuthContext } from "../Schemas/AuthContext";
 
 const HomePage = ({ navigation }) => {
   const handleCustomerLogin = () => {
     navigation.navigate("customer-login");
   };
 
+  
   const handleVendorLogin = () => {
     navigation.navigate("vendor-login");
   };
@@ -23,11 +26,11 @@ const HomePage = ({ navigation }) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#E5FFEC",
+        justifyContent: "space-between",
       }}
     >
       <StatusBar backgroundColor="#fff" />
-      <View
+      <ImageBackground
         source={require("../assets/VendorRegistrationBack.png")}
         style={{
           flex: 1,
@@ -35,14 +38,18 @@ const HomePage = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
         }}
-        blurRadius={3}
+        blurRadius={5}
       >
-        <View>
+        <View
+          style={{
+            flexDirection: "column",
+          }}
+        >
           <Text
             style={{
               fontSize: 48,
               fontWeight: "bold",
-              color: "#000",
+              color: "#fff",
               textAlign: "center",
             }}
           >
@@ -56,7 +63,7 @@ const HomePage = ({ navigation }) => {
                 backgroundColor: "#fff",
                 borderRadius: 8,
                 borderWidth: 2,
-                borderColor: "#065F46",
+                borderColor: "#000",
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
@@ -66,14 +73,14 @@ const HomePage = ({ navigation }) => {
               <FontAwesome6
                 name="person"
                 size={20}
-                color="#065f46"
+                color="#000"
                 style={{ margin: "auto", padding: 3 }}
               />
               <Text
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  color: "#065F46",
+                  color: "#000",
                   textAlign: "center",
                 }}
               >
@@ -87,7 +94,7 @@ const HomePage = ({ navigation }) => {
                 backgroundColor: "white",
                 borderRadius: 8,
                 borderWidth: 2,
-                borderColor: "#065F46",
+                borderColor: "#000",
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
@@ -97,14 +104,14 @@ const HomePage = ({ navigation }) => {
               <Entypo
                 name="shop"
                 size={20}
-                color="#065f46"
+                color="#000"
                 style={{ margin: "auto", padding: 3 }}
               />
               <Text
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  color: "#065F46",
+                  color: "#000",
                   textAlign: "center",
                 }}
               >
@@ -118,7 +125,7 @@ const HomePage = ({ navigation }) => {
                 backgroundColor: "white",
                 borderRadius: 8,
                 borderWidth: 2,
-                borderColor: "#065F46",
+                borderColor: "#000",
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
@@ -128,14 +135,14 @@ const HomePage = ({ navigation }) => {
               <Ionicons
                 name="person"
                 size={20}
-                color="#065f46"
+                color="#000"
                 style={{ margin: "auto", padding: 3 }}
               />
               <Text
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  color: "#065F46",
+                  color: "#000",
                   textAlign: "center",
                 }}
               >
@@ -144,7 +151,7 @@ const HomePage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ImageBackground>
     </View>
   );
 };

@@ -14,12 +14,13 @@ import {
 import axios from "axios";
 import CustomerNavbar from "../../components/CustomerNavbar";
 import Loading from "../../components/Loading";
-
+import { Feather } from "@expo/vector-icons";
 function CustomerDashboard({ route, navigation }) {
   const [categoryData, setCategoryData] = useState([]);
   // const { data } = route.params;
   // console.log(data);
   const [displayedCategories, setDisplayedCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSearch = (searchText) => {
     const tempCategories = categoryData.filter((item) =>
@@ -43,6 +44,7 @@ function CustomerDashboard({ route, navigation }) {
           console.log(categories);
           setCategoryData(categories);
           setDisplayedCategories(categories);
+          setLoading(false);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,6 +80,7 @@ function CustomerDashboard({ route, navigation }) {
         </Text>
       </View>
       <View style={styles.seaarchContainer}>
+        <Feather name="search" color="#2F855A" size={20} />
         <TextInput
           style={styles.input}
           placeholder="Search"
@@ -86,15 +89,15 @@ function CustomerDashboard({ route, navigation }) {
           }}
         />
       </View>
-      {displayedCategories ? (
+      {loading ? (
+        <Loading />
+      ) : (
         <FlatList
           data={displayedCategories}
           keyExtractor={(item) => item.id}
           renderItem={renderCategoryItem}
           numColumns={2}
         />
-      ) : (
-        <Loading />
       )}
     </View>
   );
@@ -103,28 +106,32 @@ function CustomerDashboard({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 48,
-    backgroundColor: "#EDF7ED",
+    backgroundColor: "#fff",
     flex: 1,
   },
   headingContainer: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 20,
   },
   headingText: {
-    fontSize: 40,
-    color: "#4caf50",
+    fontSize: 20,
+    color: "#2F855A",
     fontWeight: "bold",
   },
   seaarchContainer: {
     padding: 4,
     borderWidth: 1,
     borderRadius: 10,
-    margin: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+    borderColor: "#F0F0F0",
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
-    height: 40,
-    borderColor: "#000",
-    paddingLeft: 10,
+    height: 30,
+    color: "#000",
+    paddingLeft: 5,
   },
 });
 
