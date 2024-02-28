@@ -10,6 +10,8 @@ import {
   StatusBar,
   Image,
 } from "react-native";
+import LottieView from "lottie-react-native";
+
 import { loginValidationSchema } from "../../Schemas/ValidationSchema";
 import { Formik } from "formik";
 import DEFAULT_URL from "../../config";
@@ -74,7 +76,7 @@ export default function CustomerLogin({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#FFFFFF"} />
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../../assets/CustomerLogin.jpg")}
         style={{
           flex: 1,
@@ -84,73 +86,74 @@ export default function CustomerLogin({ navigation }) {
           width: 450,
         }}
         blurRadius={3}
-      >
-        <View style={styles.card}>
-          <Text style={styles.title}>Customer Login</Text>
-          <Text style={styles.subtitle}>
-            Explore food from different cuisines !!!
-          </Text>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={handleLogin}
-            validationSchema={loginValidationSchema}
-          >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-            }) => (
-              <View>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-                <TextInput
-                  style={styles.input}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                  placeholder="Password"
-                  secureTextEntry
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </Formik>
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Or Login with</Text>
-            <View style={styles.dividerLine} />
-          </View>
-          <View style={styles.socialLogin}>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/google.png")}
-                style={styles.socialIcon}
+      > */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Customer Login</Text>
+        <Text style={styles.subtitle}>
+          Explore food from different cuisines !!!
+        </Text>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={loginValidationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                keyboardType="email-address"
               />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/apple.png")}
-                style={styles.socialIcon}
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                secureTextEntry
               />
-            </TouchableOpacity>
-          </View>
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Or Login with</Text>
+          <View style={styles.dividerLine} />
+        </View>
+        <View style={styles.socialLogin}>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/google.png")}
+              style={styles.socialIcon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/apple.png")}
+              style={styles.socialIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <TouchableOpacity
             style={styles.signupLink}
             onPress={() => {
@@ -166,7 +169,17 @@ export default function CustomerLogin({ navigation }) {
             <Text style={styles.signupText}>Sign Up Instead?</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
+      <LottieView
+        source={require("../../assets/CustomerLogin.json")}
+        autoPlay
+        loop
+        style={{
+          width: "90%",
+          flex: 0.5,
+        }}
+      />
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -176,18 +189,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FaFaFa",
+    backgroundColor: "#fff",
   },
   card: {
-    width: "80%",
+    width: "90%",
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    shadowColor: "#047857",
-    shadowOffset: { width: 10, height: 2 },
-    shadowOpacity: 0.75,
-    shadowRadius: 3.84,
-    elevation: 10,
+    // shadowColor: "#047857",
+    // shadowOffset: { width: 10, height: 2 },
+    // shadowOpacity: 0.75,
+    // shadowRadius: 3.84,
+    // elevation: 10,
   },
   title: {
     fontSize: 24,
@@ -257,7 +270,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#047857",
     textAlign: "center",
