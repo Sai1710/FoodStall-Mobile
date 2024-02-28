@@ -28,19 +28,18 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     margin: 12,
     borderRadius: 6,
-    shadowColor: "#047857",
-    shadowOffset: { width: 10, height: 2 },
+    shadowColor: "#000",
+    shadowOffset: { width: 5, height: 2 },
     shadowOpacity: 0.75,
     shadowRadius: 3.84,
-    elevation: 10,
+    elevation: 5,
     flex: 1,
   },
   image: {
     height: 160,
     width: "100%",
     alignSelf: "center",
-    borderRadius: 100,
-    
+    borderRadius: 6,
   },
   categoryTextContainer: {
     justifyContent: "center",
