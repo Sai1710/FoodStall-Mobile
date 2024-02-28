@@ -26,7 +26,7 @@ function StallMenu({ route }) {
     try {
       axios
         .get(
-          `${DEFAULT_URL}/api/v1/customer/food_items?vendor_id=${vendor.id}&category_id=${categoryId}`,
+          `${DEFAULT_URL}/api/v1/customer/food_items?vendor_id=${vendor.id}`,
           {
             headers: {
               Authorization: "Bearer " + token,

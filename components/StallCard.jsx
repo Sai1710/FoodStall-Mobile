@@ -70,10 +70,8 @@ const styles = StyleSheet.create({
     height: 160,
     width: "100%",
     alignSelf: "center",
-    borderBottomLeftRadius: 60,
-    borderBottomRightRadius: 60,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+
+    borderRadius: 6,
   },
   categoryTextContainer: {
     justifyContent: "space-between",
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
   categoryText: {
     color: "#000",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 12,
     marginTop: 10,
   },
   imgContainer: {

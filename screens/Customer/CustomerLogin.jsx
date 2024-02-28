@@ -46,7 +46,7 @@ export default function CustomerLogin({ navigation }) {
           setEmail("");
           setPassword("");
           if (res.status == 200) {
-            navigation.navigate("home-screen", { data: res.data.customer });
+            navigation.replace("home-screen", { data: res.data.customer });
             setAccessToken(res);
           }
         })
@@ -55,7 +55,7 @@ export default function CustomerLogin({ navigation }) {
           Dialog.show({
             type: ALERT_TYPE.WARNING,
             title: "Sign In Failed",
-            textBody: "Invalid Credentials",
+            textBody: err,
             button: "Close",
           });
         });
@@ -64,7 +64,7 @@ export default function CustomerLogin({ navigation }) {
       Dialog.show({
         type: ALERT_TYPE.WARNING,
         title: "Sign In Failed",
-        textBody: "Invalid Credentials",
+        textBody: error,
         button: "Close",
       });
     }
@@ -151,6 +151,14 @@ export default function CustomerLogin({ navigation }) {
               />
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={styles.signupLink}
+            onPress={() => {
+              console.log("Forgot Password");
+            }}
+          >
+            <Text style={styles.signupText}>Forgot Password?</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.signupLink}
             onPress={() => navigation.navigate("customer-registration")}

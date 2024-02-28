@@ -24,6 +24,7 @@ function CustomerDashboard({ route, navigation }) {
   // const { data } = route.params;
   // console.log(data);
   const [displayedCategories, setDisplayedCategories] = useState([]);
+  const [displayedStalls, setDisplayedStalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState("Categories");
   const [stalls, setStalls] = useState([]);
@@ -35,7 +36,11 @@ function CustomerDashboard({ route, navigation }) {
     const tempCategories = categoryData.filter((item) =>
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
+    const tempStalls = stalls.filter((item) =>
+      item.first_name.toLowerCase().includes(searchText.toLowerCase())
+    );
     setDisplayedCategories(tempCategories);
+    setDisplayedStalls(tempStalls);
   };
 
   const handleTabPress = (index) => {
@@ -62,6 +67,7 @@ function CustomerDashboard({ route, navigation }) {
           });
           console.log("jsbsh", tempStalls);
           setStalls(tempStalls);
+          setDisplayedStalls(tempStalls);
           setDisplayedCategories(categories);
           setLoading(false);
         });
@@ -124,7 +130,7 @@ function CustomerDashboard({ route, navigation }) {
         <Loading />
       ) : (
         <FlatList
-          data={mode === "Categories" ? displayedCategories : stalls}
+          data={mode === "Categories" ? displayedCategories : displayedStalls}
           keyExtractor={(item) => item.id}
           renderItem={mode === "Categories" ? renderCategoryItem : renderStall}
           numColumns={2}
@@ -176,7 +182,7 @@ const styles = StyleSheet.create({
     height: 400, // Adjust the height as needed
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "#047857",
     shadowOffset: { width: 10, height: 2 },
     shadowOpacity: 0.75,
     shadowRadius: 3.84,
@@ -212,6 +218,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 30,
+    flex: 1,
     color: "#000",
     paddingLeft: 5,
   },
