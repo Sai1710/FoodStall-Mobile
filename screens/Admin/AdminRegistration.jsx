@@ -8,12 +8,18 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
 import { useState } from "react";
 import { Formik } from "formik";
 import { StatusBar } from "expo-status-bar";
-import AdminRegistrationValidationSchema from "../../Schemas/ValidationSchema";
+import { AdminRegistrationValidationSchema } from "../../Schemas/ValidationSchema";
 export default function AdminRegistration({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,9 +42,21 @@ export default function AdminRegistration({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            title: "Registration Failed",
+            textBody: `Request couldn't be processed`,
+            button: "Close",
+          });
         });
     } catch (error) {
       console.error("Error logging in:", error);
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Registration Failed",
+        textBody: `Request couldn't be processed`,
+        button: "Close",
+      });
     }
     setEmail("");
     setPassword("");
@@ -48,92 +66,104 @@ export default function AdminRegistration({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#fff"} />
-      <View style={styles.card}>
-        <Text style={styles.title}>Admin Registration</Text>
-        <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
-        <Formik
-          initialValues={{ email: "", password: "", confirmPassword: "" }}
-          validationSchema={AdminRegistrationValidationSchema}
-          onSubmit={handleRegister}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
-                keyboardType="email-address"
+      <ImageBackground
+        source={require("../../assets/AdminRegistration.jpg")}
+        style={{
+          flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center",
+          alignItems: "center",
+          width: 450,
+        }}
+        blurRadius={3}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>Admin Registration</Text>
+          <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
+          <Formik
+            initialValues={{ email: "", password: "", confirmPassword: "" }}
+            validationSchema={AdminRegistrationValidationSchema}
+            onSubmit={handleRegister}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  keyboardType="email-address"
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+
+                <TextInput
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+
+                <TextInput
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  value={values.confirmPassword}
+                />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <Text style={styles.error}>{errors.confirmPassword}</Text>
+                )}
+
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Register</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Or Login with</Text>
+            <View style={styles.dividerLine} />
+          </View>
+          <View style={styles.socialLogin}>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/google.png")}
+                style={styles.socialIcon}
               />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
-
-              <TextInput
-                secureTextEntry
-                style={styles.input}
-                placeholder="Password"
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/apple.png")}
+                style={styles.socialIcon}
               />
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
-
-              <TextInput
-                secureTextEntry
-                style={styles.input}
-                placeholder="Confirm Password"
-                onChangeText={handleChange("confirmPassword")}
-                onBlur={handleBlur("confirmPassword")}
-                value={values.confirmPassword}
-              />
-              {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={styles.error}>{errors.confirmPassword}</Text>
-              )}
-
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Register</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Formik>
-
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>Or Login with</Text>
-          <View style={styles.dividerLine} />
-        </View>
-        <View style={styles.socialLogin}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/google.png")}
-              style={styles.socialIcon}
-            />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.signupLink}
+            onPress={() => navigation.navigate("admin-login")}
+          >
+            <Text style={styles.signupText}>Login Instead?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/apple.png")}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("admin-login")}
-        >
-          <Text style={styles.signupText}>Login Instead?</Text>
-        </TouchableOpacity>
-      </View>
+      </ImageBackground>
     </View>
   );
 }

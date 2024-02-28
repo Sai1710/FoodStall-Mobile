@@ -10,10 +10,9 @@ import { AuthContext } from "../Schemas/AuthContext";
 
 const HomePage = ({ navigation }) => {
   const handleCustomerLogin = () => {
-    navigation.navigate("customer-login");
+    navigation.push("customer-login");
   };
 
-  
   const handleVendorLogin = () => {
     navigation.navigate("vendor-login");
   };

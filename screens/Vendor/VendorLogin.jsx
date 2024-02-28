@@ -8,7 +8,13 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import validationSchema from "../../Schemas/ValidationSchema";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { loginValidationSchema } from "../../Schemas/ValidationSchema";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
@@ -16,7 +22,7 @@ import axios from "axios";
 import DEFAULT_URL from "../../config";
 import Navbar from "../../components/Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Toast } from "toastify-react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function VendorLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -51,9 +57,21 @@ export default function VendorLogin({ navigation }) {
         })
         .catch((err) => {
           console.error("Error in Axios request:", err);
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            title: "Sign In Failed",
+            textBody: "Invalid Credentials",
+            button: "Close",
+          });
         });
     } catch (error) {
       console.error("Error logging in:", error);
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Sign In Failed",
+        textBody: "Invalid Credentials",
+        button: "Close",
+      });
     }
   }
 
@@ -62,166 +80,177 @@ export default function VendorLogin({ navigation }) {
       style={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#E5FFEC",
       }}
     >
-      <View
+      <StatusBar backgroundColor="#fff" />
+      <ImageBackground
+        source={require("../../assets/VendorLoginBack.jpg")}
+        imageStyle={styles.headingImage}
         style={{
-          width: "80%",
-          backgroundColor: "#FFFFFF",
-          padding: 20,
-          borderRadius: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
+          flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center",
+          alignItems: "center",
         }}
+        blurRadius={3}
       >
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: 10,
-          }}
-        >
-          Welcome Back!
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "600",
-            textAlign: "center",
-            marginBottom: 10,
-          }}
-        >
-          Enter your Credentials
-        </Text>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleLogin}
-          validationSchema={validationSchema}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View>
-              <TextInput
-                style={styles.input}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
-                placeholder="Email"
-                keyboardType="email-address"
-              />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-                placeholder="Password"
-                secureTextEntry
-              />
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Formik>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
+            width: "80%",
+            backgroundColor: "rgb(255,255,255)",
+            padding: 20,
+            borderRadius: 10,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
           }}
-        >
-          <View
-            style={{
-              backgroundColor: "#333",
-              height: 1,
-              flex: 1,
-              marginHorizontal: 5,
-            }}
-          />
-          <Text style={{ fontWeight: "600", marginHorizontal: 5 }}>
-            Or Login with
-          </Text>
-          <View
-            style={{
-              backgroundColor: "#333",
-              height: 1,
-              flex: 1,
-              marginHorizontal: 5,
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        >
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#778CA3",
-              padding: 10,
-              borderRadius: 20,
-              marginHorizontal: 5,
-            }}
-          >
-            <Image
-              source={require("../../assets/google.png")}
-              style={{ width: 20, height: 20 }}
-            />
-          </View>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#778CA3",
-              padding: 10,
-              borderRadius: 20,
-              marginHorizontal: 5,
-            }}
-          >
-            <Image
-              source={require("../../assets/apple.png")}
-              style={{ width: 20, height: 20 }}
-            />
-          </View>
-        </View>
-        <TouchableOpacity
-          style={{ marginTop: 20 }}
-          onPress={() => navigation.navigate("vendor-registration")}
         >
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 24,
               fontWeight: "bold",
-              color: "#047857",
               textAlign: "center",
+              marginBottom: 10,
             }}
           >
-            Sign Up Instead?
+            Welcome Back!
           </Text>
-        </TouchableOpacity>
-      </View>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              textAlign: "center",
+              marginBottom: 10,
+            }}
+          >
+            Enter your Credentials
+          </Text>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleLogin}
+            validationSchema={loginValidationSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+                <TextInput
+                  style={styles.input}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  placeholder="Password"
+                  secureTextEntry
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#333",
+                height: 1,
+                flex: 1,
+                marginHorizontal: 5,
+              }}
+            />
+            <Text style={{ fontWeight: "600", marginHorizontal: 5 }}>
+              Or Login with
+            </Text>
+            <View
+              style={{
+                backgroundColor: "#333",
+                height: 1,
+                flex: 1,
+                marginHorizontal: 5,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          >
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: "#778CA3",
+                padding: 10,
+                borderRadius: 20,
+                marginHorizontal: 5,
+              }}
+            >
+              <Image
+                source={require("../../assets/google.png")}
+                style={{ width: 20, height: 20 }}
+              />
+            </View>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: "#778CA3",
+                padding: 10,
+                borderRadius: 20,
+                marginHorizontal: 5,
+              }}
+            >
+              <Image
+                source={require("../../assets/apple.png")}
+                style={{ width: 20, height: 20 }}
+              />
+            </View>
+          </View>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => navigation.navigate("vendor-registration")}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#047857",
+                textAlign: "center",
+              }}
+            >
+              Sign Up Instead?
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </View>
   );
 }

@@ -41,18 +41,11 @@ export default function VendorRegistration({ navigation }) {
   const fetchCategories = async () => {
     const token = await AsyncStorage.getItem("access-token");
     try {
-      axios
-        .get(`${DEFAULT_URL}/api/v1/admin/categories`, {
-          headers: {
-            Authorization: "Bearer " + token,
-            "ngrok-skip-browser-warning": true,
-          },
-        })
-        .then((response) => {
-          const categories = response.data.categories || [];
+      axios.get(`${DEFAULT_URL}/api/v1/admin/categories`).then((response) => {
+        const categories = response.data.categories || [];
 
-          setFetchedCategories(categories);
-        });
+        setFetchedCategories(categories);
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -122,11 +115,12 @@ export default function VendorRegistration({ navigation }) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flexGrow: 1 }}>
       <StatusBar backgroundColor={"#fff"}></StatusBar>
+
       <View className="flex-1 justify-center items-center">
-        {/* <ImageBackground
-          source={require("../../assets/VendorLoginBack.png")}
+        <ImageBackground
+          source={require("../../assets/VendorRegistration.jpg")}
           style={{
             flex: 1,
             resizeMode: "cover",
@@ -134,62 +128,63 @@ export default function VendorRegistration({ navigation }) {
             alignItems: "center",
             width: 450,
           }}
-          blurRadius={5}
-        > */}
-        <View
-          className="w-4/5 bg-white p-5 rounded-lg shadow-md"
-          style={{ margin: 80 }}
+          blurRadius={3}
         >
-          <Text className="text-2xl font-bold text-center mb-5">
-            Register your Stall
-          </Text>
-          <TextInput
-            value={firstName}
-            onChangeText={setFirstName}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            placeholder="First Name"
-          />
-          <TextInput
-            value={lastName}
-            onChangeText={setLastName}
-            style={{ borderWidth: 1 }}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            placeholder="Last Name"
-          />
-          <TextInput
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Email"
-          />
-          <TextInput
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setPhoneNumber}
-            value={phoneNumber}
-            keyboardType="numeric"
-            placeholder="Phone Number"
-          />
-          <TextInput
-            secureTextEntry={true}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-          />
-          <TextInput
-            secureTextEntry={true}
-            className="border-gray-300 p-3 mb-4 rounded-lg"
-            style={{ borderWidth: 1 }}
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-            placeholder="Confirm Password"
-          />
-
-          {/* <SelectBox
+          <View
+            className="w-4/5 bg-white p-5 rounded-lg shadow-md"
+            style={{ margin: 80 }}
+          >
+            <Text className="text-2xl font-bold text-center mb-5">
+              Register your Stall
+            </Text>
+            <View>
+              <TextInput
+                value={firstName}
+                onChangeText={setFirstName}
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                placeholder="First Name"
+              />
+              <TextInput
+                value={lastName}
+                onChangeText={setLastName}
+                style={{ borderWidth: 1 }}
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                placeholder="Last Name"
+              />
+              <TextInput
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setEmail}
+                value={email}
+                placeholder="Email"
+              />
+              <TextInput
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setPhoneNumber}
+                value={phoneNumber}
+                keyboardType="numeric"
+                placeholder="Phone Number"
+              />
+              <TextInput
+                secureTextEntry={true}
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setPassword}
+                value={password}
+                placeholder="Password"
+              />
+              <TextInput
+                secureTextEntry={true}
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setConfirmPassword}
+                value={confirmPassword}
+                placeholder="Confirm Password"
+              />
+            </View>
+            {/* <SelectBox
               label="Categories"
               options={items}
               selectedValues={categories}
@@ -197,83 +192,86 @@ export default function VendorRegistration({ navigation }) {
               onTapClose={onMultiChange()}
               isMulti
             /> */}
-          <MultiSelect
-            items={fetchedCategories}
-            uniqueKey="name"
-            onSelectedItemsChange={onSelectedItemsChange}
-            selectedItems={categories}
-            selectText="Categories"
-            searchInputPlaceholderText="Search"
-            tagRemoveIconColor="#4caf50"
-            tagBorderColor="#4caf50"
-            tagTextColor="#4caf50"
-            selectedItemTextColor="#CCC"
-            selectedItemIconColor="#CCC"
-            itemTextColor="#000"
-            searchInputStyle={{ color: "#CCC" }}
-            submitButtonColor="#4caf50"
-            submitButtonText="Submit"
-            styleMainWrapper={{
-              borderWidth: 1,
-              padding: 2,
-              borderColor: "rgb(203,213,219)",
-              borderRadius: 8,
-              marginBottom: 16,
-            }}
-          />
-
-          <View className="flex-row mb-4">
-            <Pressable
-              className={` flex-1 pl-2 pr-2
+            <View>
+              <MultiSelect
+                items={fetchedCategories}
+                uniqueKey="name"
+                onSelectedItemsChange={onSelectedItemsChange}
+                selectedItems={categories}
+                selectText="Categories"
+                searchInputPlaceholderText="Search"
+                tagRemoveIconColor="#4caf50"
+                tagBorderColor="#4caf50"
+                tagTextColor="#4caf50"
+                selectedItemTextColor="#CCC"
+                selectedItemIconColor="#CCC"
+                itemTextColor="#000"
+                searchInputStyle={{ color: "#CCC" }}
+                submitButtonColor="#4caf50"
+                submitButtonText="Submit"
+                styleMainWrapper={{
+                  borderWidth: 1,
+                  padding: 2,
+                  borderColor: "rgb(203,213,219)",
+                  borderRadius: 8,
+                  marginBottom: 16,
+                }}
+              />
+            </View>
+            <View>
+              <View className="flex-row mb-4">
+                <Pressable
+                  className={` flex-1 pl-2 pr-2
                  pt-2 pb-2 rounded ${
                    franchise ? "bg-green-800" : "bg-gray-500"
                  } text-white font-medium`}
+                  onPress={() => {
+                    setFranchise((prev) => !prev);
+                  }}
+                >
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    Franchise
+                  </Text>
+                </Pressable>
+              </View>
+
+              {franchise && (
+                <TextInput
+                  className="border-gray-300 p-3 mb-4 rounded-lg"
+                  style={{ borderWidth: 1 }}
+                  onChangeText={setFranchiseDetails}
+                  value={franchiseDetails}
+                  placeholder="Franchise Details"
+                />
+              )}
+              <TouchableOpacity
+                className="bg-green-900 py-3 rounded-lg"
+                onPress={onSubmit}
+              >
+                <Text className="text-white text-center text-lg font-semibold">
+                  Register
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Pressable
+              className="mt-10 mb-4"
               onPress={() => {
-                setFranchise((prev) => !prev);
+                navigation.navigate("vendor-login");
               }}
             >
-              <Text style={{ color: "white", textAlign: "center" }}>
-                Franchise
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#14532d",
+                  fontSize: 19,
+                }}
+              >
+                Login Instead?
               </Text>
             </Pressable>
           </View>
-
-          {franchise && (
-            <TextInput
-              className="border-gray-300 p-3 mb-4 rounded-lg"
-              style={{ borderWidth: 1 }}
-              onChangeText={setFranchiseDetails}
-              value={franchiseDetails}
-              placeholder="Franchise Details"
-            />
-          )}
-          <TouchableOpacity
-            className="bg-green-900 py-3 rounded-lg"
-            onPress={onSubmit}
-          >
-            <Text className="text-white text-center text-lg font-semibold">
-              Register
-            </Text>
-          </TouchableOpacity>
-          <Pressable
-            className="mt-10 mb-4"
-            onPress={() => {
-              navigation.navigate("vendor-login");
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-                color: "#14532d",
-                fontSize: 19,
-              }}
-            >
-              Login Instead?
-            </Text>
-          </Pressable>
-        </View>
-        {/* </ImageBackground> */}
+        </ImageBackground>
       </View>
     </ScrollView>
   );

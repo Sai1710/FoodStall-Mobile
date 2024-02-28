@@ -10,7 +10,7 @@ import {
   StatusBar,
   Image,
 } from "react-native";
-import validationSchema from "../../Schemas/ValidationSchema";
+import { loginValidationSchema } from "../../Schemas/ValidationSchema";
 import { Formik } from "formik";
 import DEFAULT_URL from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -74,79 +74,91 @@ export default function CustomerLogin({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#FFFFFF"} />
-      <View style={styles.card}>
-        <Text style={styles.title}>Customer Login</Text>
-        <Text style={styles.subtitle}>
-          Explore food from different cuisines !!!
-        </Text>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleLogin}
-          validationSchema={validationSchema}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View>
-              <TextInput
-                style={styles.input}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
-                placeholder="Email"
-                keyboardType="email-address"
+      <ImageBackground
+        source={require("../../assets/CustomerLogin.jpg")}
+        style={{
+          flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center",
+          alignItems: "center",
+          width: 450,
+        }}
+        blurRadius={3}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>Customer Login</Text>
+          <Text style={styles.subtitle}>
+            Explore food from different cuisines !!!
+          </Text>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleLogin}
+            validationSchema={loginValidationSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+                <TextInput
+                  style={styles.input}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  placeholder="Password"
+                  secureTextEntry
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Or Login with</Text>
+            <View style={styles.dividerLine} />
+          </View>
+          <View style={styles.socialLogin}>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/google.png")}
+                style={styles.socialIcon}
               />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-                placeholder="Password"
-                secureTextEntry
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/apple.png")}
+                style={styles.socialIcon}
               />
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Formik>
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>Or Login with</Text>
-          <View style={styles.dividerLine} />
-        </View>
-        <View style={styles.socialLogin}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/google.png")}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/apple.png")}
-              style={styles.socialIcon}
-            />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.signupLink}
+            onPress={() => navigation.navigate("customer-registration")}
+          >
+            <Text style={styles.signupText}>Sign Up Instead?</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("customer-registration")}
-        >
-          <Text style={styles.signupText}>Sign Up Instead?</Text>
-        </TouchableOpacity>
-      </View>
+      </ImageBackground>
     </View>
   );
 }

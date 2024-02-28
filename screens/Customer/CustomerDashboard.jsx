@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../../config";
 import CategoryCard from "../../components/CategoryCard";
 import { CATEGORIES } from "../../data/dummy-data";
+import StallCard from "../../components/StallCard";
 import {
   FlatList,
   StyleSheet,
@@ -12,17 +13,23 @@ import {
   TextInput,
   Image,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 import CustomerNavbar from "../../components/CustomerNavbar";
 import Loading from "../../components/Loading";
-import { Feather } from "@expo/vector-icons";
+import { Entypo, Feather, MaterialIcons } from "@expo/vector-icons";
 function CustomerDashboard({ route, navigation }) {
   const [categoryData, setCategoryData] = useState([]);
   // const { data } = route.params;
   // console.log(data);
   const [displayedCategories, setDisplayedCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [mode, setMode] = useState("Categories");
+  const [stalls, setStalls] = useState([]);
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabs = ["Categories", "Stalls"];
 
   const handleSearch = (searchText) => {
     const tempCategories = categoryData.filter((item) =>
@@ -31,6 +38,10 @@ function CustomerDashboard({ route, navigation }) {
     setDisplayedCategories(tempCategories);
   };
 
+  const handleTabPress = (index) => {
+    setActiveTab(index);
+    setMode(tabs[index]);
+  };
   const fetchCategories = async () => {
     const token = await AsyncStorage.getItem("access-token");
     try {
@@ -43,8 +54,14 @@ function CustomerDashboard({ route, navigation }) {
         })
         .then((response) => {
           const categories = response.data.categories || [];
+          let tempStalls = [];
           console.log(categories);
           setCategoryData(categories);
+          categories.forEach((obj) => {
+            tempStalls = [...tempStalls, ...obj.vendors];
+          });
+          console.log("jsbsh", tempStalls);
+          setStalls(tempStalls);
           setDisplayedCategories(categories);
           setLoading(false);
         });
@@ -52,6 +69,9 @@ function CustomerDashboard({ route, navigation }) {
       console.error("Error fetching data:", error);
     }
   };
+  function renderStall(itemData) {
+    return <StallCard data={itemData.item} />;
+  }
 
   function renderCategoryItem(itemData) {
     return (
@@ -104,12 +124,43 @@ function CustomerDashboard({ route, navigation }) {
         <Loading />
       ) : (
         <FlatList
-          data={displayedCategories}
+          data={mode === "Categories" ? displayedCategories : stalls}
           keyExtractor={(item) => item.id}
-          renderItem={renderCategoryItem}
+          renderItem={mode === "Categories" ? renderCategoryItem : renderStall}
           numColumns={2}
         />
       )}
+      <View style={styles.tabContainer}>
+        {tabs.map((tab, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[styles.tab, activeTab === index && styles.activeTab]}
+            onPress={() => handleTabPress(index)}
+          >
+            {tab === "Stalls" ? (
+              <Entypo
+                name="shop"
+                size={20}
+                color={activeTab === 1 ? "#fff" : "#2F855A"}
+              />
+            ) : (
+              <MaterialIcons
+                name="fastfood"
+                size={20}
+                color={activeTab === 0 ? "#fff" : "#2F855A"}
+              />
+            )}
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === index && styles.activeTabText,
+              ]}
+            >
+              {tab}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
@@ -163,6 +214,32 @@ const styles = StyleSheet.create({
     height: 30,
     color: "#000",
     paddingLeft: 5,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    height: 70,
+  },
+  tab: {
+    flex: 1,
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#2F855A",
+  },
+  activeTab: {
+    backgroundColor: "#2F855A",
+  },
+  activeTabText: {
+    color: "#fff",
   },
 });
 

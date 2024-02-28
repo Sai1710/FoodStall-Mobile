@@ -8,6 +8,14 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { customerRegistrationSchema } from "../../Schemas/ValidationSchema";
+import { Formik } from "formik";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
 import { useState } from "react";
@@ -18,31 +26,40 @@ export default function CustomerRegistration({ navigation }) {
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = async () => {
-    if (confirmPassword == password) {
-      try {
-        axios
-          .post(`${DEFAULT_URL}/api/v1/customer/sign_up`, {
-            customer: {
-              name: name,
-              email: email,
-              password: password,
-            },
-            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-          })
-          .then((res) => {
-            console.log(res);
-            navigation.navigate("customer-login");
-          })
-          .catch((err) => {
-            console.log(err);
+  const handleRegistration = async (values) => {
+    try {
+      axios
+        .post(`${DEFAULT_URL}/api/v1/customer/sign_up`, {
+          customer: {
+            name: values.name,
+            email: values.email,
+            password: values.password,
+          },
+          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        })
+        .then((res) => {
+          console.log(res);
+          navigation.navigate("customer-login");
+        })
+        .catch((err) => {
+          console.log(err);
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            title: "Registration Failed",
+            textBody: `Request couldn't be processed`,
+            button: "Close",
           });
-      } catch (error) {
-        console.error("Error logging in:", error);
-      }
-    } else {
-      alert("Passwords don't match");
+        });
+    } catch (error) {
+      console.error("Error logging in:", error);
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Registration Failed",
+        textBody: `Request couldn't be processed`,
+        button: "Close",
+      });
     }
+
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -51,64 +68,119 @@ export default function CustomerRegistration({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#fff"} />
-      <View style={styles.card}>
-        <Text style={styles.title}>Customer Registration</Text>
-        <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          onChangeText={setName}
-          value={name}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>Or Login with</Text>
-          <View style={styles.dividerLine} />
-        </View>
-        <View style={styles.socialLogin}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/google.png")}
-              style={styles.socialIcon}
-            />
+      <ImageBackground
+        source={require("../../assets/CustomerRegistration.jpg")}
+        style={{
+          flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center",
+          alignItems: "center",
+          width: 450,
+        }}
+        blurRadius={3}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>Customer Registration</Text>
+          <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+            }}
+            validationSchema={customerRegistrationSchema}
+            onSubmit={handleRegistration}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
+                />
+                {touched.name && errors.name && (
+                  <Text style={styles.error}>{errors.name}</Text>
+                )}
+
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.input}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  placeholder="Password"
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.input}
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  value={values.confirmPassword}
+                  placeholder="Confirm Password"
+                />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <Text style={styles.error}>{errors.confirmPassword}</Text>
+                )}
+
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Register</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </Formik>
+
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Or Login with</Text>
+            <View style={styles.dividerLine} />
+          </View>
+          <View style={styles.socialLogin}>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/google.png")}
+                style={styles.socialIcon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.socialButton}>
+              <Image
+                source={require("../../assets/apple.png")}
+                style={styles.socialIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.signupLink}
+            onPress={() => navigation.navigate("customer-login")}
+          >
+            <Text style={styles.signupText}>Login Instead?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require("../../assets/apple.png")}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("customer-login")}
-        >
-          <Text style={styles.signupText}>Login Instead?</Text>
-        </TouchableOpacity>
-      </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -122,7 +194,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "80%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(255,255,255,0.95)",
     padding: 20,
     borderRadius: 10,
     shadowColor: "#000",
@@ -182,6 +254,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
   socialButton: {
     borderWidth: 1,

@@ -44,13 +44,28 @@ export default function AddItem({ navigation }) {
   const [taste, setTaste] = useState([]);
   const [tags, setTags] = useState([]);
   const [price, setPrice] = useState("");
-  const [foodCategory, setFoodCategory] = useState(1);
+  const [foodCategory, setFoodCategory] = useState();
   const [fetchedCategories, setFetchedCategories] = useState([]);
 
   const itemTypeOptions = [
     { name: "Veg", value: "veg" },
     { name: "Non-Veg", value: "no-veg" },
   ];
+  const fetchCategories = async () => {
+    try {
+      axios.get(`${DEFAULT_URL}/api/v1/admin/categories`).then((response) => {
+        const categories = response.data.categories || [];
+
+        setFetchedCategories(categories);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const itemSubTypeOptions = [
     { name: "Regular", value: "regular" },
@@ -277,7 +292,7 @@ export default function AddItem({ navigation }) {
                 setFoodCategory(itemValue);
               }}
             >
-              {categoryOptions.map((item) => {
+              {fetchedCategories.map((item) => {
                 return (
                   <Picker.Item
                     key={item.id}
