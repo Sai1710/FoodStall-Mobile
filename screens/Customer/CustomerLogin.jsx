@@ -175,7 +175,7 @@ export default function CustomerLogin({ navigation }) {
         autoPlay
         loop
         style={{
-          width: "90%",
+          width: "100%",
           flex: 0.5,
         }}
       />
