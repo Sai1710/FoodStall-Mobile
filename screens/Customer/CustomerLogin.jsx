@@ -36,18 +36,26 @@ export default function CustomerLogin({ navigation }) {
   const handleLogin = async (values) => {
     try {
       axios
-        .post(`${DEFAULT_URL}/api/v1/customer/login`, {
-          customer: {
-            email: values.email,
-            password: values.password,
+        .post(
+          `${DEFAULT_URL}/api/v1/customer/login`,
+          {
+            customer: {
+              email: values.email,
+              password: values.password,
+            },
+            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
           },
-          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-        })
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+            },
+          }
+        )
         .then((res) => {
-          console.log(res);
+          console.log("response", res.data);
           setEmail("");
           setPassword("");
-          if (res.status == 200) {
+          if (res.status === 200) {
             navigation.replace("home-screen", { data: res.data.customer });
             setAccessToken(res);
           }
@@ -62,7 +70,7 @@ export default function CustomerLogin({ navigation }) {
           });
         });
     } catch (error) {
-      console.error("Error logging in:", error);
+      console.error("Error logging in:", error.message);
       Dialog.show({
         type: ALERT_TYPE.WARNING,
         title: "Sign In Failed",
@@ -176,7 +184,8 @@ export default function CustomerLogin({ navigation }) {
         loop
         style={{
           width: "100%",
-          flex: 0.5,
+          flex: 0.6,
+          marginTop: 30,
         }}
       />
       {/* </ImageBackground> */}
@@ -193,14 +202,14 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "90%",
-    backgroundColor: "#fff",
+    backgroundColor: "rgb(255,255,255)",
     padding: 20,
     borderRadius: 10,
-    // shadowColor: "#047857",
-    // shadowOffset: { width: 10, height: 2 },
-    // shadowOpacity: 0.75,
+    shadowColor: "#047857",
+    // shadowOffset: { width: 40, height: 2 },
+    // shadowOpacity: 1,
     // shadowRadius: 3.84,
-    // elevation: 10,
+    elevation: 5,
   },
   title: {
     fontSize: 24,

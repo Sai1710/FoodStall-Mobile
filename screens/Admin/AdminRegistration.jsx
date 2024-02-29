@@ -35,6 +35,11 @@ export default function AdminRegistration({ navigation }) {
             password: values.password,
           },
           client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+        },{
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            "ngrok-skip-browser-warning": true,
+          },
         })
         .then((res) => {
           console.log(res);

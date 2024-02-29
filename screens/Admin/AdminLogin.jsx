@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import validationSchema from "../../Schemas/ValidationSchema";
 import { loginValidationSchema } from "../../Schemas/ValidationSchema";
+import LottieView from "lottie-react-native";
 
 export default function AdminLogin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -34,13 +35,21 @@ export default function AdminLogin({ navigation }) {
   const handleLogin = async (values) => {
     try {
       axios
-        .post(`${DEFAULT_URL}/api/v1/admin/login`, {
-          admin: {
-            email: values.email,
-            password: values.password,
+        .post(
+          `${DEFAULT_URL}/api/v1/admin/login`,
+          {
+            admin: {
+              email: values.email,
+              password: values.password,
+            },
+            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
           },
-          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-        })
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
 

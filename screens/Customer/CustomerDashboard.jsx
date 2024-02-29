@@ -49,6 +49,7 @@ function CustomerDashboard({ route, navigation }) {
   };
   const fetchCategories = async () => {
     const token = await AsyncStorage.getItem("access-token");
+    console.log(token);
     try {
       axios
         .get(`${DEFAULT_URL}/api/v1/customer/categories`, {
@@ -65,7 +66,7 @@ function CustomerDashboard({ route, navigation }) {
           categories.forEach((obj) => {
             tempStalls = [...tempStalls, ...obj.vendors];
           });
-          console.log("jsbsh", tempStalls);
+          console.log(tempStalls);
           setStalls(tempStalls);
           setDisplayedStalls(tempStalls);
           setDisplayedCategories(categories);
@@ -80,9 +81,11 @@ function CustomerDashboard({ route, navigation }) {
   }
 
   function renderCategoryItem(itemData) {
+    console.log(itemData);
     return (
       <CategoryCard
         data={itemData.item}
+        // key={itemData.index}
         onPress={() => {
           navigation.navigate("List", {
             data: itemData.item.vendors,
@@ -131,7 +134,7 @@ function CustomerDashboard({ route, navigation }) {
       ) : (
         <FlatList
           data={mode === "Categories" ? displayedCategories : displayedStalls}
-          keyExtractor={(item) => item.id}
+          // keyExtractor={(item) => item.id}
           renderItem={mode === "Categories" ? renderCategoryItem : renderStall}
           numColumns={2}
         />
@@ -156,14 +159,16 @@ function CustomerDashboard({ route, navigation }) {
                 color={activeTab === 0 ? "#fff" : "#2F855A"}
               />
             )}
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === index && styles.activeTabText,
-              ]}
-            >
-              {tab}
-            </Text>
+            {activeTab === index && (
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === index && styles.activeTabText,
+                ]}
+              >
+                {tab}
+              </Text>
+            )}
           </TouchableOpacity>
         ))}
       </View>
