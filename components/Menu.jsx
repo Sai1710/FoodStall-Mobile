@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function Menu({ options, activeOption, onChange }) {
   const navigation = useNavigation();
   function onChange(option) {
-    navigation.navigate(option.page);
+    navigation.replace(option.page);
   }
   return (
     <View style={styles.container}>

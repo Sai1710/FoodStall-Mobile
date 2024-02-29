@@ -1,3 +1,4 @@
+<script src="http://localhost:8097"></script>;
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -10,7 +11,7 @@ import { AuthContext } from "../Schemas/AuthContext";
 
 const HomePage = ({ navigation }) => {
   const handleCustomerLogin = () => {
-    navigation.push("customer-login");
+    navigation.navigate("customer-login");
   };
 
   const handleVendorLogin = () => {
@@ -25,7 +26,6 @@ const HomePage = ({ navigation }) => {
     <View
       style={{
         flex: 1,
-        justifyContent: "space-between",
       }}
     >
       <StatusBar backgroundColor="#fff" />
@@ -42,6 +42,8 @@ const HomePage = ({ navigation }) => {
         <View
           style={{
             flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <Text
@@ -54,7 +56,11 @@ const HomePage = ({ navigation }) => {
           >
             Welcome to Food Stall!
           </Text>
-          <View>
+          <View
+            style={{
+              alignSelf: "stretch",
+            }}
+          >
             <TouchableOpacity
               style={{
                 marginTop: 32,

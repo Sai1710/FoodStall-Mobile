@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
     margin: 16,
     marginTop: 32,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 8,
     borderRadius: 8,
-    backgroundColor: "#14532D",
+    backgroundColor: "#047857",
   },
   addButtonText: {
     color: "white",

@@ -237,21 +237,38 @@ export default function VendorLogin({ navigation }) {
             />
           </View>
         </View>
-        <TouchableOpacity
-          style={{ marginTop: 20 }}
-          onPress={() => navigation.navigate("vendor-registration")}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "bold",
-              color: "#047857",
-              textAlign: "center",
-            }}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => navigation.navigate("vendor-registration")}
           >
-            Sign Up Instead?
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "bold",
+                color: "#047857",
+                textAlign: "center",
+              }}
+            >
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => navigation.navigate("vendor-registration")}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "bold",
+                color: "#047857",
+                textAlign: "center",
+              }}
+            >
+              Sign Up Instead?
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <LottieView
         source={require("../../assets/VendorLogin.json")}

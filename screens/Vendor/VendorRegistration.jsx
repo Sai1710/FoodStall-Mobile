@@ -115,7 +115,7 @@ export default function VendorRegistration({ navigation }) {
   };
 
   return (
-    <ScrollView style={{ flexGrow: 1 }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <StatusBar backgroundColor={"#fff"}></StatusBar>
 
       <View className="flex-1 justify-center items-center">

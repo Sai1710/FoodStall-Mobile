@@ -14,6 +14,7 @@ import {
   AlertNotificationRoot,
   Toast,
 } from "react-native-alert-notification";
+import LottieView from "lottie-react-native";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
 import { useState } from "react";
@@ -29,18 +30,22 @@ export default function AdminRegistration({ navigation }) {
     console.log(values);
     try {
       axios
-        .post(`${DEFAULT_URL}/api/v1/admin/sign_up`, {
-          admin: {
-            email: values.email,
-            password: values.password,
+        .post(
+          `${DEFAULT_URL}/api/v1/admin/sign_up`,
+          {
+            admin: {
+              email: values.email,
+              password: values.password,
+            },
+            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
           },
-          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-        },{
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-            "ngrok-skip-browser-warning": true,
-          },
-        })
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+              "ngrok-skip-browser-warning": true,
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           navigation.navigate("admin-login");
@@ -71,7 +76,7 @@ export default function AdminRegistration({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#fff"} />
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../../assets/AdminRegistration.jpg")}
         style={{
           flex: 1,
@@ -81,94 +86,104 @@ export default function AdminRegistration({ navigation }) {
           width: 450,
         }}
         blurRadius={3}
-      >
-        <View style={styles.card}>
-          <Text style={styles.title}>Admin Registration</Text>
-          <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
-          <Formik
-            initialValues={{ email: "", password: "", confirmPassword: "" }}
-            validationSchema={AdminRegistrationValidationSchema}
-            onSubmit={handleRegister}
-          >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-            }) => (
-              <View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  keyboardType="email-address"
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-
-                <TextInput
-                  secureTextEntry
-                  style={styles.input}
-                  placeholder="Password"
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-
-                <TextInput
-                  secureTextEntry
-                  style={styles.input}
-                  placeholder="Confirm Password"
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  value={values.confirmPassword}
-                />
-                {touched.confirmPassword && errors.confirmPassword && (
-                  <Text style={styles.error}>{errors.confirmPassword}</Text>
-                )}
-
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </Formik>
-
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Or Login with</Text>
-            <View style={styles.dividerLine} />
-          </View>
-          <View style={styles.socialLogin}>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/google.png")}
-                style={styles.socialIcon}
+      > */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Admin Registration</Text>
+        <Text style={styles.subtitle}>Welcome to FoodStall !</Text>
+        <Formik
+          initialValues={{ email: "", password: "", confirmPassword: "" }}
+          validationSchema={AdminRegistrationValidationSchema}
+          onSubmit={handleRegister}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                keyboardType="email-address"
               />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/apple.png")}
-                style={styles.socialIcon}
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+
+              <TextInput
+                secureTextEntry
+                style={styles.input}
+                placeholder="Password"
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
               />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.signupLink}
-            onPress={() => navigation.navigate("admin-login")}
-          >
-            <Text style={styles.signupText}>Login Instead?</Text>
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <TextInput
+                secureTextEntry
+                style={styles.input}
+                placeholder="Confirm Password"
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
+                value={values.confirmPassword}
+              />
+              {touched.confirmPassword && errors.confirmPassword && (
+                <Text style={styles.error}>{errors.confirmPassword}</Text>
+              )}
+
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Register</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Or Login with</Text>
+          <View style={styles.dividerLine} />
+        </View>
+        <View style={styles.socialLogin}>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/google.png")}
+              style={styles.socialIcon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/apple.png")}
+              style={styles.socialIcon}
+            />
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+        <TouchableOpacity
+          style={styles.signupLink}
+          onPress={() => navigation.navigate("admin-login")}
+        >
+          <Text style={styles.signupText}>Login Instead?</Text>
+        </TouchableOpacity>
+      </View>
+      <LottieView
+        source={require("../../assets/AdminLogin.json")}
+        autoPlay
+        loop
+        style={{
+          width: "100%",
+          flex: 0.6,
+          marginTop: 30,
+        }}
+      />
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -178,7 +193,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#E5FFEC",
+    backgroundColor: "#fff",
   },
   error: {
     color: "red",
@@ -262,7 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#047857",
     textAlign: "center",

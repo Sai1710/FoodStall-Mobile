@@ -35,6 +35,7 @@ export default function CustomerNavbar({ options, activeOption }) {
           <TouchableOpacity
             onPress={() => {
               console.log("profile opened");
+              navigation.popToTop();
             }}
           >
             <View

@@ -54,7 +54,7 @@ export default function AdminLogin({ navigation }) {
           console.log(res);
 
           if (res.status == 200) {
-            navigation.navigate("stall-requests");
+            navigation.replace("stall-requests");
             setAccessToken(res);
           }
         })
@@ -82,7 +82,7 @@ export default function AdminLogin({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#FFFFFF"} />
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../../assets/VendorRegistration.jpg")}
         style={{
           flex: 1,
@@ -92,73 +92,82 @@ export default function AdminLogin({ navigation }) {
           width: 450,
         }}
         blurRadius={3}
-      >
-        <View style={styles.card}>
-          <Text style={styles.title}>Admin Login</Text>
-          <Text style={styles.subtitle}>
-            Enter your Credentials to access your account
-          </Text>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={handleLogin}
-            validationSchema={loginValidationSchema}
+      > */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Admin Login</Text>
+        <Text style={styles.subtitle}>
+          Enter your Credentials to access your account
+        </Text>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={loginValidationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                secureTextEntry
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Or Login with</Text>
+          <View style={styles.dividerLine} />
+        </View>
+        <View style={styles.socialLogin}>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/google.png")}
+              style={styles.socialIcon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image
+              source={require("../../assets/apple.png")}
+              style={styles.socialIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            style={styles.signupLink}
+            onPress={() => {
+              console.log("Forgot Password");
+            }}
           >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-            }) => (
-              <View>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-                <TextInput
-                  style={styles.input}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                  placeholder="Password"
-                  secureTextEntry
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </Formik>
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Or Login with</Text>
-            <View style={styles.dividerLine} />
-          </View>
-          <View style={styles.socialLogin}>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/google.png")}
-                style={styles.socialIcon}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image
-                source={require("../../assets/apple.png")}
-                style={styles.socialIcon}
-              />
-            </TouchableOpacity>
-          </View>
+            <Text style={styles.signupText}>Forgot Password?</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.signupLink}
             onPress={() => navigation.navigate("admin-registration")}
@@ -166,7 +175,18 @@ export default function AdminLogin({ navigation }) {
             <Text style={styles.signupText}>Sign Up Instead?</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </View>
+      <LottieView
+        source={require("../../assets/AdminRegistration.json")}
+        autoPlay
+        loop
+        style={{
+          width: "100%",
+          flex: 0.6,
+          marginTop: 30,
+        }}
+      />
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -176,10 +196,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#E5FFEC",
+    backgroundColor: "#fff",
   },
   card: {
-    width: "80%",
+    width: "90%",
     backgroundColor: "rgb(255,255,255)",
     padding: 20,
     borderRadius: 10,
@@ -238,6 +258,7 @@ const styles = StyleSheet.create({
   dividerText: {
     fontWeight: "600",
     marginHorizontal: 5,
+    fontSize: 12,
   },
   socialLogin: {
     flexDirection: "row",
@@ -260,7 +281,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#047857",
     textAlign: "center",

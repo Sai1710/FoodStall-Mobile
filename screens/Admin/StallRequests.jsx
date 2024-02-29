@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RequestCard from "../../components/RequestCard";
 import RequestModal from "../../components/RequestModal";
 import { StatusBar } from "expo-status-bar";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function StallRequests() {
   const [requests, setRequests] = useState([]);
