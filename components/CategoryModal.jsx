@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
+  Picker,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../config";

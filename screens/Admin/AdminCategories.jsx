@@ -39,8 +39,12 @@ export default function AdminCategories() {
         })
         .then((response) => {
           const categories = response.data.categories || [];
+          const sortedCategoryData = categories.sort((a, b) => {
+            return new Date(b.created_at) - new Date(a.created_at);
+          });
 
-          setCategoryData(categories);
+          console.log(sortedCategoryData);
+          setCategoryData(sortedCategoryData);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -81,7 +85,7 @@ export default function AdminCategories() {
           </Pressable>
         </View>
 
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <DeleteModal
             setModalVisible={setModalVisible}
             modalVisible={modalVisible}
