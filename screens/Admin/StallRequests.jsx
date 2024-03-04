@@ -57,6 +57,7 @@ export default function StallRequests() {
           const categoryReq = requestData.filter(
             (request) => request.status.toLowerCase() === "pending"
           );
+          console.log(requestData)
           setDisplayedRequests(categoryReq);
         })
         .catch((err) => {

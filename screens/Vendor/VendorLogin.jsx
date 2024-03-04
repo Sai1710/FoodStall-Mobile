@@ -86,17 +86,7 @@ export default function VendorLogin({ navigation }) {
       }}
     >
       <StatusBar backgroundColor="#fff" />
-      {/* <ImageBackground
-        source={require("../../assets/VendorLoginBack.jpg")}
-        imageStyle={styles.headingImage}
-        style={{
-          flex: 1,
-          resizeMode: "cover",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        blurRadius={3}
-      > */}
+
       <View
         style={{
           width: "90%",

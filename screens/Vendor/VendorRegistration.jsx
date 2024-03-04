@@ -15,6 +15,8 @@ import {
   VirtualizedList,
   FlatList,
 } from "react-native";
+
+import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { CheckBox } from "react-native-btr";
 import { useState, useEffect } from "react";
@@ -35,8 +37,10 @@ export default function VendorRegistration({ navigation }) {
   const [franchise, setFranchise] = useState(false);
   const [franchiseDetails, setFranchiseDetails] = useState("");
   const [error, setError] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
   const [fetchedCategories, setFetchedCategories] = useState([]);
+  const [formMode, setFormMode] = useState("personal");
+  const [stallName, setStallName] = useState("");
+  const [stallLogo, setStallLogo] = useState();
 
   const fetchCategories = async () => {
     const token = await AsyncStorage.getItem("access-token");
@@ -56,6 +60,18 @@ export default function VendorRegistration({ navigation }) {
   }, []);
 
   const onSubmit = async () => {
+    console.log(
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      stallLogo,
+      stallName,
+      franchise,
+      franchiseDetails
+    );
     if (confirmPassword == password) {
       axios
         .post(
@@ -71,6 +87,8 @@ export default function VendorRegistration({ navigation }) {
               confirm_password: confirmPassword,
               type_of_categories: categories,
               franchise: franchise,
+              stall_name: stallName,
+              stall_logo: stallLogo,
               franchise_details: franchiseDetails,
             },
             client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
@@ -95,49 +113,55 @@ export default function VendorRegistration({ navigation }) {
     setConfirmPassword("");
     setFranchise(false);
     setFranchiseDetails("");
-    setSelectedImage(null);
   };
-  // const pickImageAsync = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     quality: 1,
-  //   });
+  const pickImageAsync = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  //   if (!result.canceled) {
-  //     setSelectedImage(result.assets[0].uri);
-  //   } else {
-  //     alert("You did not select any image.");
-  //   }
-  // };
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission Denied",
+        `Sorry, we need camera  
+             roll permission to upload images.`
+      );
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.canceled) {
+        // If an image is selected (not cancelled),
+        // update the file state variable
+        setStallLogo(result);
+        console.log(stallLogo);
+
+        // Clear any previous errors
+      }
+    }
+  };
 
   onSelectedItemsChange = (categories) => {
     setCategories(categories);
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <StatusBar backgroundColor={"#fff"}></StatusBar>
+    <ScrollView>
+      <View className="flex-1 bg-white align-middle justify-center">
+        <StatusBar backgroundColor={"#fff"}></StatusBar>
 
-      <View className="flex-1 justify-center items-center">
-        <ImageBackground
-          source={require("../../assets/VendorRegistration.jpg")}
-          style={{
-            flex: 1,
-            resizeMode: "cover",
-            justifyContent: "center",
-            alignItems: "center",
-            width: 450,
-          }}
-          blurRadius={3}
+        <View
+          className="flex-1 justify-center"
+          style={{ alignItems: "center" }}
         >
           <View
             className="w-4/5 bg-white p-5 rounded-lg shadow-md"
             style={{ margin: 80 }}
           >
-            <Text className="text-2xl font-bold text-center mb-5">
+            <Text className="text-2xl font-bold text-center mb-5 text-green-900">
               Register your Stall
             </Text>
-            <View>
+            <Text className="text-sm font-bold text-center mb-5 text-green-900">
+              Enter stall details
+            </Text>
+
+            <View className="flex-1">
               <TextInput
                 value={firstName}
                 onChangeText={setFirstName}
@@ -183,16 +207,27 @@ export default function VendorRegistration({ navigation }) {
                 value={confirmPassword}
                 placeholder="Confirm Password"
               />
-            </View>
-            {/* <SelectBox
-              label="Categories"
-              options={items}
-              selectedValues={categories}
-              onMultiSelect={onMultiChange()}
-              onTapClose={onMultiChange()}
-              isMulti
-            /> */}
-            <View>
+
+              <TextInput
+                className="border-gray-300 p-3 mb-4 rounded-lg"
+                style={{ borderWidth: 1 }}
+                onChangeText={setStallName}
+                value={stallName}
+                placeholder="Stall Name"
+              />
+              {/* <Button
+                theme="primary"
+                title="Choose a photo"
+                onPress={pickImageAsync}
+              /> */}
+              <TouchableOpacity
+                className="bg-green-900 py-1 rounded-lg mb-2"
+                onPress={pickImageAsync}
+              >
+                <Text className="text-white text-center text-sm font-semibold">
+                  {!stallLogo ? "Upload Stall Logo" : "Image Selected"}
+                </Text>
+              </TouchableOpacity>
               <MultiSelect
                 items={fetchedCategories}
                 uniqueKey="name"
@@ -217,23 +252,20 @@ export default function VendorRegistration({ navigation }) {
                   marginBottom: 16,
                 }}
               />
-            </View>
-            <View>
-              <View className="flex-row mb-4">
-                <Pressable
-                  className={` flex-1 pl-2 pr-2
+
+              <Pressable
+                className={`flex-1 m-2 pl-2 pr-2
                  pt-2 pb-2 rounded ${
                    franchise ? "bg-green-800" : "bg-gray-500"
                  } text-white font-medium`}
-                  onPress={() => {
-                    setFranchise((prev) => !prev);
-                  }}
-                >
-                  <Text style={{ color: "white", textAlign: "center" }}>
-                    Franchise
-                  </Text>
-                </Pressable>
-              </View>
+                onPress={() => {
+                  setFranchise((prev) => !prev);
+                }}
+              >
+                <Text style={{ color: "white", textAlign: "center" }}>
+                  Franchise
+                </Text>
+              </Pressable>
 
               {franchise && (
                 <TextInput
@@ -253,25 +285,23 @@ export default function VendorRegistration({ navigation }) {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Pressable
-              className="mt-10 mb-4"
-              onPress={() => {
-                navigation.navigate("vendor-login");
-              }}
+            <View
+              className="flex-row mt-3"
+              style={{ alignItems: "center", justifyContent: "space-around" }}
             >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#14532d",
-                  fontSize: 19,
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("vendor-login");
                 }}
               >
-                Login Instead?
-              </Text>
-            </Pressable>
+                <Text className="text-green-900 text-center items-center font-bold">
+                  Login Instead?
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </ImageBackground>
+          {/* </ImageBackground> */}
+        </View>
       </View>
     </ScrollView>
   );

@@ -37,7 +37,7 @@ function CustomerDashboard({ route, navigation }) {
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
     const tempStalls = stalls.filter((item) =>
-      item.first_name.toLowerCase().includes(searchText.toLowerCase())
+      item.stall_name.toLowerCase().includes(searchText.toLowerCase())
     );
     setDisplayedCategories(tempCategories);
     setDisplayedStalls(tempStalls);
@@ -134,7 +134,7 @@ function CustomerDashboard({ route, navigation }) {
       ) : (
         <FlatList
           data={mode === "Categories" ? displayedCategories : displayedStalls}
-          // keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => index}
           renderItem={mode === "Categories" ? renderCategoryItem : renderStall}
           numColumns={2}
         />

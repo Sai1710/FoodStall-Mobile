@@ -25,8 +25,9 @@ export default function StallCard({ data, categoryId }) {
 
           <View style={styles.categoryTextContainer}>
             <Text style={styles.categoryText}>
-              {data.first_name.toUpperCase()}{" "}
-              {data.last_name ? data.last_name.toUpperCase() : ""}
+              {data.stall_name && data.stall_name.length !== 0
+                ? data.stall_name.toUpperCase()
+                : "No Stall Name"}
             </Text>
             <TouchableOpacity style={styles.button} onPress={handlePress}>
               <Text style={styles.buttonText}>View Menu</Text>
