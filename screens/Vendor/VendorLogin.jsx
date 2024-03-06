@@ -51,7 +51,7 @@ export default function VendorLogin({ navigation }) {
         })
         .then((res) => {
           if (res.status == 200) {
-            console.log(res);
+            console.log(res.data.vendor);
             navigation.navigate("vendor-menu");
             setAccessToken(res);
           }

@@ -50,3 +50,19 @@ export const customerRegistrationSchema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Required"),
 });
+
+export const vendorValidationSchema = yup.object().shape({
+  firstName: yup.string().required("First Name is required"),
+  lastName: yup.string().required("Last Name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phoneNumber: yup.number().required("Phone Number is required"),
+  password: yup.string().required("Password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+  stallName: yup.string().required("Stall Name is required"),
+  categories: yup.array().required("Categories not Selected"),
+  franchise: yup.boolean(),
+  franchise_details: yup.string(),
+});

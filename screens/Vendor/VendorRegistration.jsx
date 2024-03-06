@@ -1,5 +1,3 @@
-// import SelectBox from "react-native-multi-selectbox";
-
 import {
   View,
   Text,
@@ -16,6 +14,7 @@ import {
   FlatList,
 } from "react-native";
 
+import { vendorValidationSchema } from "../../Schemas/ValidationSchema";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { CheckBox } from "react-native-btr";
@@ -24,6 +23,7 @@ import { CATEGORIES } from "../../data/dummy-data";
 import MultiSelect from "react-native-multiple-select";
 import ModalDropdown from "react-native-modal-dropdown";
 import DEFAULT_URL from "../../config";
+import { Formik } from "formik";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function VendorRegistration({ navigation }) {
@@ -59,60 +59,45 @@ export default function VendorRegistration({ navigation }) {
     fetchCategories();
   }, []);
 
-  const onSubmit = async () => {
-    console.log(
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-      phoneNumber,
+  const handleRegister = async () => {
+    const formData = new FormData();
+    formData.append("vendor[first_name]", firstName);
+    formData.append("vendor[last_name]", lastName);
+    formData.append("vendor[email]", email);
+    formData.append("vendor[phone_number]", phoneNumber);
+    formData.append("vendor[password]", password);
+    formData.append("vendor[confirm_password]", confirmPassword);
+    formData.append("vendor[type_of_categories]", categories);
+    formData.append("vendor[franchise]", franchise);
+    formData.append("vendor[franchise_details]", franchiseDetails);
+    formData.append("vendor[stall_name]", stallName);
+    formData.append("vendor[stall_logo]", {
       stallLogo,
-      stallName,
-      franchise,
-      franchiseDetails
-    );
-    if (confirmPassword == password) {
-      axios
-        .post(
-          `${DEFAULT_URL}/api/v1/vendor/sign_up`,
+      name: "image.jpg",
+      type: "image/jpg",
+    });
+    formData.append("client_id", "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI");
+    console.log(formData);
 
-          {
-            vendor: {
-              first_name: firstName,
-              last_name: lastName,
-              email: email,
-              phone_number: phoneNumber,
-              password: password,
-              confirm_password: confirmPassword,
-              type_of_categories: categories,
-              franchise: franchise,
-              stall_name: stallName,
-              stall_logo: stallLogo,
-              franchise_details: franchiseDetails,
-            },
-            client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          navigation.navigate("vendor-login");
-        })
-        .catch((err) => {
-          console.error("Error in Axios request:", err.message);
-        });
-    } else {
-      alert("Password dont match");
-    }
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPhoneNumber("");
-    setCategories([]);
-    setPassword("");
-    setConfirmPassword("");
-    setFranchise(false);
-    setFranchiseDetails("");
+    axios
+      .post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData)
+      .then((res) => {
+        console.log(res);
+        navigation.navigate("vendor-login");
+      })
+      .catch((err) => {
+        console.error("Error in Axios request:", err);
+      });
+
+    // setFirstName("");
+    // setLastName("");
+    // setEmail("");
+    // setPhoneNumber("");
+    // setCategories([]);
+    // setPassword("");
+    // setConfirmPassword("");
+    // setFranchise(false);
+    // setFranchiseDetails("");
   };
   const pickImageAsync = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -127,17 +112,13 @@ export default function VendorRegistration({ navigation }) {
       const result = await ImagePicker.launchImageLibraryAsync();
 
       if (!result.canceled) {
-        // If an image is selected (not cancelled),
-        // update the file state variable
-        setStallLogo(result);
+        setStallLogo(result.assets[0].uri);
         console.log(stallLogo);
-
-        // Clear any previous errors
       }
     }
   };
 
-  onSelectedItemsChange = (categories) => {
+  const onSelectedItemsChange = (categories) => {
     setCategories(categories);
   };
 
@@ -163,19 +144,21 @@ export default function VendorRegistration({ navigation }) {
 
             <View className="flex-1">
               <TextInput
-                value={firstName}
                 onChangeText={setFirstName}
+                value={firstName}
                 className="border-gray-300 p-3 mb-4 rounded-lg"
                 style={{ borderWidth: 1 }}
                 placeholder="First Name"
               />
+
               <TextInput
-                value={lastName}
                 onChangeText={setLastName}
+                value={lastName}
                 style={{ borderWidth: 1 }}
                 className="border-gray-300 p-3 mb-4 rounded-lg"
                 placeholder="Last Name"
               />
+
               <TextInput
                 className="border-gray-300 p-3 mb-4 rounded-lg"
                 style={{ borderWidth: 1 }}
@@ -183,6 +166,7 @@ export default function VendorRegistration({ navigation }) {
                 value={email}
                 placeholder="Email"
               />
+
               <TextInput
                 className="border-gray-300 p-3 mb-4 rounded-lg"
                 style={{ borderWidth: 1 }}
@@ -191,6 +175,7 @@ export default function VendorRegistration({ navigation }) {
                 keyboardType="numeric"
                 placeholder="Phone Number"
               />
+
               <TextInput
                 secureTextEntry={true}
                 className="border-gray-300 p-3 mb-4 rounded-lg"
@@ -199,6 +184,7 @@ export default function VendorRegistration({ navigation }) {
                 value={password}
                 placeholder="Password"
               />
+
               <TextInput
                 secureTextEntry={true}
                 className="border-gray-300 p-3 mb-4 rounded-lg"
@@ -215,19 +201,30 @@ export default function VendorRegistration({ navigation }) {
                 value={stallName}
                 placeholder="Stall Name"
               />
-              {/* <Button
-                theme="primary"
-                title="Choose a photo"
-                onPress={pickImageAsync}
-              /> */}
+
               <TouchableOpacity
-                className="bg-green-900 py-1 rounded-lg mb-2"
+                style={{
+                  borderWidth: 2,
+                  borderStyle: "dotted",
+                  borderColor: "black",
+                  paddingVertical: 5,
+                  borderRadius: 8,
+                  marginBottom: 12,
+                }}
                 onPress={pickImageAsync}
               >
-                <Text className="text-white text-center text-sm font-semibold">
+                <Text
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    fontSize: 14,
+                    fontWeight: "bold",
+                  }}
+                >
                   {!stallLogo ? "Upload Stall Logo" : "Image Selected"}
                 </Text>
               </TouchableOpacity>
+
               <MultiSelect
                 items={fetchedCategories}
                 uniqueKey="name"
@@ -278,7 +275,7 @@ export default function VendorRegistration({ navigation }) {
               )}
               <TouchableOpacity
                 className="bg-green-900 py-3 rounded-lg"
-                onPress={onSubmit}
+                onPress={handleRegister}
               >
                 <Text className="text-white text-center text-lg font-semibold">
                   Register
@@ -313,5 +310,9 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
   },
 });
