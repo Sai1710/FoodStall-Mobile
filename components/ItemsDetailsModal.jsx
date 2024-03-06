@@ -1,141 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
+  Image,
   Pressable,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
+  const link = "https://www.happyeater.com/images/default-food-image.jpg";
+  const [quantity, setQuantity] = useState(0);
+
   return (
-    <Pressable
-      onPress={() => {
+    <Modal
+      visible={modalVisible}
+      transparent={true}
+      animationType="slide"
+      onRequestClose={() => {
         setModalVisible(false);
       }}
     >
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => {
-          setModalVisible(false);
+      <Pressable
+        style={styles.modalContainer}
+        onPress={() => {
+          setModalVisible((prev) => !prev);
         }}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.titleContainer}>
+        <View style={styles.modalContent}>
+          <Image
+            source={require("../assets/ChineseFood.jpg")}
+            style={{ width: "100%", height: 200, borderRadius: 20 }}
+          />
+          <View style={styles.titleContainer}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                source={
+                  item.item_type === "veg"
+                    ? require("../assets/VEG.png")
+                    : require("../assets/NONVEG.png")
+                }
+                style={{ height: 20, width: 20, marginRight: 5 }}
+              />
               <Text style={styles.title}>{item.name}</Text>
-
-              <View
-                style={{
-                  backgroundColor:
-                    item.item_type.toUpperCase() === "VEG" ? "green" : "red",
-                  paddingVertical: 6,
-                  paddingHorizontal: 16,
-                  borderRadius: 5,
-                  marginBottom: 10,
-                }}
-              >
-                <Text style={styles.description}>
-                  {item.item_type.toUpperCase()}
-                </Text>
-              </View>
             </View>
-            <View style={styles.divider}></View>
             <View>
-              <Text style={{ fontWeight: "bold" }}>Tags</Text>
-              <View style={{ flexDirection: "row" }}>
-                {item.tags.map((item) => {
-                  return (
-                    <View
-                      key={item}
-                      style={{
-                        backgroundColor: "#047857",
-                        paddingVertical: 6,
-                        paddingHorizontal: 16,
-                        borderRadius: 5,
-                        marginRight: 10,
-                        marginVertical: 10,
-                      }}
-                    >
-                      <Text style={styles.description}>{item}</Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.divider}></View>
-            <View>
-              <Text style={{ fontWeight: "bold" }}>Taste</Text>
-              <View style={{ flexDirection: "row" }}>
-                {item.taste.map((item) => {
-                  return (
-                    <View
-                      key={item}
-                      style={{
-                        backgroundColor: "#047857",
-                        paddingVertical: 6,
-                        paddingHorizontal: 16,
-                        borderRadius: 5,
-                        marginRight: 10,
-                        marginVertical: 10,
-                      }}
-                    >
-                      <Text style={styles.description}>{item}</Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.divider}></View>
-            <View>
-              <Text style={{ fontWeight: "bold" }}>Sub Types</Text>
-              <View style={{ flexDirection: "row" }}>
-                {item.sub_type.map((item) => {
-                  return (
-                    <View
-                      key={item}
-                      style={{
-                        backgroundColor: "#047857",
-                        paddingVertical: 6,
-                        paddingHorizontal: 16,
-                        borderRadius: 5,
-                        marginRight: 10,
-                        marginVertical: 10,
-                      }}
-                    >
-                      <Text style={styles.description}>{item}</Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: 20,
-              }}
-            >
               <Text style={styles.price}>${item.price}</Text>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => {
-                  setModalVisible((prev) => !prev);
-                }}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
             </View>
           </View>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 20,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              <TouchableOpacity
+                style={{ marginHorizontal: 10 }}
+                onPress={() => {
+                  setQuantity((prev) => prev - 1);
+                }}
+              >
+                <AntDesign name="minuscircleo" color="#2F855A" size={25} />
+              </TouchableOpacity>
+              <Text style={{ marginHorizontal: 10, fontWeight: "bold" }}>
+                {quantity}
+              </Text>
+              <TouchableOpacity
+                style={{ marginHorizontal: 10 }}
+                onPress={() => {
+                  setQuantity((prev) => prev + 1);
+                }}
+              >
+                <AntDesign name="pluscircleo" color="#2F855A" size={25} />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => {
+                setModalVisible((prev) => !prev);
+              }}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </Modal>
-    </Pressable>
+      </Pressable>
+    </Modal>
   );
 };
 
@@ -158,11 +121,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginTop: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
   },
   description: {
     color: "#fff",
@@ -172,7 +135,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#4caf50",
+    color: "#2F855A",
     margin: "auto",
   },
   closeButton: {

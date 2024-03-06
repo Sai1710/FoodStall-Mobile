@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import Menu from "./Menu";
 import { useNavigation } from "@react-navigation/native";
 
-export default function CustomerNavbar({ options, activeOption }) {
+export default function CustomerNavbar({ options, activeOption, title }) {
   const navigation = useNavigation();
 
   return (
@@ -28,7 +28,7 @@ export default function CustomerNavbar({ options, activeOption }) {
           }}
         >
           <Text style={{ color: "#2F855A", fontWeight: "900", fontSize: 24 }}>
-            FoodM
+            {title}
           </Text>
         </TouchableOpacity>
         <View style={styles.menuContainer}>

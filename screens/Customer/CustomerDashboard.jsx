@@ -104,7 +104,7 @@ function CustomerDashboard({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <CustomerNavbar />
+      <CustomerNavbar title="FoodM" />
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>
           What are you craving today, {name}?

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import ItemDetailsModal from "./ItemsDetailsModal";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 const MenuItemCard = ({ item }) => {
   const link = "https://www.happyeater.com/images/default-food-image.jpg";
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   return (
     <>
@@ -14,79 +23,137 @@ const MenuItemCard = ({ item }) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => {
-          setModalVisible((prev) => !prev);
-        }}
-      >
-        <Image source={{ uri: link }} style={styles.image} />
-        <View style={styles.detailsContainer}>
-          <Text style={styles.title}>{item.name}</Text>
-          <Text
+
+      <View style={styles.innerContainer}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
             style={{
-              fontSize: 14,
-              color: item.item_type.toUpperCase() === "VEG" ? "green" : "red",
+              borderRadius: 100,
+              borderWidth: 1,
+              borderColor: item.item_type === "veg" ? "green" : "red",
             }}
           >
-            {item.item_type.toUpperCase()}
-          </Text>
-          <Text style={styles.price}>${item.price}</Text>
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: item.item_type === "veg" ? "green" : "red",
+                borderRadius: 100,
+                margin: 2,
+              }}
+            ></View>
+          </View>
+          <Pressable
+            onPress={() => {
+              setFavorite((prev) => !prev);
+            }}
+          >
+            <MaterialIcons
+              name={!favorite ? "favorite-border" : "favorite"}
+              size={20}
+              color={!favorite ? "black" : "red"}
+            />
+          </Pressable>
+        </View>
+        <View style={styles.imgContainer}>
+          <Image
+            source={require("../assets/ChineseFood.jpg")}
+            style={styles.image}
+          />
         </View>
 
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      </TouchableOpacity>
+        <View style={{ marginTop: 20 }}>
+          <View style={styles.categoryTextContainer}>
+            <Text style={styles.categoryText}>{item.name}</Text>
+          </View>
+          <View style={styles.priceContainer}>
+            <Text style={styles.priceText}>$ {item.price}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible((prev) => !prev);
+              }}
+            >
+              <Ionicons name="add-circle" color="#2F855A" size={30} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  priceContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    overflow: "hidden",
-    marginHorizontal: 20,
-    marginVertical: 5,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
+    borderRadius: 5,
+    marginLeft: 3,
+    marginTop: 5,
   },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: "cover",
-  },
-  detailsContainer: {
-    flex: 1,
-    padding: 10,
-  },
-  title: {
-    fontSize: 18,
+  priceText: {
+    color: "#2F855A",
     fontWeight: "bold",
+    fontSize: 15,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  button: {
+    backgroundColor: "#047857",
+    padding: 6,
+    borderRadius: 4,
+    margin: 0,
+    marginTop: 10,
   },
 
-  price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 5,
-    color: "black",
+  image: {
+    height: 150,
+    width: 150,
+    alignSelf: "center",
+    borderRadius: 160,
   },
-  addButton: {
-    backgroundColor: "#4caf50",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  categoryTextContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    borderRadius: 5,
+    marginLeft: 3,
+    marginTop: 10,
+  },
+  titleContainer: {
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 16,
+  categoryText: {
+    color: "#000",
     fontWeight: "bold",
+    fontSize: 14,
+  },
+  imgContainer: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  innerContainer: {
+    flex: 1,
+    margin: 10,
+    borderColor: "grey",
+    borderWidth: 0.5,
+    padding: 10,
+    borderRadius: 6,
+    height: 255,
   },
 });
 

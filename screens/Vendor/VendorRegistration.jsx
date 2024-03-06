@@ -13,7 +13,9 @@ import {
   VirtualizedList,
   FlatList,
 } from "react-native";
-
+// import RNFetchBlob from "rn-fetch-blob";
+import { withSwal } from "react-sweetalert2";
+import { launchImageLibrary } from "react-native-image-picker";
 import { vendorValidationSchema } from "../../Schemas/ValidationSchema";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -60,6 +62,8 @@ export default function VendorRegistration({ navigation }) {
   }, []);
 
   const handleRegister = async () => {
+    const response = await fetch(stallLogo);
+    const blob = await response.blob();
     const formData = new FormData();
     formData.append("vendor[first_name]", firstName);
     formData.append("vendor[last_name]", lastName);
@@ -71,16 +75,26 @@ export default function VendorRegistration({ navigation }) {
     formData.append("vendor[franchise]", franchise);
     formData.append("vendor[franchise_details]", franchiseDetails);
     formData.append("vendor[stall_name]", stallName);
-    formData.append("vendor[stall_logo]", {
-      stallLogo,
-      name: "image.jpg",
-      type: "image/jpg",
-    });
+    formData.append("vendor[stall_logo]", blob);
     formData.append("client_id", "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI");
-    console.log(formData);
+    // console.log(formData);
 
     axios
-      .post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData)
+      .post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, {
+        vendor: {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          phone_number: phoneNumber,
+          password: password,
+          type_of_categories: categories,
+          franchise: franchise,
+          franchise_details: franchiseDetails,
+          stall_name: stallName,
+          stall_logo: blob,
+        },
+        client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI",
+      })
       .then((res) => {
         console.log(res);
         navigation.navigate("vendor-login");
@@ -99,20 +113,19 @@ export default function VendorRegistration({ navigation }) {
     // setFranchise(false);
     // setFranchiseDetails("");
   };
+
   const pickImageAsync = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
     if (status !== "granted") {
       Alert.alert(
         "Permission Denied",
-        `Sorry, we need camera  
+        `Sorry, we need camera
              roll permission to upload images.`
       );
     } else {
       const result = await ImagePicker.launchImageLibraryAsync();
-
       if (!result.canceled) {
-        setStallLogo(result.assets[0].uri);
+        setStallLogo(result.assets[0]);
         console.log(stallLogo);
       }
     }
@@ -211,7 +224,7 @@ export default function VendorRegistration({ navigation }) {
                   borderRadius: 8,
                   marginBottom: 12,
                 }}
-                onPress={pickImageAsync}
+                onPress={pickImageAsync.bind(this)}
               >
                 <Text
                   style={{

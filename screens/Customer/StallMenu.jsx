@@ -9,7 +9,11 @@ import {
   Text,
   Image,
   ScrollView,
+  Dimensions,
+  TextInput,
 } from "react-native";
+import CustomerNavbar from "../../components/CustomerNavbar";
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import DEFAULT_URL from "../../config";
@@ -18,6 +22,7 @@ import Loading from "../../components/Loading";
 function StallMenu({ route }) {
   const { vendor, categoryId } = route.params;
   const [menu, setMenu] = useState([]);
+  const [displayedMenu, setDisplayedMenu] = useState([]);
   console.log(vendor.id, categoryId);
 
   const fetchMenu = async () => {
@@ -38,53 +43,77 @@ function StallMenu({ route }) {
           const res = response.data.food_items || [];
           console.log(res);
           setMenu(res);
+          setDisplayedMenu(res);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  const handleSearch = (searchText) => {
+    const tempMenu = menu.filter((item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    setDisplayedMenu(tempMenu);
+  };
+  const renderMenu = (itemData) => {
+    return <MenuItemCard key={itemData.id} item={itemData.item} />;
+  };
+
   useEffect(() => {
     fetchMenu();
   }, []);
   return (
-    <ScrollView style={{ backgroundColor: "#E5FFEC" }}>
-      <View>
-        <View style={styles.stallHeading}>
-          <Image
-            source={{
-              uri: "https://cdn.dribbble.com/users/1726660/screenshots/3502872/punjabi_junction_dribble3.jpg",
-            }}
-            style={{ height: 40, width: 40 }}
-          />
-          <Text style={styles.headingText}>
-            {vendor.first_name + " " + vendor.last_name}
-          </Text>
-        </View>
-
-        <View style={styles.headingDesign}></View>
+    <View style={{ backgroundColor: "#fff", flex: 1, marginTop: 48 }}>
+      <CustomerNavbar
+        title={vendor.stall_name ? vendor.stall_name : vendor.first_name}
+      />
+      <View style={styles.seaarchContainer}>
+        <Feather name="search" color="#2F855A" size={20} />
+        <TextInput
+          style={styles.input}
+          placeholder="Search"
+          onChangeText={(searchText) => {
+            handleSearch(searchText);
+          }}
+        />
       </View>
-      <View>
-        <View style={styles.menuHeading}>
-          <Text style={{ fontWeight: "700", fontSize: 18, color: "#4caf50" }}>
-            Menu
-          </Text>
-        </View>
-        <View>
-          {menu ? (
+      <View style={styles.headingContainer}>
+        <Text style={styles.headingText}>Menu</Text>
+      </View>
+
+      {/* {menu ? (
             menu.map((item) => {
               return <MenuItemCard key={item.id} item={item} />;
             })
           ) : (
             <Loading />
-          )}
-        </View>
-      </View>
-    </ScrollView>
+          )} */}
+
+      <FlatList
+        data={displayedMenu}
+        keyExtractor={(item) => item.id}
+        renderItem={renderMenu}
+        numColumns={2}
+        style={{ margin: 10 }}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  itemsWrap: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginVertical: 6,
+    marginHorizontal: 6,
+  },
+  singleItem: {
+    marginHorizontal: 3,
+    width: "50%",
+  },
   stallHeading: {
     backgroundColor: "#4caf50",
     padding: 40,
@@ -107,6 +136,30 @@ const styles = StyleSheet.create({
   },
   menuHeading: {
     margin: 30,
+  },
+  seaarchContainer: {
+    padding: 4,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+    borderColor: "#F0F0F0",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  input: {
+    height: 30,
+    color: "#000",
+    paddingLeft: 5,
+  },
+  headingContainer: {
+    marginTop: 10,
+    marginLeft: 20,
+  },
+  headingText: {
+    fontSize: 20,
+    color: "#2F855A",
+    fontWeight: "bold",
   },
 });
 

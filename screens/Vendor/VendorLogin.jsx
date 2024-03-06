@@ -30,7 +30,7 @@ export default function VendorLogin({ navigation }) {
   const [password, setPassword] = useState("");
 
   const setAccessToken = async (res) => {
-    await AsyncStorage.setItem("access-token", res.data.vendor.access_token);
+    await AsyncStorage.setItem("access-token", res.data.access_token);
   };
 
   const options = [
@@ -39,7 +39,6 @@ export default function VendorLogin({ navigation }) {
   ];
 
   async function handleLogin(values) {
-    const token = await AsyncStorage.getItem("access-token");
     try {
       axios
         .post(`${DEFAULT_URL}/api/v1/vendor/login`, {
@@ -51,7 +50,7 @@ export default function VendorLogin({ navigation }) {
         })
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data.vendor);
+            console.log(res);
             navigation.navigate("vendor-menu");
             setAccessToken(res);
           }

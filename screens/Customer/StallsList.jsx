@@ -32,7 +32,7 @@ function StallsList({ route, navigation }) {
   };
   return (
     <View style={styles.container}>
-      <CustomerNavbar />
+      <CustomerNavbar title="FoodM" />
 
       <View style={styles.seaarchContainer}>
         <Feather name="search" color="#2F855A" size={20} />

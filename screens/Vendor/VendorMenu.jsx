@@ -18,6 +18,7 @@ const VendorMenu = ({ navigation }) => {
 
   const fetchMenu = async () => {
     const token = await AsyncStorage.getItem("access-token");
+    console.log(token);
     try {
       axios
         .get(`${DEFAULT_URL}/api/v1/vendor/food_items`, {

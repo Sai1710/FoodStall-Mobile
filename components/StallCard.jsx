@@ -20,7 +20,10 @@ export default function StallCard({ data, categoryId }) {
       <TouchableOpacity onPress={handlePress}>
         <View style={styles.innerContainer}>
           <View style={styles.imgContainer}>
-            <Image source={{ uri: link }} style={styles.image} />
+            <Image
+              source={{ uri: data.stall_logo_url ? data.stall_logo_url : link }}
+              style={styles.image}
+            />
           </View>
 
           <View style={styles.categoryTextContainer}>
