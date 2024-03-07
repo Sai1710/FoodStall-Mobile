@@ -17,11 +17,14 @@ import {
 } from "react-native";
 import axios from "axios";
 import CartCard from "../../components/CartCard";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 import CustomerNavbar from "../../components/CustomerNavbar";
 import Loading from "../../components/Loading";
 import { Entypo, Feather, MaterialIcons } from "@expo/vector-icons";
 function CustomerDashboard({ route, navigation }) {
   const [categoryData, setCategoryData] = useState([]);
+
   // const { data } = route.params;
   // console.log(data);
   const [displayedCategories, setDisplayedCategories] = useState([]);
@@ -30,7 +33,7 @@ function CustomerDashboard({ route, navigation }) {
   const [mode, setMode] = useState("Categories");
   const [stalls, setStalls] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
-  const [cart, setCart] = useState(null);
+  const [cart, setCart] = useState([]);
 
   const tabs = ["Categories", "Stalls"];
 
@@ -83,6 +86,7 @@ function CustomerDashboard({ route, navigation }) {
   const fetchCart = async () => {
     const token = await AsyncStorage.getItem("access-token");
     const cartId = await AsyncStorage.getItem("cart-id");
+    console.log(cartId);
     if (cartId !== null) {
       try {
         axios
@@ -94,7 +98,7 @@ function CustomerDashboard({ route, navigation }) {
           })
           .then((response) => {
             console.log(response.data.cart);
-            setCart(response.data.cart);
+            setCart(response.data.cart.cart_items);
           })
           .catch((err) => {
             console.log(err.message);
@@ -122,8 +126,13 @@ function CustomerDashboard({ route, navigation }) {
   }
   useEffect(() => {
     fetchCategories();
-    fetchCart();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchCart();
+    }, [])
+  );
   // let index = data.name.indexOf(" ");
   // let name = data.name.substring(0, index + 1);
   let name = "Saikiriti";
@@ -165,7 +174,8 @@ function CustomerDashboard({ route, navigation }) {
           numColumns={2}
         />
       )}
-      {cart ? <CartCard cart={cart} /> : <></>}
+      {cart.length != 0 ? <CartCard cart={cart} /> : <></>}
+      {/* <CartCard cart={cart} /> */}
       <View style={styles.tabContainer}>
         {tabs.map((tab, index) => (
           <TouchableOpacity

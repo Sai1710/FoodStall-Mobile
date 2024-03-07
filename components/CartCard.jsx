@@ -1,14 +1,48 @@
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  Pressable,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const { height } = Dimensions.get("window");
 
 export default function CartCard({ cart }) {
+  const clearCartId = async () => {
+    await AsyncStorage.clear("cart-id");
+  };
+
+  const deleteCart = async () => {
+    const token = await AsyncStorage.getItem("access-token");
+
+    try {
+      axios
+        .delete(`${DEFAULT_URL}/api/v1/customer/carts`, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "ngrok-skip-browser-warning": true,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          // clearCartId();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      // clearCartId();
+    }
+  };
   return (
-    <TouchableOpacity
+    <Pressable
       style={{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
         backgroundColor: "#2F855A",
         padding: 10,
         borderRadius: 10,
@@ -19,7 +53,7 @@ export default function CartCard({ cart }) {
         left: "5%",
         zIndex: 2,
         width: "90%",
-        opacity: 0.9,
+        opacity: 0.95,
       }}
     >
       <View
@@ -41,7 +75,9 @@ export default function CartCard({ cart }) {
         </Text>
         <AntDesign name="shoppingcart" color="#fff" size={30} />
       </View>
-      <AntDesign name="close" size={20} color="white" />
-    </TouchableOpacity>
+      <TouchableOpacity onPress={deleteCart}>
+        <AntDesign name="close" size={20} color="white" />
+      </TouchableOpacity>
+    </Pressable>
   );
 }

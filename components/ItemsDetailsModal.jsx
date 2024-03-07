@@ -19,25 +19,27 @@ const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
   const [quantity, setQuantity] = useState(0);
 
   const setCartId = async (res) => {
-    await AsyncStorage.setItem("cart-id", JSON.stringify(res.data.cart.id));
+    await AsyncStorage.setItem("cart-id", res.data.cart.id.toString());
   };
 
   const createCart = async () => {
     const token = await AsyncStorage.getItem("access-token");
-
+    console.log(token);
     try {
       axios
         .post(`${DEFAULT_URL}/api/v1/customer/carts`, {
           headers: {
             Authorization: "Bearer " + token,
+            "ngrok-skip-browser-warning": true,
           },
         })
         .then((res) => {
           console.log(res);
           setCartId(res);
+          addItem();
         })
         .catch((err) => {
-          console.log(err);
+          console.log("Axios ", err);
         });
     } catch (error) {
       console.log(error);
@@ -79,9 +81,9 @@ const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
   const handleAdd = async () => {
     const cartId = await AsyncStorage.getItem("cart-id");
     console.log(cartId);
-    if (cartId === null) {
+    if (cartId == null) {
       createCart();
-      addItem();
+      // addItem();
     } else {
       addItem();
     }
