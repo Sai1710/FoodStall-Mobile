@@ -26,7 +26,6 @@ const StyledText = styled(Text);
 import { AlertNotificationRoot } from "react-native-alert-notification";
 import { useContext } from "react";
 import { AuthContext } from "./Schemas/AuthContext";
-
 const stack = createNativeStackNavigator();
 
 const App = () => {

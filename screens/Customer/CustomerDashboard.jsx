@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DEFAULT_URL from "../../config";
 import CategoryCard from "../../components/CategoryCard";
@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
+import CartCard from "../../components/CartCard";
 import CustomerNavbar from "../../components/CustomerNavbar";
 import Loading from "../../components/Loading";
 import { Entypo, Feather, MaterialIcons } from "@expo/vector-icons";
@@ -29,6 +30,7 @@ function CustomerDashboard({ route, navigation }) {
   const [mode, setMode] = useState("Categories");
   const [stalls, setStalls] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
+  const [cart, setCart] = useState(null);
 
   const tabs = ["Categories", "Stalls"];
 
@@ -61,12 +63,10 @@ function CustomerDashboard({ route, navigation }) {
         .then((response) => {
           const categories = response.data.categories || [];
           let tempStalls = [];
-          console.log(categories);
           setCategoryData(categories);
           categories.forEach((obj) => {
             tempStalls = [...tempStalls, ...obj.vendors];
           });
-          console.log(tempStalls);
           setStalls(tempStalls);
           setDisplayedStalls(tempStalls);
           setDisplayedCategories(categories);
@@ -80,8 +80,33 @@ function CustomerDashboard({ route, navigation }) {
     return <StallCard data={itemData.item} />;
   }
 
+  const fetchCart = async () => {
+    const token = await AsyncStorage.getItem("access-token");
+    const cartId = await AsyncStorage.getItem("cart-id");
+    if (cartId !== null) {
+      try {
+        axios
+          .get(`${DEFAULT_URL}/api/v1/customer/cart`, {
+            headers: {
+              Authorization: "Bearer " + token,
+              "ngrok-skip-browser-warning": true,
+            },
+          })
+          .then((response) => {
+            console.log(response.data.cart);
+            setCart(response.data.cart);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    console.log(token);
+  };
+
   function renderCategoryItem(itemData) {
-    console.log(itemData);
     return (
       <CategoryCard
         data={itemData.item}
@@ -95,9 +120,10 @@ function CustomerDashboard({ route, navigation }) {
       />
     );
   }
-  useState(() => {
+  useEffect(() => {
     fetchCategories();
-  });
+    fetchCart();
+  }, []);
   // let index = data.name.indexOf(" ");
   // let name = data.name.substring(0, index + 1);
   let name = "Saikiriti";
@@ -139,6 +165,7 @@ function CustomerDashboard({ route, navigation }) {
           numColumns={2}
         />
       )}
+      {cart ? <CartCard cart={cart} /> : <></>}
       <View style={styles.tabContainer}>
         {tabs.map((tab, index) => (
           <TouchableOpacity

@@ -52,7 +52,6 @@ export default function CustomerLogin({ navigation }) {
           }
         )
         .then((res) => {
-          console.log("response", res.data);
           setEmail("");
           setPassword("");
           if (res.status === 200) {

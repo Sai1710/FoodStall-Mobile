@@ -8,7 +8,6 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { useContext } from "react";
 import { AuthContext } from "../Schemas/AuthContext";
-
 const HomePage = ({ navigation }) => {
   const handleCustomerLogin = () => {
     navigation.navigate("customer-login");
@@ -73,6 +72,7 @@ const HomePage = ({ navigation }) => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              // style={tailwind("pt-12 items-center")}
               onPress={handleCustomerLogin}
             >
               <FontAwesome6
