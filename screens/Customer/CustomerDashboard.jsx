@@ -60,7 +60,7 @@ function CustomerDashboard({ route, navigation }) {
         .get(`${DEFAULT_URL}/api/v1/customer/categories`, {
           headers: {
             Authorization: "Bearer " + token,
-            "ngrok-skip-browser-warning": true,
+            // "ngrok-skip-browser-warning": true,
           },
         })
         .then((response) => {
@@ -114,7 +114,6 @@ function CustomerDashboard({ route, navigation }) {
     return (
       <CategoryCard
         data={itemData.item}
-        // key={itemData.index}
         onPress={() => {
           navigation.navigate("List", {
             data: itemData.item.vendors,
@@ -174,7 +173,11 @@ function CustomerDashboard({ route, navigation }) {
           numColumns={2}
         />
       )}
-      {cart.length != 0 ? <CartCard cart={cart} /> : <></>}
+      {cart.length != 0 ? (
+        <CartCard cart={cart} fetchCart={fetchCart} />
+      ) : (
+        <></>
+      )}
       {/* <CartCard cart={cart} /> */}
       <View style={styles.tabContainer}>
         {tabs.map((tab, index) => (

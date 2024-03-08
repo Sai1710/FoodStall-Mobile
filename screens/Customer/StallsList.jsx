@@ -24,6 +24,32 @@ function StallsList({ route, navigation }) {
     return <StallCard data={itemData.item} categoryId={id} />;
   }
 
+  const fetchCart = async () => {
+    const token = await AsyncStorage.getItem("access-token");
+    const cartId = await AsyncStorage.getItem("cart-id");
+    console.log(cartId);
+    if (cartId !== null) {
+      try {
+        axios
+          .get(`${DEFAULT_URL}/api/v1/customer/cart`, {
+            headers: {
+              Authorization: "Bearer " + token,
+              "ngrok-skip-browser-warning": true,
+            },
+          })
+          .then((response) => {
+            console.log(response.data.cart);
+            setCart(response.data.cart.cart_items);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    console.log(token);
+  };
   const handleSearch = (searchText) => {
     const tempStalls = stalls.filter((item) =>
       item.first_name.toLowerCase().includes(searchText.toLowerCase())

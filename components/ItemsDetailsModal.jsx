@@ -25,25 +25,30 @@ const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
   const createCart = async () => {
     const token = await AsyncStorage.getItem("access-token");
     console.log(token);
-    try {
-      axios
-        .post(`${DEFAULT_URL}/api/v1/customer/carts`, {
+
+    axios
+      .post(
+        `${DEFAULT_URL}/api/v1/customer/carts`,
+        {},
+        {
           headers: {
-            Authorization: "Bearer " + token,
-            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            // "ngrok-skip-browser-warning": true,
           },
-        })
-        .then((res) => {
-          console.log(res);
-          setCartId(res);
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setCartId(res);
+        if (res.status === 200) {
           addItem();
-        })
-        .catch((err) => {
-          console.log("Axios ", err);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+        }
+      })
+      .catch((err) => {
+        console.log("Axios ", err);
+      });
+    setModalVisible(false);
   };
 
   const addItem = async () => {
@@ -75,22 +80,21 @@ const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
       } catch (error) {
         console.log(error);
       }
+      setModalVisible(false);
     }
   };
 
   const handleAdd = async () => {
     const cartId = await AsyncStorage.getItem("cart-id");
     console.log(cartId);
-    if (cartId == null) {
+    if (cartId === null) {
       createCart();
       // addItem();
     } else {
       addItem();
     }
-    setModalVisible(false);
   };
 
-  console.log(item);
   return (
     <Modal
       visible={modalVisible}
@@ -191,7 +195,7 @@ const ItemDetailsModal = ({ modalVisible, setModalVisible, item }) => {
                 borderWidth: 1,
                 borderColor: "#2F855A",
               }}
-              onPress={handleAdd}
+              onPress={createCart}
             >
               <Text
                 style={{

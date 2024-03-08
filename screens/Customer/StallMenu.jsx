@@ -35,7 +35,7 @@ function StallMenu({ route }) {
           {
             headers: {
               Authorization: "Bearer " + token,
-              "ngrok-skip-browser-warning": true,
+              // "ngrok-skip-browser-warning": true,
             },
           }
         )

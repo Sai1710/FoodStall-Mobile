@@ -1,7 +1,6 @@
 import { Pressable, View, Text, StyleSheet, Image } from "react-native";
 
 export default function CategoryCard({ data, onPress }) {
-  console.log(data);
   function pressHandler() {}
   return (
     <View style={styles.container}>

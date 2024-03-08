@@ -180,7 +180,6 @@ export default function CustomerLogin({ navigation }) {
       <LottieView
         source={require("../../assets/CustomerLogin.json")}
         autoPlay
-        loop
         style={{
           width: "100%",
           flex: 0.6,

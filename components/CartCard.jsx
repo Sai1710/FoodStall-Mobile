@@ -9,15 +9,16 @@ import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 const { height } = Dimensions.get("window");
+import DEFAULT_URL from "../config";
 
-export default function CartCard({ cart }) {
+export default function CartCard({ cart, fetchCart }) {
   const clearCartId = async () => {
-    await AsyncStorage.clear("cart-id");
+    await AsyncStorage.removeItem("cart-id");
   };
 
   const deleteCart = async () => {
     const token = await AsyncStorage.getItem("access-token");
-
+    console.log(token);
     try {
       axios
         .delete(`${DEFAULT_URL}/api/v1/customer/carts`, {
@@ -28,14 +29,15 @@ export default function CartCard({ cart }) {
         })
         .then((response) => {
           console.log(response);
-          // clearCartId();
+          clearCartId();
         })
         .catch((err) => {
           console.log(err);
         });
     } catch (error) {
-      // clearCartId();
+      console.log(error);
     }
+    fetchCart();
   };
   return (
     <Pressable
