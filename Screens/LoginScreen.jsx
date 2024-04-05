@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   TextInput,
   Text,
@@ -11,8 +11,8 @@ import {
   Image,
 } from "react-native";
 import LottieView from "lottie-react-native";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
@@ -23,6 +23,79 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("customer");
   const navigation = useNavigation();
+
+  const setCredentials = async (res) => {
+    switch (mode) {
+      case "admin":
+        await AsyncStorage.setItem("access_token", res.data.admin.access_token);
+        await AsyncStorage.setItem("role", "Admin");
+
+        return;
+      case "customer":
+        await AsyncStorage.setItem(
+          "access_token",
+          res.data.customer.access_token
+        );
+        await AsyncStorage.setItem("role", "Customer");
+
+        return;
+      case "vendor":
+        await AsyncStorage.setItem(
+          "access_token",
+          res.data.vendor.access_token
+        );
+        await AsyncStorage.setItem("role", "Vendor");
+
+        return;
+      default:
+        return;
+    }
+  };
+
+  const checkStatus = async () => {
+    const token = await AsyncStorage.getItem("access_token");
+    const role = await AsyncStorage.getItem("role");
+    if (token !== null) {
+      switch (role) {
+        case "Admin":
+          navigation.replace("AdminHome");
+          break;
+        case "Customer":
+          navigation.replace("CustomerHome");
+          break;
+        case "Vendor":
+          navigation.replace("VendorHome");
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append("admin[email]", email);
+    formData.append("admin[password]", password);
+    formData.append("client_id", "g1PLnHS02Gp3uMyfrMy_fojfEMhQNQ3C_Ah6_xgV3Mg");
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+    axios
+      .post(`api/v1/${mode}/login`, formData, { headers })
+      .then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          navigation.replace("AdminHome");
+          setCredentials(res);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    checkStatus();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,11 +166,15 @@ export default function LoginScreen() {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
             keyboardType="email-address"
           />
 
           <TextInput
             style={styles.input}
+            value={password}
+            onChangeText={setPassword}
             placeholder="Password"
             secureTextEntry
           />
@@ -105,7 +182,7 @@ export default function LoginScreen() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigation.navigate("AdminHome");
+              handleSubmit();
             }}
           >
             <Text style={styles.buttonText}>Login</Text>

@@ -1,10 +1,28 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
+import RequestCard from "../../Components/Admin/RequestCard";
 
 const AdminRequests = () => {
   const [status, setStatus] = useState("pending");
+  const requests = [
+    { id: 1, stall_name: "Dominos" },
+    { id: 2, stall_name: "Subway" },
+    { id: 3, stall_name: "TacoBell" },
+    { id: 4, stall_name: "KFC" },
+    { id: 5, stall_name: "Paradise Biryani" },
+  ];
+
+  const renderItem = (itemData) => {
+    return <RequestCard data={itemData.item} />;
+  };
   return (
     <SafeAreaView className="flex-1 bg-white">
       <NavBar title="FoodStall" />
@@ -53,6 +71,14 @@ const AdminRequests = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <FlatList
+        data={requests}
+        renderItem={renderItem}
+        numColumns={2}
+        className="m-2"
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };
