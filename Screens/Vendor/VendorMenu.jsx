@@ -1,12 +1,32 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome6 } from "@expo/vector-icons";
 import NavBar from "../../Components/Custom/Navbar";
+import MenuCard from "../../Components/Custom/MenuCard";
 
 const VendorMenu = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [menu, setMenu] = useState([]);
+  // const [menu, setMenu] = useState([]);
+  function renderItem(itemData) {
+    console.log(itemData.item);
+
+    return <MenuCard item={itemData.item} role="vendor" />;
+  }
+  const menu = [
+    { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
+    { name: "Chicken Sandwich", item_type: "non_veg", price: 8.99 },
+    { name: "Salad Bowl", item_type: "veg", price: 6.49 },
+    { name: "Beef Burger", item_type: "non_veg", price: 9.49 },
+    { name: "Fruit Salad", item_type: "veg", price: 4.99 },
+    { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
+  ];
   return (
     <SafeAreaView className="flex-1 bg-white">
       <NavBar title="FoodStall" />

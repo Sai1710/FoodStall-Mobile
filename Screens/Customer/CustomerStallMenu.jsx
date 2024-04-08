@@ -14,7 +14,7 @@ const CustomerStallMenu = ({ route }) => {
   function renderItem(itemData) {
     console.log(itemData.item);
 
-    return <MenuCard item={itemData.item} />;
+    return <MenuCard item={itemData.item} role="customer" />;
   }
 
   const menu = [
