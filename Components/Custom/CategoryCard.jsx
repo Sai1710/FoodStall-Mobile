@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import CustomModal from "../Custom/CustomModal";
+import CustomModal from "./CustomModal";
 
-const CategoryCard = ({ data }) => {
+const CategoryCard = ({ data, role }) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <Pressable
@@ -31,14 +31,16 @@ const CategoryCard = ({ data }) => {
         <Text className={`text-sm my-1 text-center font-bold text-[#047857]`}>
           {data.name}
         </Text>
-        <TouchableOpacity
-          className="self-center"
-          onPress={() => {
-            setModalVisible((prev) => !prev);
-          }}
-        >
-          <MaterialIcons name="delete" size={20} color="#f10000" />
-        </TouchableOpacity>
+        {role === "admin" && (
+          <TouchableOpacity
+            className="self-center"
+            onPress={() => {
+              setModalVisible((prev) => !prev);
+            }}
+          >
+            <MaterialIcons name="delete" size={20} color="#f10000" />
+          </TouchableOpacity>
+        )}
       </View>
     </Pressable>
   );

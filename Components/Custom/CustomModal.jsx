@@ -19,19 +19,34 @@ const CustomModal = ({
       }}
     >
       <View
-        className={`flex-1 justify-center items-center bg-black`}
+        className={`flex-1 justify-center items-center bg-black p-3`}
         style={{
           backgroundColor: "rgba(0,0,0,0.6)",
         }}
       >
         <View className={`bg-white rounded-lg p-6 w-80`}>
-          <Text className={`text-lg font-bold mb-4`}>{title}</Text>
-          <TouchableOpacity
-            className={`bg-${buttonColor} rounded-lg py-2 px-4 items-center`}
-            onPress={onButtonClick}
-          >
-            <Text className={`text-white font-bold`}>{buttonTitle}</Text>
-          </TouchableOpacity>
+          <Text className={`text-base text-center font-bold mb-4`}>
+            {title}
+          </Text>
+          <View className="flex-row align-middle justify-center">
+            <TouchableOpacity
+              className={`bg-gray-300
+              } rounded-lg py-2 px-4 items-center flex-1 mx-1`}
+              onPress={() => {
+                setVisible((prev) => !prev);
+              }}
+            >
+              <Text className={`text-white font-bold`}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className={`bg-${
+                buttonColor === "red" ? "red-700" : "green-700"
+              } rounded-lg py-2 px-4 items-center flex-1 mx-1`}
+              onPress={onButtonClick}
+            >
+              <Text className={`text-white font-bold`}>{buttonTitle}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>

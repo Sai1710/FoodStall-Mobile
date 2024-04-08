@@ -12,117 +12,24 @@ import {
 } from "react-native";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
 
-export default function LoginScreen() {
+export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState("customer");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [mobile, setMobile] = useState();
+  const [stallName, setStallName] = useState("");
+  const [stallLogo, setStallLogo] = useState(null);
   const navigation = useNavigation();
 
-  const setCredentials = async (res) => {
-    switch (mode) {
-      case "admin":
-        await AsyncStorage.setItem("access_token", res.data.admin.access_token);
-        await AsyncStorage.setItem("role", "admin");
-
-        return;
-      case "customer":
-        await AsyncStorage.setItem(
-          "access_token",
-          res.data.customer.access_token
-        );
-        await AsyncStorage.setItem("role", "customer");
-
-        return;
-      case "vendor":
-        await AsyncStorage.setItem(
-          "access_token",
-          res.data.vendor.access_token
-        );
-        await AsyncStorage.setItem("role", "vendor");
-
-        return;
-      default:
-        return;
-    }
-  };
-
-  const checkStatus = async () => {
-    const token = await AsyncStorage.getItem("access_token");
-    const role = await AsyncStorage.getItem("role");
-    if (token !== null) {
-      switch (role) {
-        case "admin":
-          navigation.replace("AdminHome");
-          break;
-        case "customer":
-          navigation.replace("CustomerHome");
-          break;
-        case "vendor":
-          navigation.replace("VendorHome");
-          break;
-        default:
-          break;
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    const formData = new FormData();
-    switch (mode) {
-      case "admin":
-        formData.append("admin[email]", email);
-        formData.append("admin[password]", password);
-        break;
-      case "customer":
-        formData.append("customer[email]", email);
-        formData.append("customer[password]", password);
-        break;
-      case "vendor":
-        formData.append("vendor[email]", email);
-        formData.append("vendor[password]", password);
-        break;
-      default:
-        break;
-    }
-
-    formData.append("client_id", "g1PLnHS02Gp3uMyfrMy_fojfEMhQNQ3C_Ah6_xgV3Mg");
-    const headers = {
-      "Content-Type": "multipart/form-data",
-    };
-    axios
-      .post(`api/v1/${mode}/login`, formData, { headers })
-      .then((res) => {
-        console.log(res);
-        if (res.status == 200) {
-          switch (mode) {
-            case "admin":
-              navigation.replace("AdminHome");
-              break;
-            case "customer":
-              navigation.replace("CustomerHome");
-              break;
-            case "vendor":
-              navigation.replace("VendorHome");
-              break;
-            default:
-              break;
-          }
-          setCredentials(res);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    checkStatus();
-  }, []);
+  const handleSubmit = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -146,50 +53,30 @@ export default function LoginScreen() {
           Explore food from different cuisines !!!
         </Text>
         <View className="flex-row align-middle justify-center mb-6">
-          <Pressable
-            className={
-              mode === "customer"
-                ? "flex-1 border-b-2 border-[#047857]"
-                : "flex-1"
-            }
-            onPress={() => {
-              setMode("customer");
-            }}
-          >
+          <View className={`flex-1`} onPress={() => {}}>
             <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Customer
+              Vendor Registration
             </Text>
-          </Pressable>
-
-          <Pressable
-            className={
-              mode === "vendor"
-                ? "flex-1 border-b-2 border-[#047857]"
-                : "flex-1"
-            }
-            onPress={() => {
-              setMode("vendor");
-            }}
-          >
-            <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Vendor
-            </Text>
-          </Pressable>
-          <Pressable
-            className={
-              mode === "admin" ? "flex-1 border-b-2 border-[#047857]" : "flex-1"
-            }
-            onPress={() => {
-              setMode("admin");
-            }}
-          >
-            <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Admin
-            </Text>
-          </Pressable>
+          </View>
         </View>
 
         <View>
+          <View className="flex-row align-middle justify-center">
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              value={firstName}
+              onChangeText={setfirstName}
+              className="flex-1 mr-1"
+            />
+            <TextInput
+              style={styles.input}
+              className="flex-1 ml-1"
+              placeholder="Last Name"
+              value={lastName}
+              onChangeText={setlastName}
+            />
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -205,6 +92,39 @@ export default function LoginScreen() {
             placeholder="Password"
             secureTextEntry
           />
+          <TextInput
+            style={styles.input}
+            value={mobile}
+            onChangeText={setMobile}
+            placeholder="Mobile"
+            keyboardType="numeric"
+          />
+          <View className="flex-row align-middle justify-center">
+            <TextInput
+              className={`border border-gray-300 rounded p-2 mr-1 my-2 flex-1`}
+              value={stallName}
+              onChangeText={setStallName}
+              placeholder="StallName"
+            />
+            <TouchableOpacity
+              className={`bg-[#047857] rounded flex-2 p-2 ml-1 my-2`}
+              onPress={() => {}}
+            >
+              {!stallLogo ? (
+                <MaterialCommunityIcons
+                  name="image-plus"
+                  size={24}
+                  color="white"
+                />
+              ) : (
+                <Ionicons
+                  name="checkmark-done-circle-sharp"
+                  size={24}
+                  color="white"
+                />
+              )}
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={styles.button}
@@ -245,9 +165,9 @@ export default function LoginScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signupLink}
-            onPress={() => navigation.navigate("SignUpScreen")}
+            onPress={() => navigation.navigate("customer-registration")}
           >
-            <Text style={styles.signupText}>Sign Up Instead?</Text>
+            <Text style={styles.signupText}>Login Instead?</Text>
           </TouchableOpacity>
         </View>
       </View>
