@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomModal from "./CustomModal";
+import { useNavigation } from "@react-navigation/native";
 
 const CategoryCard = ({ data, role }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
   return (
     <Pressable
       className={`flex-1 bg-white rounded shadow-md p-2 m-2`}
@@ -14,6 +16,9 @@ const CategoryCard = ({ data, role }) => {
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+      }}
+      onPress={() => {
+        navigation.navigate("StallsList");
       }}
     >
       <CustomModal

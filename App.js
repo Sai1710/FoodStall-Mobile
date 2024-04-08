@@ -12,6 +12,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalProvider } from "./Context/GlobalContext";
 import SignupScreen from "./Screens/VendorSignUpScreen";
 import { AlertNotificationRoot } from "react-native-alert-notification";
+import CustomerProfile from "./Screens/Customer/CustomerProfile";
+import CustomerCategoryStalls from "./Screens/Customer/CustomerCategoryStalls";
+import CustomerStallMenu from "./Screens/Customer/CustomerStallMenu";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -38,7 +41,11 @@ export default function App() {
           >
             <Stack.Screen name="LoginPage" component={LoginScreen} />
             <Stack.Screen name="SignUpScreen" component={SignupScreen} />
-
+            <Stack.Screen
+              name="StallsList"
+              component={CustomerCategoryStalls}
+            />
+            <Stack.Screen name="StallMenu" component={CustomerStallMenu} />
             <Stack.Screen name="VendorHome" component={VendorHome} />
             <Stack.Screen name="CustomerHome" component={CustomerHome} />
             <Stack.Screen name="AdminHome" component={AdminHome} />
