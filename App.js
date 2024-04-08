@@ -11,6 +11,7 @@ import AdminHome from "./Screens/Admin/AdminHome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalProvider } from "./Context/GlobalContext";
 import SignupScreen from "./Screens/VendorSignUpScreen";
+import { AlertNotificationRoot } from "react-native-alert-notification";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -26,23 +27,25 @@ export default function App() {
     }
   );
   return (
-    <GlobalProvider>
-      <NavigationContainer>
-        <StatusBar backgroundColor="#fff" />
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="LoginPage" component={LoginScreen} />
-          <Stack.Screen name="SignUpScreen" component={SignupScreen} />
+    <AlertNotificationRoot>
+      <GlobalProvider>
+        <NavigationContainer>
+          <StatusBar backgroundColor="#fff" />
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="LoginPage" component={LoginScreen} />
+            <Stack.Screen name="SignUpScreen" component={SignupScreen} />
 
-          <Stack.Screen name="VendorHome" component={VendorHome} />
-          <Stack.Screen name="CustomerHome" component={CustomerHome} />
-          <Stack.Screen name="AdminHome" component={AdminHome} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </GlobalProvider>
+            <Stack.Screen name="VendorHome" component={VendorHome} />
+            <Stack.Screen name="CustomerHome" component={CustomerHome} />
+            <Stack.Screen name="AdminHome" component={AdminHome} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GlobalProvider>
+    </AlertNotificationRoot>
   );
 }
 

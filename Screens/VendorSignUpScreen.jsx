@@ -13,11 +13,52 @@ import {
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import MultiSelect from "react-native-multiple-select";
+
+const items = [
+  {
+    id: "92iijs7yta",
+    name: "Ondo",
+  },
+  {
+    id: "a0s0a8ssbsd",
+    name: "Ogun",
+  },
+  {
+    id: "16hbajsabsd",
+    name: "Calabar",
+  },
+  {
+    id: "nahs75a5sg",
+    name: "Lagos",
+  },
+  {
+    id: "667atsas",
+    name: "Maiduguri",
+  },
+  {
+    id: "hsyasajs",
+    name: "Anambra",
+  },
+  {
+    id: "djsjudksjd",
+    name: "Benue",
+  },
+  {
+    id: "sdhyaysdj",
+    name: "Kaduna",
+  },
+  {
+    id: "suudydjsjd",
+    name: "Abuja",
+  },
+];
 
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
+import GlobalContext from "../Context/GlobalContext";
 
 export default function SignupScreen() {
   const [email, setEmail] = useState("");
@@ -27,9 +68,14 @@ export default function SignupScreen() {
   const [mobile, setMobile] = useState();
   const [stallName, setStallName] = useState("");
   const [stallLogo, setStallLogo] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const navigation = useNavigation();
+  const { categories, fetchCategories } = useContext(GlobalContext);
 
   const handleSubmit = () => {};
+  useEffect(() => {
+    fetchCategories();
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -124,6 +170,33 @@ export default function SignupScreen() {
                 />
               )}
             </TouchableOpacity>
+          </View>
+          <View className="my-2 border border-gray-300 rounded">
+            <MultiSelect
+              hideTags
+              items={categories}
+              uniqueKey="id"
+              ref={(component) => {
+                this.multiSelect = component;
+              }}
+              onSelectedItemsChange={(items) => {
+                setSelectedCategories(items);
+              }}
+              selectedItems={selectedCategories}
+              selectText="Categories"
+              searchInputPlaceholderText="Search"
+              onChangeInput={(text) => console.log(text)}
+              tagRemoveIconColor="#000"
+              tagBorderColor="#000"
+              tagTextColor="#000"
+              selectedItemTextColor="#000"
+              selectedItemIconColor="#000"
+              itemTextColor="#000"
+              displayKey="name"
+              searchInputStyle={{ color: "#000" }}
+              submitButtonColor="#047857"
+              submitButtonText="Submit"
+            />
           </View>
 
           <TouchableOpacity

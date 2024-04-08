@@ -27,17 +27,16 @@ export const GlobalProvider = ({ children }) => {
     const role = await AsyncStorage.getItem("role");
 
     console.log("Token", token);
-    if (token) {
-      axios
-        .get(`/api/v1/${role}/categories`)
-        .then((res) => {
-          console.log(res);
-          dispatch({ type: "SET_CATEGORIES", payload: res.data?.categories });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    axios
+      .get(`/api/v1/${role ? role : "admin"}/categories`)
+      .then((res) => {
+        console.log(res);
+        dispatch({ type: "SET_CATEGORIES", payload: res.data?.categories });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({ type: "SET_CATEGORIES", payload: [] });
+      });
   };
 
   return (

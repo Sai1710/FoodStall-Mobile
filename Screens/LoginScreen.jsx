@@ -40,10 +40,7 @@ export default function LoginScreen() {
 
         return;
       case "vendor":
-        await AsyncStorage.setItem(
-          "access_token",
-          res.data.vendor.access_token
-        );
+        await AsyncStorage.setItem("access_token", res.data.access_token);
         await AsyncStorage.setItem("role", "vendor");
 
         return;

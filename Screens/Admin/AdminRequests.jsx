@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,19 +9,29 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
 import RequestCard from "../../Components/Admin/RequestCard";
+import axios from "axios";
 
 const AdminRequests = () => {
   const [status, setStatus] = useState("pending");
-  const requests = [
-    { id: 1, stall_name: "Dominos" },
-    { id: 2, stall_name: "Subway" },
-    { id: 3, stall_name: "TacoBell" },
-    { id: 4, stall_name: "KFC" },
-    { id: 5, stall_name: "Paradise Biryani" },
-  ];
+  const [requests, setRequests] = useState([]);
 
+  const getRequests = () => {
+    axios
+      .get(`/api/v1/admin/requests?status=${status}`)
+      .then((res) => {
+        console.log(res);
+        setRequests(res.data.requests);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getRequests();
+  }, [status]);
   const renderItem = (itemData) => {
-    return <RequestCard data={itemData.item} />;
+    return <RequestCard data={itemData.item} handleShow={getRequests} />;
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
