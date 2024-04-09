@@ -4,42 +4,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
 import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
+import CartCard from "../../Components/Customer/CartCard";
 
 const CustomerCategoryStalls = ({ route }) => {
   const { vendors, id } = route.params;
   //   const [stalls, setStalls] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
+  const { cart } = useContext(GlobalContext);
   function renderItem(itemData) {
     return <StallCard data={itemData.item} categoryId={id} />;
   }
-
-  const stalls = [
-    {
-      stall_name: "Food Stall 1",
-      stall_logo_url:
-        "https://imgs.search.brave.com/Jp6ngmaC-F_2y5_7UN2IF8HtgALS20IY1-qn-o5x8EA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzI5LzQyLzQy/LzM2MF9GXzQyOTQy/NDI3OV9kb2tFRndu/U29KZU9LcHF2VjF0/dFh1bThwaUVTc0Y1/TC5qcGc",
-    },
-    {
-      stall_name: "Food Stall 2",
-      stall_logo_url:
-        "https://imgs.search.brave.com/Jp6ngmaC-F_2y5_7UN2IF8HtgALS20IY1-qn-o5x8EA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzI5LzQyLzQy/LzM2MF9GXzQyOTQy/NDI3OV9kb2tFRndu/U29KZU9LcHF2VjF0/dFh1bThwaUVTc0Y1/TC5qcGc",
-    },
-    {
-      stall_name: "Food Stall 3",
-      stall_logo_url:
-        "https://imgs.search.brave.com/Jp6ngmaC-F_2y5_7UN2IF8HtgALS20IY1-qn-o5x8EA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzI5LzQyLzQy/LzM2MF9GXzQyOTQy/NDI3OV9kb2tFRndu/U29KZU9LcHF2VjF0/dFh1bThwaUVTc0Y1/TC5qcGc",
-    },
-    {
-      stall_name: "Food Stall 4",
-      stall_logo_url:
-        "https://imgs.search.brave.com/Jp6ngmaC-F_2y5_7UN2IF8HtgALS20IY1-qn-o5x8EA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzI5LzQyLzQy/LzM2MF9GXzQyOTQy/NDI3OV9kb2tFRndu/U29KZU9LcHF2VjF0/dFh1bThwaUVTc0Y1/TC5qcGc",
-    },
-    {
-      stall_name: "Food Stall 5",
-      stall_logo_url:
-        "https://imgs.search.brave.com/Jp6ngmaC-F_2y5_7UN2IF8HtgALS20IY1-qn-o5x8EA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzI5LzQyLzQy/LzM2MF9GXzQyOTQy/NDI3OV9kb2tFRndu/U29KZU9LcHF2VjF0/dFh1bThwaUVTc0Y1/TC5qcGc",
-    },
-  ];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -60,6 +34,7 @@ const CustomerCategoryStalls = ({ route }) => {
           <Text className="text-2xl text-gray-300">No Stalls Found</Text>
         </View>
       )}
+      {cart?.cart_items?.length !== 0 && <CartCard />}
     </SafeAreaView>
   );
 };

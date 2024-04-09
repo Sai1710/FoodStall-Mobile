@@ -6,6 +6,7 @@ import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 import MenuCard from "../../Components/Custom/MenuCard";
 import axios from "axios";
+import CartCard from "../../Components/Customer/CartCard";
 
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
@@ -17,6 +18,8 @@ const CustomerStallMenu = ({ route }) => {
 
     return <MenuCard item={itemData.item} role="customer" />;
   }
+  const { cart } = useContext(GlobalContext);
+
   const [menu, setMenu] = useState([]);
 
   const tempMenu = [
@@ -66,6 +69,7 @@ const CustomerStallMenu = ({ route }) => {
           <Text className="text-2xl text-gray-300">No Menu Found</Text>
         </View>
       )}
+      {cart?.cart_items?.length !== 0 && <CartCard />}
     </SafeAreaView>
   );
 };

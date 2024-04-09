@@ -301,6 +301,7 @@ const AddItemModal = ({
                   editItem();
                 } else {
                   addItem();
+                  setModalVisible(false);
                 }
               }}
               className={`bg-[#047857] rounded flex-1 mx-3 py-3 mt-3`}

@@ -16,8 +16,21 @@ import GlobalContext from "../../Context/GlobalContext";
 const MenuItemModal = ({ modalVisible, setModalVisible, item }) => {
   const link = "https://www.happyeater.com/images/default-food-image.jpg";
   const [quantity, setQuantity] = useState(0);
+  const [itemPresent, setItemPresent] = useState(false);
+  const [cartItemId, setCartItemId] = useState(null);
 
-  const { handleAdd } = useContext(GlobalContext);
+  const { cart } = useContext(GlobalContext);
+  useEffect(() => {
+    const foundItem = cart?.cart_items?.find(
+      (val) => val.food_item_id === item.id
+    );
+    setQuantity(foundItem ? foundItem.quantity : 0);
+    if (foundItem) {
+      setItemPresent(true);
+      setCartItemId(foundItem.id);
+    }
+  }, []);
+  const { handleAdd, updateItem } = useContext(GlobalContext);
 
   return (
     <Modal
@@ -79,7 +92,14 @@ const MenuItemModal = ({ modalVisible, setModalVisible, item }) => {
             </View>
             <TouchableOpacity
               className="flex flex-row items-center flex-1 justify-center ml-2 bg-green-700 p-2 rounded-lg border border-green-700"
-              onPress={handleAdd}
+              onPress={() => {
+                if (itemPresent) {
+                  updateItem(cartItemId, item, quantity);
+                } else {
+                  handleAdd(item, quantity);
+                }
+                setModalVisible((prev) => !prev);
+              }}
             >
               <Text className="font-bold text-lg text-white mx-2">
                 {quantity === 0 ? "Add Item" : "₹ " + quantity * item.price}

@@ -1,4 +1,9 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -6,7 +11,7 @@ const GlobalContext = createContext();
 
 const initialState = {
   categories: [],
-  cart: [],
+  cart: {},
   loading: false,
 };
 
@@ -23,26 +28,70 @@ const globalReducer = (state, action) => {
       return state;
   }
 };
+
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, initialState);
-  const createCart = async () => {
-    const token = await AsyncStorage.getItem("access-token");
+  const updateCart = (price) => {
     axios
-      .post(`/api/v1/customer/carts`, {})
+      .put(`api/v1/customer/carts`, {
+        cart: {
+          final_price: price,
+        },
+      })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deleteCart = async () => {
+    try {
+      axios
+        .delete(`/api/v1/customer/carts`)
+        .then(async (response) => {
+          console.log(response);
+          dispatch({ type: "SET_CART", payload: [] });
+          await AsyncStorage.removeItem("cart-id");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getCart = () => {
+    axios
+      .get(`/api/v1/customer/cart`)
       .then((res) => {
         dispatch({ type: "SET_CART", payload: res.data?.cart });
+        const totalPrice = res.data.cart.cart_items.reduce((total, item) => {
+          return total + item.price;
+        }, 0);
+        console.log("totalPrice", totalPrice);
+        updateCart(totalPrice);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const createCart = async (item, quantity) => {
+    axios
+      .post(`/api/v1/customer/carts`, {})
+      .then(async (res) => {
+        dispatch({ type: "SET_CART", payload: res.data?.cart });
+        await AsyncStorage.setItem("cart-id", res.data.cart.id.toString());
         if (res.status === 200) {
-          addItem();
+          addItem(item, quantity);
+          console.log(res);
         }
       })
       .catch((err) => {
         console.log("Axios", err);
       });
-    setModalVisible(false);
   };
 
-  const addItem = async (item) => {
-    const token = await AsyncStorage.getItem("access-token");
+  const addItem = (item, quantity) => {
+    console.log("item", item);
     if (quantity != 0) {
       try {
         axios
@@ -55,6 +104,7 @@ export const GlobalProvider = ({ children }) => {
           })
           .then((res) => {
             console.log(res);
+            getCart();
           })
           .catch((err) => {
             console.log(err);
@@ -62,19 +112,52 @@ export const GlobalProvider = ({ children }) => {
       } catch (error) {
         console.log(error);
       }
-      setModalVisible(false);
     }
   };
 
-  const handleAdd = async (item) => {
+  const handleAdd = async (item, quantity) => {
     const cartId = await AsyncStorage.getItem("cart-id");
     if (cartId === null) {
-      createCart();
+      createCart(item, quantity);
     } else {
-      addItem(item);
+      addItem(item, quantity);
     }
   };
+  const deleteItem = (cartItemId) => {
+    axios
+      .delete(`/api/v1/customer/carts/cart_items/${cartItemId}`)
+      .then((res) => {
+        console.log(res);
+        getCart();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  const updateItem = (cartItemId, item, quantity) => {
+    if (quantity === 0) {
+      deleteItem(cartItemId);
+      return;
+    }
+    const formData = new FormData();
+    formData.append("cart_item[food_item_id]", item.id);
+    formData.append("cart_item[quantity]", quantity);
+    formData.append("cart_item[price]", quantity * item.price);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+    axios
+      .put(`/api/v1/customer/carts/cart_items/${cartItemId}`, formData, {
+        headers,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const fetchCategories = async () => {
     const token = await AsyncStorage.getItem("access_token");
     const role = await AsyncStorage.getItem("role");
@@ -100,6 +183,9 @@ export const GlobalProvider = ({ children }) => {
         cart: state.cart,
         fetchCategories,
         handleAdd,
+        getCart,
+        updateItem,
+        deleteCart,
       }}
     >
       {children}
