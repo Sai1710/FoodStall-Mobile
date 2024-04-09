@@ -42,7 +42,10 @@ const CustomModal = ({
               className={`bg-${
                 buttonColor === "red" ? "red-700" : "green-700"
               } rounded-lg py-2 px-4 items-center flex-1 mx-1`}
-              onPress={onButtonClick}
+              onPress={() => {
+                onButtonClick();
+                setVisible((prev) => !prev);
+              }}
             >
               <Text className={`text-white font-bold`}>{buttonTitle}</Text>
             </TouchableOpacity>

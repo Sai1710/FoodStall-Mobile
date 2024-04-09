@@ -5,10 +5,11 @@ import NavBar from "../../Components/Custom/Navbar";
 import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 import MenuCard from "../../Components/Custom/MenuCard";
+import axios from "axios";
 
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
-  const { stallName } = route.params;
+  const { stall, categoryId } = route.params;
   //   const [menu, setmenu] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
   function renderItem(itemData) {
@@ -16,8 +17,9 @@ const CustomerStallMenu = ({ route }) => {
 
     return <MenuCard item={itemData.item} role="customer" />;
   }
+  const [menu, setMenu] = useState([]);
 
-  const menu = [
+  const tempMenu = [
     { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
     { name: "Chicken Sandwich", item_type: "non_veg", price: 8.99 },
     { name: "Salad Bowl", item_type: "veg", price: 6.49 },
@@ -25,12 +27,30 @@ const CustomerStallMenu = ({ route }) => {
     { name: "Fruit Salad", item_type: "veg", price: 4.99 },
     { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
   ];
+  const fetchMenu = async () => {
+    try {
+      axios
+        .get(`/api/v1/customer/food_items?vendor_id=${stall.id}`)
+        .then((response) => {
+          const res = response.data.food_items || [];
+          console.log(res);
+          setMenu(res);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchMenu();
+  }, []);
   return (
     <SafeAreaView className="flex-1 bg-white">
       <NavBar title="FoodStall" />
       <View className="mx-6 my-2">
-        <Text className="font-bold text-xl text-[#047857]">{stallName}</Text>
+        <Text className="font-bold text-xl text-[#047857]">
+          {stall.stall_name}
+        </Text>
       </View>
 
       {menu?.length !== 0 ? (

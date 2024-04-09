@@ -12,118 +12,49 @@ import {
 } from "react-native";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import MultiSelect from "react-native-multiple-select";
+import { Dialog, ALERT_TYPE } from "react-native-alert-notification";
+import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
+import GlobalContext from "../Context/GlobalContext";
 
-export default function LoginScreen() {
+export default function CustomerSignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState("customer");
+  const [name, setName] = useState("");
   const navigation = useNavigation();
-
-  const setCredentials = async (res) => {
-    switch (mode) {
-      case "admin":
-        await AsyncStorage.setItem("access_token", res.data.admin.access_token);
-        await AsyncStorage.setItem("role", "admin");
-
-        return;
-      case "customer":
-        await AsyncStorage.setItem(
-          "access_token",
-          res.data.customer.access_token
-        );
-        await AsyncStorage.setItem("role", "customer");
-
-        return;
-      case "vendor":
-        await AsyncStorage.setItem("access_token", res.data.access_token);
-        await AsyncStorage.setItem(
-          "categories",
-          JSON.stringify(res.data.categories)
-        );
-        await AsyncStorage.setItem("role", "vendor");
-
-        return;
-      default:
-        return;
-    }
-  };
-
-  const checkStatus = async () => {
-    const token = await AsyncStorage.getItem("access_token");
-    const role = await AsyncStorage.getItem("role");
-    if (token !== null) {
-      switch (role) {
-        case "admin":
-          navigation.replace("AdminHome");
-          break;
-        case "customer":
-          navigation.replace("CustomerHome");
-          break;
-        case "vendor":
-          navigation.replace("VendorHome");
-          break;
-        default:
-          break;
-      }
-    }
-  };
+  const { categories, fetchCategories } = useContext(GlobalContext);
 
   const handleSubmit = () => {
     const formData = new FormData();
-    switch (mode) {
-      case "admin":
-        formData.append("admin[email]", email);
-        formData.append("admin[password]", password);
-        break;
-      case "customer":
-        formData.append("customer[email]", email);
-        formData.append("customer[password]", password);
-        break;
-      case "vendor":
-        formData.append("vendor[email]", email);
-        formData.append("vendor[password]", password);
-        break;
-      default:
-        break;
-    }
+    formData.append("customer[name]", name);
+    formData.append("customer[email]", email);
+    formData.append("customer[password]", password);
 
     formData.append("client_id", "OT-Fkr2xgMFDGwjPO_cga2BiDwVZX5RDPwGtjTG1Vs8");
+
     const headers = {
       "Content-Type": "multipart/form-data",
     };
     axios
-      .post(`api/v1/${mode}/login`, formData, { headers })
+      .post("/api/v1/customer/sign_up", formData, { headers })
       .then((res) => {
-        console.log(res);
-        if (res.status == 200) {
-          switch (mode) {
-            case "admin":
-              navigation.replace("AdminHome");
-              break;
-            case "customer":
-              navigation.replace("CustomerHome");
-              break;
-            case "vendor":
-              navigation.replace("VendorHome");
-              break;
-            default:
-              break;
-          }
-          setCredentials(res);
-        }
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Successfully Registered",
+          button: "Close",
+        });
+        navigation.replace("LoginPage");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  useEffect(() => {
-    checkStatus();
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -147,50 +78,21 @@ export default function LoginScreen() {
           Explore food from different cuisines !!!
         </Text>
         <View className="flex-row align-middle justify-center mb-6">
-          <Pressable
-            className={
-              mode === "customer"
-                ? "flex-1 border-b-2 border-[#047857]"
-                : "flex-1"
-            }
-            onPress={() => {
-              setMode("customer");
-            }}
-          >
+          <View className={`flex-1`} onPress={() => {}}>
             <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Customer
+              Customer Registration
             </Text>
-          </Pressable>
-
-          <Pressable
-            className={
-              mode === "vendor"
-                ? "flex-1 border-b-2 border-[#047857]"
-                : "flex-1"
-            }
-            onPress={() => {
-              setMode("vendor");
-            }}
-          >
-            <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Vendor
-            </Text>
-          </Pressable>
-          <Pressable
-            className={
-              mode === "admin" ? "flex-1 border-b-2 border-[#047857]" : "flex-1"
-            }
-            onPress={() => {
-              setMode("admin");
-            }}
-          >
-            <Text className="text-center text-[#047857] text-lg font-bold p-2">
-              Admin
-            </Text>
-          </Pressable>
+          </View>
         </View>
 
         <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+          />
+
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -213,7 +115,7 @@ export default function LoginScreen() {
               handleSubmit();
             }}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.divider}>
@@ -246,15 +148,9 @@ export default function LoginScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signupLink}
-            onPress={() => {
-              if (mode === "customer") {
-                navigation.navigate("CustomerSignUpScreen");
-              } else {
-                navigation.navigate("VendorSignUpScreen");
-              }
-            }}
+            onPress={() => navigation.navigate("LoginPage")}
           >
-            <Text style={styles.signupText}>Sign Up Instead?</Text>
+            <Text style={styles.signupText}>Login Instead?</Text>
           </TouchableOpacity>
         </View>
       </View>

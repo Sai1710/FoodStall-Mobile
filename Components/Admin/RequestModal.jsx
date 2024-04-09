@@ -95,8 +95,8 @@ const RequestModal = ({ visible, setVisible, stall, handleShow }) => {
             </View>
             <View className={`mb-4`}>
               <Text className={`mb-2`}>Categories:</Text>
-              {categories?.map((category, index) => (
-                <Text key={index} className={`ml-2`}>
+              {stall.type_of_categories?.map((category, index) => (
+                <Text key={index} className={`ml-2 font-semibold text-right`}>
                   - {category}
                 </Text>
               ))}

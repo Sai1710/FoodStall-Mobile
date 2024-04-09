@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,18 +8,32 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome6 } from "@expo/vector-icons";
+import axios from "axios";
 import NavBar from "../../Components/Custom/Navbar";
 import MenuCard from "../../Components/Custom/MenuCard";
+import AddItemModal from "../../Components/Vendor/AddItemModal";
 
 const VendorMenu = () => {
   const [modalVisible, setModalVisible] = useState(false);
   // const [menu, setMenu] = useState([]);
   function renderItem(itemData) {
-    console.log(itemData.item);
-
-    return <MenuCard item={itemData.item} role="vendor" />;
+    return <MenuCard item={itemData.item} role="vendor" getMenu={getMenu} />;
   }
-  const menu = [
+
+  const [menu, setMenu] = useState([]);
+
+  const getMenu = () => {
+    axios
+      .get(`/api/v1/vendor/food_items`)
+      .then((res) => {
+        setMenu(res.data.food_items);
+        console.log(res.data.food_items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const tempMenu = [
     { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
     { name: "Chicken Sandwich", item_type: "non_veg", price: 8.99 },
     { name: "Salad Bowl", item_type: "veg", price: 6.49 },
@@ -27,9 +41,17 @@ const VendorMenu = () => {
     { name: "Fruit Salad", item_type: "veg", price: 4.99 },
     { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
   ];
+  useEffect(() => {
+    getMenu();
+  }, []);
   return (
     <SafeAreaView className="flex-1 bg-white">
       <NavBar title="FoodStall" />
+      <AddItemModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        getMenu={getMenu}
+      />
       <View className="mx-6 my-2">
         <Text className="font-bold text-xl text-[#047857]">My Menu</Text>
       </View>

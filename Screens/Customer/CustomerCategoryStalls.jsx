@@ -6,11 +6,11 @@ import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 
 const CustomerCategoryStalls = ({ route }) => {
-  //   const { data, id } = route.params;
+  const { vendors, id } = route.params;
   //   const [stalls, setStalls] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
   function renderItem(itemData) {
-    return <StallCard data={itemData.item} />;
+    return <StallCard data={itemData.item} categoryId={id} />;
   }
 
   const stalls = [
@@ -48,9 +48,9 @@ const CustomerCategoryStalls = ({ route }) => {
         <Text className="font-bold text-xl text-[#047857]">Stalls</Text>
       </View>
 
-      {stalls?.length !== 0 ? (
+      {vendors?.length !== 0 ? (
         <FlatList
-          data={stalls}
+          data={vendors}
           renderItem={renderItem}
           className="m-2"
           showsVerticalScrollIndicator={false}

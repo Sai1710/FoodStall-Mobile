@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
 import GlobalContext from "../../Context/GlobalContext";
+import CartCard from "../../Components/Customer/CartCard";
 import CategoryCard from "../../Components/Custom/CategoryCard";
 
 const CustomerCategories = () => {
@@ -33,6 +34,7 @@ const CustomerCategories = () => {
           <Text className="text-2xl text-gray-300">No Categories Found</Text>
         </View>
       )}
+      <CartCard />
     </SafeAreaView>
   );
 };

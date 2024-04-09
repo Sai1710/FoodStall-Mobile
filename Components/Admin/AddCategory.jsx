@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import {
   AntDesign,
@@ -6,12 +6,14 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import axios from "axios";
-import { Dialog } from "react-native-alert-notification";
+import { Dialog, ALERT_TYPE } from "react-native-alert-notification";
 import * as ImagePicker from "expo-image-picker";
+import GlobalContext from "../../Context/GlobalContext";
 
 const AddCategory = ({ modalVisible, setModalVisible }) => {
   const [category, setCategory] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
+  const { fetchCategories } = useContext(GlobalContext);
   const addCategory = () => {
     const formData = new FormData();
     formData.append("category[name]", category);
@@ -33,6 +35,7 @@ const AddCategory = ({ modalVisible, setModalVisible }) => {
           textBody: "Category Successfully Added",
           button: "Close",
         });
+        fetchCategories();
         setModalVisible((prev) => !prev);
       })
       .catch((err) => {

@@ -14,53 +14,15 @@ import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import MultiSelect from "react-native-multiple-select";
-
-const items = [
-  {
-    id: "92iijs7yta",
-    name: "Ondo",
-  },
-  {
-    id: "a0s0a8ssbsd",
-    name: "Ogun",
-  },
-  {
-    id: "16hbajsabsd",
-    name: "Calabar",
-  },
-  {
-    id: "nahs75a5sg",
-    name: "Lagos",
-  },
-  {
-    id: "667atsas",
-    name: "Maiduguri",
-  },
-  {
-    id: "hsyasajs",
-    name: "Anambra",
-  },
-  {
-    id: "djsjudksjd",
-    name: "Benue",
-  },
-  {
-    id: "sdhyaysdj",
-    name: "Kaduna",
-  },
-  {
-    id: "suudydjsjd",
-    name: "Abuja",
-  },
-];
-
+import { Dialog, ALERT_TYPE } from "react-native-alert-notification";
+import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../Context/GlobalContext";
 
-export default function SignupScreen() {
+export default function VendorSignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setfirstName] = useState("");
@@ -69,13 +31,63 @@ export default function SignupScreen() {
   const [stallName, setStallName] = useState("");
   const [stallLogo, setStallLogo] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [franchise, setFranchise] = useState(false);
+  const [franchiseDetails, setFranchiseDetails] = useState("");
   const navigation = useNavigation();
   const { categories, fetchCategories } = useContext(GlobalContext);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (franchiseDetails !== "") {
+      setFranchise(true);
+    }
+    const formData = new FormData();
+    formData.append("vendor[first_name]", firstName);
+    formData.append("vendor[last_name]", lastName);
+    formData.append("vendor[email]", email);
+    formData.append("vendor[password]", password);
+    formData.append("vendor[phone_number]", mobile);
+    formData.append("vendor[stall_name]", stallName);
+    formData.append("vendor[stall_logo]", {
+      uri: stallLogo.uri,
+      name: stallLogo.fileName,
+      type: stallLogo.mimeType,
+    });
+    formData.append("vendor[franchise_details]", franchiseDetails);
+    formData.append("vendor[franchise]", franchise);
+    formData.append(
+      `vendor[type_of_categories]`,
+      JSON.stringify(selectedCategories)
+    );
+    formData.append("client_id", "OT-Fkr2xgMFDGwjPO_cga2BiDwVZX5RDPwGtjTG1Vs8");
+
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+    axios
+      .post("/api/v1/vendor/sign_up", formData, { headers })
+      .then((res) => {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Request Sent",
+          button: "Close",
+        });
+        navigation.replace("LoginPage");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const uploadImage = async () => {
+    const image = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      copyToCacheDirectory: true,
+    });
+    setStallLogo(image.assets[0]);
+  };
   useEffect(() => {
     fetchCategories();
-  });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -145,6 +157,12 @@ export default function SignupScreen() {
             placeholder="Mobile"
             keyboardType="numeric"
           />
+          <TextInput
+            style={styles.input}
+            placeholder="Franchise Details"
+            value={franchiseDetails}
+            onChangeText={setFranchiseDetails}
+          />
           <View className="flex-row align-middle justify-center">
             <TextInput
               className={`border border-gray-300 rounded p-2 mr-1 my-2 flex-1`}
@@ -154,7 +172,7 @@ export default function SignupScreen() {
             />
             <TouchableOpacity
               className={`bg-[#047857] rounded flex-2 p-2 ml-1 my-2`}
-              onPress={() => {}}
+              onPress={uploadImage}
             >
               {!stallLogo ? (
                 <MaterialCommunityIcons
@@ -175,7 +193,7 @@ export default function SignupScreen() {
             <MultiSelect
               hideTags
               items={categories}
-              uniqueKey="id"
+              uniqueKey="name"
               ref={(component) => {
                 this.multiSelect = component;
               }}
@@ -205,7 +223,7 @@ export default function SignupScreen() {
               handleSubmit();
             }}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.divider}>
@@ -238,7 +256,7 @@ export default function SignupScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signupLink}
-            onPress={() => navigation.navigate("customer-registration")}
+            onPress={() => navigation.navigate("LoginPage")}
           >
             <Text style={styles.signupText}>Login Instead?</Text>
           </TouchableOpacity>
