@@ -12,9 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
   const { stall, categoryId } = route.params;
-  const [vendorCategories, setVendorCategories] = useState(
-    stall.type_of_categories
-  );
+  const [vendorCategories, setVendorCategories] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
   //   const [menu, setmenu] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
@@ -35,14 +33,31 @@ const CustomerStallMenu = ({ route }) => {
     { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
   ];
 
-  const filterMenu = () => {
+  const filterMenu = (categoryId) => {
+    if (categoryId === "-1") {
+      setDisplayedMenu(menu);
+      return;
+    }
     axios
       .get(
-        `/api/v1/customer/food_items?vendor_id=${vendor.id}&category_id={categoryId}`
+        `/api/v1/customer/food_items?vendor_id=${stall.id}&category_id=${categoryId}`
       )
       .then((res) => {
-        setDisp;
+        setDisplayedMenu(res.data.food_items);
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  };
+  const getVendorCategories = (menu) => {
+    const uniqueCategories = [
+      ...new Set(
+        menu.map((item) => JSON.stringify(item.vendor_category.category))
+      ),
+    ].map((category) => JSON.parse(category));
+
+    setVendorCategories(uniqueCategories);
+    console.log("abxcd", vendorCategories);
   };
   const fetchMenu = async () => {
     try {
@@ -53,6 +68,7 @@ const CustomerStallMenu = ({ route }) => {
           console.log(res);
           setMenu(res);
           setDisplayedMenu(res);
+          getVendorCategories(res);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -71,14 +87,17 @@ const CustomerStallMenu = ({ route }) => {
         </Text>
         <View className="border flex-1 border-gray-300 rounded">
           <Picker
-            selectedValue={categoryId}
+            selectedValue={selectedCategoryId}
             onValueChange={(itemValue, itemIndex) => {
               console.log(itemValue);
               filterMenu(itemValue);
               setSelectedCategoryId(itemValue);
             }}
           >
-            <Picker.Item label="All" value="All" key="0" />
+            <Picker.Item label="All" value="-1" key="0" />
+            {vendorCategories?.map((item, index) => (
+              <Picker.Item label={item.name} value={item.id} key={item.id} />
+            ))}
           </Picker>
         </View>
       </View>
