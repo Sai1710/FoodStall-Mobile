@@ -16,6 +16,7 @@ import CustomerProfile from "./Screens/Customer/CustomerProfile";
 import CustomerCategoryStalls from "./Screens/Customer/CustomerCategoryStalls";
 import CustomerStallMenu from "./Screens/Customer/CustomerStallMenu";
 import CustomerSignUpScreen from "./Screens/CustomerSignUpScreen";
+import CustomerCart from "./Screens/Customer/CustomerCart";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -55,6 +56,8 @@ export default function App() {
               component={CustomerCategoryStalls}
             />
             <Stack.Screen name="StallMenu" component={CustomerStallMenu} />
+            <Stack.Screen name="CartPage" component={CustomerCart} />
+
             <Stack.Screen name="VendorHome" component={VendorHome} />
             <Stack.Screen name="CustomerHome" component={CustomerHome} />
             <Stack.Screen name="AdminHome" component={AdminHome} />

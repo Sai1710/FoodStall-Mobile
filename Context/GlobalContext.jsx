@@ -12,6 +12,7 @@ const GlobalContext = createContext();
 const initialState = {
   categories: [],
   cart: {},
+  cartArray: [],
   loading: false,
 };
 
@@ -23,7 +24,8 @@ const globalReducer = (state, action) => {
       return { ...state, loading: action.payload };
     case "SET_CART":
       return { ...state, cart: action.payload };
-
+    case "SET_CART_ARRAY":
+      return { ...state, cartArray: action.payload };
     default:
       return state;
   }
@@ -31,6 +33,24 @@ const globalReducer = (state, action) => {
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, initialState);
+  const categorizeCart = (cart) => {
+    const tempCart = cart.cart_items.reduce((acc, item) => {
+      const vendorId = item.food_item?.vendor_category?.vendor_id;
+      if (!acc[vendorId]) {
+        acc[vendorId] = [];
+      }
+      acc[vendorId].push(item);
+      return acc;
+    }, {});
+    console.log(tempCart);
+    const tempCartArray = Object.keys(tempCart).map((key) => ({
+      key,
+      items: tempCart[key],
+    }));
+    console.log(tempCartArray);
+    dispatch({ type: "SET_CART_ARRAY", payload: tempCartArray });
+  };
+
   const updateCart = (price) => {
     axios
       .put(`api/v1/customer/carts`, {
@@ -38,7 +58,11 @@ export const GlobalProvider = ({ children }) => {
           final_price: price,
         },
       })
-      .then((res) => {})
+      .then((res) => {
+        console.log(res);
+        dispatch({ type: "SET_CART", payload: res.data?.cart });
+        categorizeCart(res.data?.cart);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -153,6 +177,12 @@ export const GlobalProvider = ({ children }) => {
       })
       .then((res) => {
         console.log(res);
+        dispatch({ type: "SET_CART", payload: res.data?.cart });
+        const totalPrice = res.data.cart.cart_items.reduce((total, item) => {
+          return total + item.price;
+        }, 0);
+        console.log("totalPrice", totalPrice);
+        updateCart(totalPrice);
       })
       .catch((err) => {
         console.log(err);
@@ -181,11 +211,13 @@ export const GlobalProvider = ({ children }) => {
         categories: state.categories,
         loading: state.loading,
         cart: state.cart,
+        cartArray: state.cartArray,
         fetchCategories,
         handleAdd,
         getCart,
         updateItem,
         deleteCart,
+        categorizeCart,
       }}
     >
       {children}

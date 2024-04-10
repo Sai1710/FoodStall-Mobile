@@ -5,7 +5,7 @@ import MenuItemModal from "../Customer/MenuItemModal";
 import axios from "axios";
 import { Dialog, ALERT_TYPE } from "react-native-alert-notification";
 import AddItemModal from "../Vendor/AddItemModal";
-const MenuCard = ({ item, role, getMenu }) => {
+const MenuCard = ({ item, role, getMenu, index }) => {
   const link = "https://www.happyeater.com/images/default-food-image.jpg";
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,7 +29,7 @@ const MenuCard = ({ item, role, getMenu }) => {
   };
 
   return (
-    <View className={`flex-1 p-4 border border-gray-300 rounded mt-4 mx-2`}>
+    <View className={`p-4 border border-gray-300 rounded mt-4 mx-2 flex-1`}>
       {role === "customer" && (
         <MenuItemModal
           modalVisible={modalVisible}

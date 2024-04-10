@@ -26,9 +26,10 @@ const AddItemModal = ({
   item,
   mode,
   getMenu,
+  categories,
 }) => {
   const [name, setName] = useState(item ? item.name : "");
-  const [itemType, setItemType] = useState(item ? item.item_type : "Veg");
+  const [itemType, setItemType] = useState(item ? item.item_type : "");
   const [subTypes, setSubTypes] = useState(item ? item.sub_type : []);
   const [taste, setTaste] = useState(item ? item.taste : []);
   const [tags, setTags] = useState(item ? item.tags : []);
@@ -58,13 +59,7 @@ const AddItemModal = ({
     { name: "Veg", value: "Veg" },
     { name: "NonVeg", value: "NonVeg" },
   ];
-  const [categories, setCategories] = useState([]);
-  const getCategories = async () => {
-    const tempCategories = await AsyncStorage.getItem("categories");
-    setCategories(JSON.parse(tempCategories));
-    console.log("categories", JSON.parse(tempCategories));
-    setCategoryId(categories[0].id);
-  };
+
   const resetForm = () => {
     setItemType("");
     setPrice("");
@@ -74,9 +69,6 @@ const AddItemModal = ({
     setTaste([]);
   };
 
-  useEffect(() => {
-    getCategories();
-  }, []);
   const editItem = () => {
     axios
       .put(`/api/v1/vendor/food_items/${item.id}`, {
@@ -133,7 +125,7 @@ const AddItemModal = ({
         });
         resetForm();
         getMenu();
-        setModalVisible((prev) => !prev);
+        setModalVisible(false);
       });
   };
   return (
@@ -189,6 +181,7 @@ const AddItemModal = ({
                   setItemType(itemValue);
                 }}
               >
+                <Picker.Item label="Item Type" value="None" key={-1} />
                 {itemTypeOptions.map((item, index) => (
                   <Picker.Item
                     label={item.name}
@@ -206,6 +199,8 @@ const AddItemModal = ({
                   setCategoryId(itemValue);
                 }}
               >
+                <Picker.Item label="Category" value="None" key={-1} />
+
                 {categories?.map((item, index) => (
                   <Picker.Item label={item.name} value={item.id} key={index} />
                 ))}
@@ -301,8 +296,8 @@ const AddItemModal = ({
                   editItem();
                 } else {
                   addItem();
-                  setModalVisible(false);
                 }
+                setModalVisible(false);
               }}
               className={`bg-[#047857] rounded flex-1 mx-3 py-3 mt-3`}
             >

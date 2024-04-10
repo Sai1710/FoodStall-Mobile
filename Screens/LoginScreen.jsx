@@ -98,9 +98,11 @@ export default function LoginScreen() {
     };
     axios
       .post(`api/v1/${mode}/login`, formData, { headers })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
         if (res.status == 200) {
+          await setCredentials(res);
+
           switch (mode) {
             case "admin":
               navigation.replace("AdminHome");
@@ -114,7 +116,6 @@ export default function LoginScreen() {
             default:
               break;
           }
-          setCredentials(res);
         }
       })
       .catch((err) => {

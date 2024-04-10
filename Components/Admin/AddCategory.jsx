@@ -14,6 +14,10 @@ const AddCategory = ({ modalVisible, setModalVisible }) => {
   const [category, setCategory] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
   const { fetchCategories } = useContext(GlobalContext);
+  const resetForm = () => {
+    setCategory("");
+    setCategoryImage(null);
+  };
   const addCategory = () => {
     const formData = new FormData();
     formData.append("category[name]", category);
@@ -35,6 +39,7 @@ const AddCategory = ({ modalVisible, setModalVisible }) => {
           textBody: "Category Successfully Added",
           button: "Close",
         });
+        resetForm();
         fetchCategories();
         setModalVisible((prev) => !prev);
       })

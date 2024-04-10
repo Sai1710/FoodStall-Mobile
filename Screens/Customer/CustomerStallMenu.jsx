@@ -7,20 +7,24 @@ import StallCard from "../../Components/Customer/StallCard";
 import MenuCard from "../../Components/Custom/MenuCard";
 import axios from "axios";
 import CartCard from "../../Components/Customer/CartCard";
+import { Picker } from "@react-native-picker/picker";
 
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
   const { stall, categoryId } = route.params;
+  const [vendorCategories, setVendorCategories] = useState(
+    stall.type_of_categories
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
   //   const [menu, setmenu] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
   function renderItem(itemData) {
-    console.log(itemData.item);
-
     return <MenuCard item={itemData.item} role="customer" />;
   }
   const { cart } = useContext(GlobalContext);
 
   const [menu, setMenu] = useState([]);
+  const [displayedMenu, setDisplayedMenu] = useState([]);
 
   const tempMenu = [
     { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
@@ -30,6 +34,16 @@ const CustomerStallMenu = ({ route }) => {
     { name: "Fruit Salad", item_type: "veg", price: 4.99 },
     { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
   ];
+
+  const filterMenu = () => {
+    axios
+      .get(
+        `/api/v1/customer/food_items?vendor_id=${vendor.id}&category_id={categoryId}`
+      )
+      .then((res) => {
+        setDisp;
+      });
+  };
   const fetchMenu = async () => {
     try {
       axios
@@ -38,6 +52,7 @@ const CustomerStallMenu = ({ route }) => {
           const res = response.data.food_items || [];
           console.log(res);
           setMenu(res);
+          setDisplayedMenu(res);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -50,19 +65,32 @@ const CustomerStallMenu = ({ route }) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <NavBar title="FoodStall" />
-      <View className="mx-6 my-2">
-        <Text className="font-bold text-xl text-[#047857]">
+      <View className="flex-row align-middle justify-center mx-6 my-2">
+        <Text className="flex-1 font-bold text-xl text-[#047857] self-center">
           {stall.stall_name}
         </Text>
+        <View className="border flex-1 border-gray-300 rounded">
+          <Picker
+            selectedValue={categoryId}
+            onValueChange={(itemValue, itemIndex) => {
+              console.log(itemValue);
+              filterMenu(itemValue);
+              setSelectedCategoryId(itemValue);
+            }}
+          >
+            <Picker.Item label="All" value="All" key="0" />
+          </Picker>
+        </View>
       </View>
 
-      {menu?.length !== 0 ? (
+      {displayedMenu?.length !== 0 ? (
         <FlatList
-          data={menu}
+          data={displayedMenu}
           renderItem={renderItem}
           numColumns={2}
           className="m-2"
           showsVerticalScrollIndicator={false}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
         />
       ) : (
         <View className="flex-1 align-middle justify-center items-center">

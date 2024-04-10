@@ -11,36 +11,66 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import axios from "axios";
 import NavBar from "../../Components/Custom/Navbar";
 import MenuCard from "../../Components/Custom/MenuCard";
+import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import AddItemModal from "../../Components/Vendor/AddItemModal";
 
 const VendorMenu = () => {
   const [modalVisible, setModalVisible] = useState(false);
   // const [menu, setMenu] = useState([]);
+  const [categoryId, setCategoryId] = useState();
+  const [categories, setCategories] = useState([]);
   function renderItem(itemData) {
-    return <MenuCard item={itemData.item} role="vendor" getMenu={getMenu} />;
+    return (
+      <MenuCard
+        item={itemData.item}
+        role="vendor"
+        getMenu={getMenu}
+        index={itemData.index}
+      />
+    );
   }
 
   const [menu, setMenu] = useState([]);
+  const [displayedMenu, setDisplayedMenu] = useState([]);
+  const getCategories = async () => {
+    const tempCategories = await AsyncStorage.getItem("categories");
+    setCategories(JSON.parse(tempCategories));
+    console.log("categories", JSON.parse(tempCategories));
+    setCategoryId(categories[0]?.id);
+  };
+  useEffect(() => {
+    getCategories();
+  }, []);
+  const filterMenu = (type) => {
+    if (type === "All") {
+      setDisplayedMenu(menu);
+      return;
+    }
+    axios
+      .get(`/api/v1/vendor/food_items?category_name=${type}`)
+      .then((res) => {
+        setDisplayedMenu(res.data.food_items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getMenu = () => {
     axios
       .get(`/api/v1/vendor/food_items`)
       .then((res) => {
         setMenu(res.data.food_items);
+        setDisplayedMenu(res.data.food_items);
         console.log(res.data.food_items);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const tempMenu = [
-    { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
-    { name: "Chicken Sandwich", item_type: "non_veg", price: 8.99 },
-    { name: "Salad Bowl", item_type: "veg", price: 6.49 },
-    { name: "Beef Burger", item_type: "non_veg", price: 9.49 },
-    { name: "Fruit Salad", item_type: "veg", price: 4.99 },
-    { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
-  ];
+
   useEffect(() => {
     getMenu();
   }, []);
@@ -51,14 +81,33 @@ const VendorMenu = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         getMenu={getMenu}
+        categories={categories}
       />
-      <View className="mx-6 my-2">
-        <Text className="font-bold text-xl text-[#047857]">My Menu</Text>
+      <View className="mx-6 my-2 flex-row align-middle justify-between">
+        <Text className="flex-1 font-bold text-xl text-[#047857] self-center">
+          My Menu
+        </Text>
+        <View className="border flex-1 border-gray-300 rounded">
+          <Picker
+            selectedValue={categoryId}
+            onValueChange={(itemValue, itemIndex) => {
+              console.log(itemValue);
+              filterMenu(itemValue);
+              setCategoryId(itemValue); // Make sure to update the categoryId state
+            }}
+          >
+            <Picker.Item label="All" value="All" key="0" />
+
+            {categories?.map((item, index) => (
+              <Picker.Item label={item.name} value={item.name} key={item.id} />
+            ))}
+          </Picker>
+        </View>
       </View>
 
-      {menu?.length !== 0 ? (
+      {displayedMenu?.length !== 0 ? (
         <FlatList
-          data={menu}
+          data={displayedMenu}
           renderItem={renderItem}
           numColumns={2}
           className="m-2"
