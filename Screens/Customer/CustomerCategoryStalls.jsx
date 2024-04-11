@@ -27,7 +27,7 @@ const CustomerCategoryStalls = ({ route }) => {
     setDisplayedStalls(tempStalls);
   };
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 flex-col align-middle justify-between bg-white">
       <LinearGradient
         colors={["#D8F3DC", "#B7E4C7"]}
         className="py-3"
@@ -53,7 +53,7 @@ const CustomerCategoryStalls = ({ route }) => {
           <Text className="text-2xl text-gray-300">No Stalls Found</Text>
         </View>
       )}
-      {cart?.cart_items?.length !== 0 && <CartCard />}
+      {Object.keys(cart).length !== 0 && <CartCard />}
     </SafeAreaView>
   );
 };

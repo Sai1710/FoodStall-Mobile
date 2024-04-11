@@ -25,8 +25,9 @@ const CustomerCategories = () => {
   const renderItem = (itemData) => {
     return <CategoryCard data={itemData.item} role="customer" />;
   };
+  console.log("cart", cart);
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-col align-middle justify-between flex-1 bg-white">
       <LinearGradient
         colors={["#D8F3DC", "#B7E4C7"]}
         className="py-3"
@@ -46,7 +47,7 @@ const CustomerCategories = () => {
           data={displayedCategories}
           renderItem={renderItem}
           numColumns={2}
-          className="m-2"
+          className="m-2 flex-1"
           showsVerticalScrollIndicator={false}
         />
       ) : (
@@ -54,7 +55,7 @@ const CustomerCategories = () => {
           <Text className="text-2xl text-gray-300">No Categories Found</Text>
         </View>
       )}
-      {cart?.cart_items?.length !== 0 && <CartCard />}
+      {Object.keys(cart).length !== 0 && <CartCard />}
     </SafeAreaView>
   );
 };

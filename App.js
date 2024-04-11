@@ -41,24 +41,30 @@ export default function App() {
               headerShown: false,
             }}
           >
+            {/* Login and SignUp */}
             <Stack.Screen name="LoginPage" component={LoginScreen} />
             <Stack.Screen
               name="VendorSignUpScreen"
               component={VendorSignUpScreen}
             />
+
+            {/* Customer Pages */}
             <Stack.Screen
               name="CustomerSignUpScreen"
               component={CustomerSignUpScreen}
             />
-
+            <Stack.Screen name="CustomerHome" component={CustomerHome} />
             <Stack.Screen
               name="StallsList"
               component={CustomerCategoryStalls}
             />
             <Stack.Screen name="StallMenu" component={CustomerStallMenu} />
 
+
+            
+            {/* VendorPages */}
             <Stack.Screen name="VendorHome" component={VendorHome} />
-            <Stack.Screen name="CustomerHome" component={CustomerHome} />
+            {/* Admin */}
             <Stack.Screen name="AdminHome" component={AdminHome} />
           </Stack.Navigator>
         </NavigationContainer>

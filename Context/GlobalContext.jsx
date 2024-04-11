@@ -73,7 +73,10 @@ export const GlobalProvider = ({ children }) => {
         .delete(`/api/v1/customer/carts`)
         .then(async (response) => {
           console.log(response);
+          getCart();
           dispatch({ type: "SET_CART", payload: [] });
+          dispatch({ type: "SET_CART_ARRAY", payload: [] });
+
           await AsyncStorage.removeItem("cart-id");
         })
         .catch((err) => {
@@ -141,7 +144,7 @@ export const GlobalProvider = ({ children }) => {
 
   const handleAdd = async (item, quantity) => {
     const cartId = await AsyncStorage.getItem("cart-id");
-    if (cartId === null) {
+    if (cartId === null && quantity !== 0) {
       createCart(item, quantity);
     } else {
       addItem(item, quantity);

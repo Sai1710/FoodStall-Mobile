@@ -13,7 +13,7 @@ const StallCard = ({ data, categoryId }) => {
   };
 
   return (
-    <View className={`bg-white p-1 mx-2 my-2 rounded-3xl shadow-md border-0.5`}>
+    <View className={`bg-white p-1 mx-2 my-2 rounded shadow-md border-0.5`}>
       <Pressable onPress={handlePress}>
         <View className={`flex-row align-middle justify-start`}>
           <Image
@@ -22,7 +22,7 @@ const StallCard = ({ data, categoryId }) => {
                 ? data.stall_logo_url.replace("localhost", IP_ADDRESS)
                 : link,
             }}
-            className={`h-36 w-36 rounded-3xl`}
+            className={`h-36 w-36 rounded`}
           />
           <View className="flex-col align-middle justify-start m-3 w-[100%]">
             <Text className={`text-xl font-semibold`}>{data.stall_name}</Text>

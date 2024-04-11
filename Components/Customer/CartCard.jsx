@@ -14,18 +14,12 @@ import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../../Context/GlobalContext";
 
 export default function CartCard() {
-  const clearCartId = async () => {
-    await AsyncStorage.removeItem("cart-id");
-  };
-
   const navigation = useNavigation();
 
   const { cart, deleteCart } = useContext(GlobalContext);
-
   return (
     <Pressable
-      className="flex-row items-center align-middle justify-between bg-green-900 p-4  border border-green-700 absolute bottom-0  mx-auto z-10 w-[100%] opacity-95"
-      //   className="items-center absolute bottom-10 left-0 right-0 mx-auto"
+      className="flex-row items-center align-middle justify-between bg-green-900 p-4  border border-green-700  mx-auto z-10 w-[100%] opacity-95"
       onPress={() => {
         navigation.navigate("CustomerCart");
       }}

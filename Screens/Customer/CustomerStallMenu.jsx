@@ -5,6 +5,8 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Image,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
@@ -12,16 +14,19 @@ import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 import MenuCard from "../../Components/Custom/MenuCard";
 import axios from "axios";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import CartCard from "../../Components/Customer/CartCard";
 import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
-import Tags from "../../Components/Customer/Tags";
+import Tags from "../../Components/Customer/CategoryTag";
+import SearchBar from "../../Components/Custom/SearchBar";
+import FilterModal from "../../Components/Customer/FilterModal";
 
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
   const { stall, categoryId } = route.params;
   const [vendorCategories, setVendorCategories] = useState();
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
   const [activeTags, setActiveTags] = useState([]);
   //   const [menu, setmenu] = useState(data);
@@ -45,6 +50,7 @@ const CustomerStallMenu = ({ route }) => {
   ];
 
   const [menu, setMenu] = useState([]);
+  const [searchText, setSearchText] = useState();
   const [displayedMenu, setDisplayedMenu] = useState([]);
 
   const filterMenu = (categoryId) => {
@@ -62,6 +68,13 @@ const CustomerStallMenu = ({ route }) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleSearch = (text) => {
+    const tempMenu = menu.filter((item) => {
+      return item.name.includes(text);
+    });
+    setDisplayedMenu(tempMenu);
   };
   const getVendorCategories = (menu) => {
     const uniqueCategories = [
@@ -97,8 +110,12 @@ const CustomerStallMenu = ({ route }) => {
   }, []);
   return (
     <SafeAreaView className="flex-1 flex-col align-middle justify-between bg-white">
+      <FilterModal
+        modalVisible={filterModalVisible}
+        setModalVisible={setFilterModalVisible}
+      />
       <LinearGradient
-        colors={["#D8F3DC", "#B7E4C7"]}
+        colors={["#B7E4C7", "#96D5B2"]}
         className="py-3"
         style={{
           borderBottomLeftRadius: 15,
@@ -117,29 +134,36 @@ const CustomerStallMenu = ({ route }) => {
             );
           })}
         </View>
-        <View className="flex-row justify-start align-middle mx-6 my-3">
-          <MaterialCommunityIcons name="chef-hat" size={20} color="green" />
-          <Text className="self-center ml-1 text-green-900 font-semibold">
-            {stall.first_name} {stall.last_name}
-          </Text>
-        </View>
-      </LinearGradient>
-      <View className="flex-row align-middle justify-center mx-6 my-2">
-        {/* <View className="border flex-1 border-gray-300 rounded">
-          <Picker
-            selectedValue={selectedCategoryId}
-            onValueChange={(itemValue, itemIndex) => {
-              console.log(itemValue);
-              filterMenu(itemValue);
-              setSelectedCategoryId(itemValue);
+        <View className="flex-row align-middle justify-center">
+          <View className="flex-row w-[78%] items-center border border-gray-300  bg-white rounded-lg p-2 ml-6 mr-3 my-2">
+            <Ionicons
+              name="search"
+              size={24}
+              color="#047857"
+              className="ml-2"
+            />
+            <TextInput
+              placeholder="Search"
+              value={searchText}
+              onChangeText={handleSearch}
+              className="flex-1 px-2"
+            />
+          </View>
+          <TouchableOpacity
+            className="self-center mt-1 flex-1"
+            onPress={() => {
+              setFilterModalVisible((prev) => !prev);
             }}
           >
-            <Picker.Item label="All" value="-1" key="0" />
-            {vendorCategories?.map((item, index) => (
-              <Picker.Item label={item.name} value={item.id} key={item.id} />
-            ))}
-          </Picker>
-        </View> */}
+            <Image
+              source={require("../../assets/Filter.png")}
+              className="h-8 w-8"
+            />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
+      {/* <View className="flex-row align-middle justify-center mx-6 my-2">
         <FlatList
           data={tags}
           renderItem={renderTags}
@@ -148,7 +172,7 @@ const CustomerStallMenu = ({ route }) => {
           showsHorizontalScrollIndicator={false}
           horizontal
         />
-      </View>
+      </View> */}
 
       {displayedMenu?.length !== 0 ? (
         <FlatList
@@ -164,7 +188,7 @@ const CustomerStallMenu = ({ route }) => {
           <Text className="text-2xl text-gray-300">No Menu Found</Text>
         </View>
       )}
-      {cart?.cart_items?.length !== 0 && <CartCard />}
+      {Object.keys(cart).length !== 0 && <CartCard />}
     </SafeAreaView>
   );
 };

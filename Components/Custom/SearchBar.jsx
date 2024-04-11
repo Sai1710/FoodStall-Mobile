@@ -11,7 +11,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <View className="flex-row items-center border border-gray-300  bg-white rounded p-2 mx-6 my-2">
+    <View className="flex-row items-center border border-gray-300  bg-white rounded-lg p-2 mx-6 my-2">
       <Ionicons name="search" size={24} color="#047857" className="ml-2" />
       <TextInput
         placeholder="Search"
