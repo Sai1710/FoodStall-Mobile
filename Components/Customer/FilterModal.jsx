@@ -1,9 +1,22 @@
 import React from "react";
-import { View, Text, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  Pressable,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const FilterModal = ({ modalVisible, setModalVisible }) => {
+const FilterModal = ({
+  modalVisible,
+  setModalVisible,
+  categories,
+  setSelectedCategory,
+  applyFilter,
+}) => {
   return (
     <Modal
       animationType="slide"
@@ -20,23 +33,62 @@ const FilterModal = ({ modalVisible, setModalVisible }) => {
         }}
       >
         <View className="bg-white rounded-lg mx-3" style={{ marginBottom: 60 }}>
-          <TouchableOpacity onPress={() => {}}>
-            <Text className="text-lg p-3 border-b border-gray-300">
-              Option 1
+          <View className="flex-row align-middle justify-around border-b-0.5 p-2">
+            <Text className="text-center font-bold flex-1 text-[#1d543a] text-xl ml-6">
+              Filter
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <Text className="text-lg p-3 border-b border-gray-300">
-              Option 2
-            </Text>
-          </TouchableOpacity>
+            <Pressable
+              style={{
+                alignSelf: "center",
+              }}
+              onPress={() => {
+                setModalVisible((prev) => !prev);
+              }}
+            >
+              <MaterialIcons name="close" size={24} color="#333" />
+            </Pressable>
+          </View>
+          {categories ? (
+            categories.map((item) => {
+              return (
+                <TouchableOpacity
+                  className="p-2 border-b-0.5"
+                  onPress={() => {
+                    setSelectedCategory(item.id);
+                    applyFilter(item.id);
+                    setModalVisible((prev) => !prev);
+                  }}
+                >
+                  <Text
+                    className={`self-center text-base font-semibold text-black `}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })
+          ) : (
+            <></>
+          )}
           <TouchableOpacity
-            onPress={() => setModalVisible((prev) => !prev)}
-            className="bg-white flex-row items-center justify-center p-3 border-t border-gray-300 rounded-b-lg"
-            style={{ opacity: 0.9 }}
+            className="p-2 border-b-0.5"
+            onPress={() => {
+              applyFilter(-1);
+              setModalVisible((prev) => !prev);
+            }}
           >
-            <MaterialIcons name="close" size={24} color="#333" />
+            <Text className={`self-center text-base font-semibold text-black `}>
+              All
+            </Text>
           </TouchableOpacity>
+          {/* <FlatList
+            data={categories}
+            renderItem={(itemData) => {
+              return (
+                
+              );
+            }}
+          /> */}
         </View>
       </View>
     </Modal>

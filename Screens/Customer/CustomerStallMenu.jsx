@@ -27,7 +27,7 @@ const CustomerStallMenu = ({ route }) => {
   const { stall, categoryId } = route.params;
   const [vendorCategories, setVendorCategories] = useState();
   const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
   const [activeTags, setActiveTags] = useState([]);
   //   const [menu, setmenu] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
@@ -53,24 +53,27 @@ const CustomerStallMenu = ({ route }) => {
   const [searchText, setSearchText] = useState();
   const [displayedMenu, setDisplayedMenu] = useState([]);
 
-  const filterMenu = (categoryId) => {
-    if (categoryId === "-1") {
+  const filterMenu = (id) => {
+    console.log(id);
+    if (id == -1) {
       setDisplayedMenu(menu);
       return;
+    } else {
+      axios
+        .get(
+          `/api/v1/customer/food_items?vendor_id=${stall.id}&category_id=${id}`
+        )
+        .then((res) => {
+          setDisplayedMenu(res.data.food_items);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    axios
-      .get(
-        `/api/v1/customer/food_items?vendor_id=${stall.id}&category_id=${categoryId}`
-      )
-      .then((res) => {
-        setDisplayedMenu(res.data.food_items);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const handleSearch = (text) => {
+    setSearchText(text);
     const tempMenu = menu.filter((item) => {
       return item.name.includes(text);
     });
@@ -84,7 +87,6 @@ const CustomerStallMenu = ({ route }) => {
     ].map((category) => JSON.parse(category));
 
     setVendorCategories(uniqueCategories);
-    console.log("abxcd", vendorCategories);
   };
   const fetchMenu = async () => {
     try {
@@ -113,6 +115,9 @@ const CustomerStallMenu = ({ route }) => {
       <FilterModal
         modalVisible={filterModalVisible}
         setModalVisible={setFilterModalVisible}
+        categories={vendorCategories}
+        applyFilter={filterMenu}
+        setSelectedCategory={setSelectedCategoryId}
       />
       <LinearGradient
         colors={["#B7E4C7", "#96D5B2"]}

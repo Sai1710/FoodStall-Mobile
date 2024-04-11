@@ -245,18 +245,20 @@ export default function LoginScreen() {
           >
             <Text style={styles.signupText}>Forgot Password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.signupLink}
-            onPress={() => {
-              if (mode === "customer") {
-                navigation.navigate("CustomerSignUpScreen");
-              } else {
-                navigation.navigate("VendorSignUpScreen");
-              }
-            }}
-          >
-            <Text style={styles.signupText}>Sign Up Instead?</Text>
-          </TouchableOpacity>
+          {mode !== "admin" && (
+            <TouchableOpacity
+              style={styles.signupLink}
+              onPress={() => {
+                if (mode === "customer") {
+                  navigation.navigate("CustomerSignUpScreen");
+                } else {
+                  navigation.navigate("VendorSignUpScreen");
+                }
+              }}
+            >
+              <Text style={styles.signupText}>Sign Up Instead?</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <LottieView

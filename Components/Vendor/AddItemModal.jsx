@@ -191,21 +191,27 @@ const AddItemModal = ({
                 ))}
               </Picker>
             </View>
-            <View className="border border-gray-300 mx-3 mt-3">
-              <Picker
-                selectedValue={categoryId}
-                onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
-                  setCategoryId(itemValue);
-                }}
-              >
-                <Picker.Item label="Category" value="None" key={-1} />
+            {mode !== "edit" && (
+              <View className="border border-gray-300 mx-3 mt-3">
+                <Picker
+                  selectedValue={categoryId}
+                  onValueChange={(itemValue, itemIndex) => {
+                    console.log(itemValue);
+                    setCategoryId(itemValue);
+                  }}
+                >
+                  <Picker.Item label="Category" value="None" key={-1} />
 
-                {categories?.map((item, index) => (
-                  <Picker.Item label={item.name} value={item.id} key={index} />
-                ))}
-              </Picker>
-            </View>
+                  {categories?.map((item, index) => (
+                    <Picker.Item
+                      label={item.name}
+                      value={item.id}
+                      key={index}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            )}
             <View className="my-2 border border-gray-300 rounded mx-3">
               <MultiSelect
                 hideTags
