@@ -6,7 +6,7 @@ import NavBar from "../../Components/Custom/Navbar";
 const VendorOrders = () => {
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
     </SafeAreaView>
   );
 };

@@ -10,7 +10,7 @@ const CustomerStalls = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
       {cart?.cart_items?.length !== 0 && <CartCard />}
     </SafeAreaView>
   );

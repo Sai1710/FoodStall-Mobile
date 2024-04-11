@@ -23,7 +23,7 @@ const VendorProfile = () => {
   };
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
       <Button title="Logout" onPress={logOut} />
     </SafeAreaView>
   );

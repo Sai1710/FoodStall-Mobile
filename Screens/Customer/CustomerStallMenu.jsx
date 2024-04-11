@@ -1,37 +1,51 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "../../Components/Custom/Navbar";
 import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 import MenuCard from "../../Components/Custom/MenuCard";
 import axios from "axios";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CartCard from "../../Components/Customer/CartCard";
 import { Picker } from "@react-native-picker/picker";
+import { LinearGradient } from "expo-linear-gradient";
+import Tags from "../../Components/Customer/Tags";
 
 const CustomerStallMenu = ({ route }) => {
   //   const { data, id } = route.params;
   const { stall, categoryId } = route.params;
   const [vendorCategories, setVendorCategories] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
+  const [activeTags, setActiveTags] = useState([]);
   //   const [menu, setmenu] = useState(data);
   //   const [displayedStalls, setDisplayedStalls] = useState(data);
   function renderItem(itemData) {
     return <MenuCard item={itemData.item} role="customer" />;
   }
   const { cart } = useContext(GlobalContext);
+  const tags = [
+    { name: "Regular", id: 1, value: "Regular" },
+    { name: "Swaminarayan", id: 2, value: "Swaminarayan" },
+    { name: "Jain", id: 3, value: "Jain" },
+    { name: "Spicy", id: 4, value: "Spicy" },
+    { name: "Medium", id: 5, value: "Medium" },
+    { name: "Light", id: 6, value: "Light" },
+    { name: "Best Seller", id: 7, value: "Best Seller" },
+    { name: "Kids", id: 8, value: "Kids" },
+    { name: "Starter", id: 9, value: "Starter" },
+    { name: "Yummy", id: 10, value: "Yummy" },
+    { name: "Healthy", id: 11, value: "Healthy" },
+  ];
 
   const [menu, setMenu] = useState([]);
   const [displayedMenu, setDisplayedMenu] = useState([]);
-
-  const tempMenu = [
-    { name: "Vegetable Soup", item_type: "veg", price: 5.99 },
-    { name: "Chicken Sandwich", item_type: "non_veg", price: 8.99 },
-    { name: "Salad Bowl", item_type: "veg", price: 6.49 },
-    { name: "Beef Burger", item_type: "non_veg", price: 9.49 },
-    { name: "Fruit Salad", item_type: "veg", price: 4.99 },
-    { name: "Fish Tacos", item_type: "non_veg", price: 7.99 },
-  ];
 
   const filterMenu = (categoryId) => {
     if (categoryId === "-1") {
@@ -75,17 +89,43 @@ const CustomerStallMenu = ({ route }) => {
     }
   };
 
+  const renderTags = (itemData) => {
+    return <Tags tag={itemData.item} />;
+  };
   useEffect(() => {
     fetchMenu();
   }, []);
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
+    <SafeAreaView className="flex-1 flex-col align-middle justify-between bg-white">
+      <LinearGradient
+        colors={["#D8F3DC", "#B7E4C7"]}
+        className="py-3"
+        style={{
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+        }}
+      >
+        <NavBar title={stall.stall_name} />
+        <View className="flex-row align-middle mx-6 mb-3">
+          {vendorCategories?.map((item) => {
+            return (
+              <View className="border-0.5 p-1 rounded mr-3" key={item.id}>
+                <Text className="text-gray-600 mx-0.5 text-base">
+                  {item.name}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+        <View className="flex-row justify-start align-middle mx-6 my-3">
+          <MaterialCommunityIcons name="chef-hat" size={20} color="green" />
+          <Text className="self-center ml-1 text-green-900 font-semibold">
+            {stall.first_name} {stall.last_name}
+          </Text>
+        </View>
+      </LinearGradient>
       <View className="flex-row align-middle justify-center mx-6 my-2">
-        <Text className="flex-1 font-bold text-xl text-[#047857] self-center">
-          {stall.stall_name}
-        </Text>
-        <View className="border flex-1 border-gray-300 rounded">
+        {/* <View className="border flex-1 border-gray-300 rounded">
           <Picker
             selectedValue={selectedCategoryId}
             onValueChange={(itemValue, itemIndex) => {
@@ -99,7 +139,15 @@ const CustomerStallMenu = ({ route }) => {
               <Picker.Item label={item.name} value={item.id} key={item.id} />
             ))}
           </Picker>
-        </View>
+        </View> */}
+        <FlatList
+          data={tags}
+          renderItem={renderTags}
+          keyExtractor={(item) => item.id}
+          className="mt-2"
+          showsHorizontalScrollIndicator={false}
+          horizontal
+        />
       </View>
 
       {displayedMenu?.length !== 0 ? (
@@ -107,7 +155,7 @@ const CustomerStallMenu = ({ route }) => {
           data={displayedMenu}
           renderItem={renderItem}
           numColumns={2}
-          className="m-2"
+          className="mx-2 flex-1"
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={{ justifyContent: "space-between" }}
         />

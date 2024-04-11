@@ -41,6 +41,7 @@ const CategoryCard = ({ data, role }) => {
       onPress={() => {
         if (role === "customer") {
           navigation.navigate("StallsList", {
+            categoryName: data.name,
             vendors: data.vendors,
             id: data.id,
           });

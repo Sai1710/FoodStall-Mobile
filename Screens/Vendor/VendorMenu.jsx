@@ -76,7 +76,7 @@ const VendorMenu = () => {
   }, []);
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
       <AddItemModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}

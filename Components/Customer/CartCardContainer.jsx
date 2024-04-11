@@ -1,19 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
-import CartItemCard from "./CartItemCard"; // Assuming you have a CartItemCard component
-import GlobalContext from "../../Context/GlobalContext";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import CartItemCard from "./CartItemCard";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const CartCardContainer = ({ stallName, items }) => {
+const CartCardContainer = ({ stall, items }) => {
   const renderItem = (itemData) => {
     return <CartItemCard item={itemData.item} />;
   };
+  const navigation = useNavigation();
 
   return (
     <View className="m-4 border-0.5 p-3 rounded border-green-800">
-      <Text className="text-lg font-medium text-green-800 mb-3 mx-1">
-        {stallName}
-      </Text>
-      <FlatList data={items} renderItem={renderItem} />
+      <View className="flex-row align-middle justify-between mb-3">
+        <Text className="text-lg font-medium text-green-800  mx-1 self-center">
+          {stall.stall_name}
+        </Text>
+        <TouchableOpacity
+          className="bg-white rounded-full self-center"
+          onPress={() => {
+            navigation.navigate("StallMenu", { stall: stall, categoryId: -1 });
+          }}
+        >
+          <FontAwesome6 name="circle-plus" size={40} color="#047857" />
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={items}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
       <View className="flex-row justify-between align-middle my-3 mx-1">
         <Text className="font-semibold">Grand Total:</Text>
         <Text className="font-bold">

@@ -105,7 +105,7 @@ export default function VendorSignUpScreen() {
       > */}
       <View style={styles.card}>
         <Text className="font-bold text-2xl mb-3 text-center text-[#047857]">
-          FoodStall
+          QuickCrave
         </Text>
         <Text style={styles.subtitle}>
           Explore food from different cuisines !!!

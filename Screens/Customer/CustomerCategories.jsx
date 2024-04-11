@@ -6,28 +6,44 @@ import GlobalContext from "../../Context/GlobalContext";
 import CartCard from "../../Components/Customer/CartCard";
 import CategoryCard from "../../Components/Custom/CategoryCard";
 import { useFocusEffect } from "@react-navigation/native";
+import SearchBar from "../../Components/Custom/SearchBar";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CustomerCategories = () => {
-  const { categories, fetchCategories, getCart, cart } =
-    useContext(GlobalContext);
+  const { categories, cart } = useContext(GlobalContext);
+  const [displayedCategories, setDisplayedCategories] = useState(categories);
   useEffect(() => {
-    fetchCategories();
-    getCart();
-  }, []);
+    setDisplayedCategories(categories);
+  }, [categories]);
 
+  const handleSearch = (searchInput) => {
+    const tempCategories = categories.filter((item) => {
+      return item.name.includes(searchInput);
+    });
+    setDisplayedCategories(tempCategories);
+  };
   const renderItem = (itemData) => {
     return <CategoryCard data={itemData.item} role="customer" />;
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
-      <View className="mx-6 my-2">
-        <Text className="font-bold text-xl text-[#047857]">Categories</Text>
-      </View>
-
-      {categories?.length !== 0 ? (
+      <LinearGradient
+        colors={["#D8F3DC", "#B7E4C7"]}
+        className="py-3"
+        style={{
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+        }}
+      >
+        <NavBar title="QuickCrave" />
+        <View className="mx-6 my-2">
+          <Text className="font-bold text-xl text-[#047857]">Categories</Text>
+        </View>
+        <SearchBar onSearch={handleSearch} />
+      </LinearGradient>
+      {displayedCategories?.length !== 0 ? (
         <FlatList
-          data={categories}
+          data={displayedCategories}
           renderItem={renderItem}
           numColumns={2}
           className="m-2"

@@ -15,10 +15,7 @@ function CustomerCart() {
     console.log(itemData.item);
     return (
       <CartCardContainer
-        stallName={
-          itemData?.item?.items[0]?.food_item?.vendor_category?.vendor
-            .stall_name
-        }
+        stall={itemData?.item?.items[0]?.food_item?.vendor_category?.vendor}
         items={itemData.item.items}
       />
     );

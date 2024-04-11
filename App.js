@@ -56,7 +56,6 @@ export default function App() {
               component={CustomerCategoryStalls}
             />
             <Stack.Screen name="StallMenu" component={CustomerStallMenu} />
-            <Stack.Screen name="CartPage" component={CustomerCart} />
 
             <Stack.Screen name="VendorHome" component={VendorHome} />
             <Stack.Screen name="CustomerHome" component={CustomerHome} />

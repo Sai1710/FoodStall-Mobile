@@ -38,7 +38,7 @@ const AdminCategories = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
       <View className="mx-6 my-2">
         <Text className="font-bold text-xl text-[#047857]">Categories</Text>
       </View>
@@ -49,6 +49,7 @@ const AdminCategories = () => {
           renderItem={renderItem}
           numColumns={2}
           className="m-2"
+          keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
         />
       ) : (

@@ -5,27 +5,46 @@ import NavBar from "../../Components/Custom/Navbar";
 import GlobalContext from "../../Context/GlobalContext";
 import StallCard from "../../Components/Customer/StallCard";
 import CartCard from "../../Components/Customer/CartCard";
+import SearchBar from "../../Components/Custom/SearchBar";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CustomerCategoryStalls = ({ route }) => {
-  const { vendors, id } = route.params;
+  const { categoryName, vendors, id } = route.params;
   //   const [stalls, setStalls] = useState(data);
-  //   const [displayedStalls, setDisplayedStalls] = useState(data);
+  const [displayedStalls, setDisplayedStalls] = useState(vendors);
+  useEffect(() => {
+    setDisplayedStalls(vendors);
+    console.log("SetVendors");
+  }, [vendors]);
   const { cart } = useContext(GlobalContext);
   function renderItem(itemData) {
     return <StallCard data={itemData.item} categoryId={id} />;
   }
-
+  const handleSearch = (searchInput) => {
+    const tempStalls = vendors.filter((item) => {
+      return item.stall_name.includes(searchInput);
+    });
+    setDisplayedStalls(tempStalls);
+  };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
-      <View className="mx-6 my-2">
-        <Text className="font-bold text-xl text-[#047857]">Stalls</Text>
-      </View>
+      <LinearGradient
+        colors={["#D8F3DC", "#B7E4C7"]}
+        className="py-3"
+        style={{
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+        }}
+      >
+        <NavBar title={categoryName} />
 
-      {vendors?.length !== 0 ? (
+        <SearchBar onSearch={handleSearch} />
+      </LinearGradient>
+      {displayedStalls?.length !== 0 ? (
         <FlatList
-          data={vendors}
+          data={displayedStalls}
           renderItem={renderItem}
+          keyExtractor={(item) => item.id}
           className="m-2"
           showsVerticalScrollIndicator={false}
         />

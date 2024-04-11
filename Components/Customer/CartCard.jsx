@@ -24,10 +24,10 @@ export default function CartCard() {
 
   return (
     <Pressable
-      className="flex-row items-center align-middle justify-between bg-green-700 p-4  border border-green-700 absolute bottom-0  mx-auto z-10 w-[100%] opacity-95"
+      className="flex-row items-center align-middle justify-between bg-green-900 p-4  border border-green-700 absolute bottom-0  mx-auto z-10 w-[100%] opacity-95"
       //   className="items-center absolute bottom-10 left-0 right-0 mx-auto"
       onPress={() => {
-        navigation.navigate("CartPage");
+        navigation.navigate("CustomerCart");
       }}
     >
       <View className="flex-row items-center justify-center">

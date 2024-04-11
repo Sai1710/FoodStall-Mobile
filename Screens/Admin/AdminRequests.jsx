@@ -35,7 +35,7 @@ const AdminRequests = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <NavBar title="FoodStall" />
+      <NavBar title="QuickCrave" />
       <View className="mx-6 my-3">
         <Text className="font-bold text-xl text-[#047857]">
           Vendor Requests
