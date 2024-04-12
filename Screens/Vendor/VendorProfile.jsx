@@ -6,7 +6,6 @@ import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native";
 import GlobalContext from "../../Context/GlobalContext";
-import IP_ADDRESS from "../../config";
 
 const VendorProfile = () => {
   const navigation = useNavigation();
@@ -37,7 +36,10 @@ const VendorProfile = () => {
           <View className="border-0.5 border-black rounded-full p-3">
             <Image
               source={{
-                uri: userInfo?.stall_logo_url?.replace("localhost", IP_ADDRESS),
+                uri: userInfo?.stall_logo_url?.replace(
+                  "localhost",
+                  process.env.IP_ADDRESS
+                ),
               }}
               className="w-32 h-32 rounded-full "
             />

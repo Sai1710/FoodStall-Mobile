@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./Screens/LoginScreen";
 import axios from "axios";
-import IP_ADDRESS from "./config";
 import VendorHome from "./Screens/Vendor/VendorHome";
 import CustomerHome from "./Screens/Customer/CustomerHome";
 import AdminHome from "./Screens/Admin/AdminHome";
@@ -20,7 +19,7 @@ import CustomerCart from "./Screens/Customer/CustomerCart";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  axios.defaults.baseURL = `http://${IP_ADDRESS}:3000`;
+  axios.defaults.baseURL = `http://${process.env.IP_ADDRESS}:3000`;
   axios.interceptors.request.use(
     async (config) => {
       config.headers["Authorization"] =

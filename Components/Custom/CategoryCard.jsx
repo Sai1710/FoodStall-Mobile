@@ -3,7 +3,6 @@ import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomModal from "./CustomModal";
 import { useNavigation } from "@react-navigation/native";
-import IP_ADDRESS from "../../config";
 import axios from "axios";
 import { Dialog, ALERT_TYPE } from "react-native-alert-notification";
 import GlobalContext from "../../Context/GlobalContext";
@@ -59,7 +58,7 @@ const CategoryCard = ({ data, role }) => {
       <Image
         source={{
           uri: data.image_url
-            ? data.image_url.replace("localhost", IP_ADDRESS)
+            ? data.image_url.replace("localhost", process.env.IP_ADDRESS)
             : "https://imgs.search.brave.com/oB6fgT45DC10B0RQfk3kTBtZ0W-2p7udZUxPnfvKT3M/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzYyLzkzLzY2/LzM2MF9GXzQ2Mjkz/NjY4OV9CcEVFY3hm/Z011WVBmVGFJQU9D/MXRDRHVybXNubzdT/cC5qcGc",
         }}
         className={`w-full h-44 rounded mb-2`}

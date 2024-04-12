@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import IP_ADDRESS from "../../config";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const StallCard = ({ data, categoryId }) => {
@@ -19,7 +18,10 @@ const StallCard = ({ data, categoryId }) => {
           <Image
             source={{
               uri: data.stall_logo_url
-                ? data.stall_logo_url.replace("localhost", IP_ADDRESS)
+                ? data.stall_logo_url.replace(
+                    "localhost",
+                    process.env.IP_ADDRESS
+                  )
                 : link,
             }}
             className={`h-36 w-36 rounded`}
