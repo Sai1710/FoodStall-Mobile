@@ -109,6 +109,7 @@ const CustomerStallMenu = ({ route }) => {
   };
   useEffect(() => {
     fetchMenu();
+    filterMenu(categoryId);
   }, []);
   return (
     <SafeAreaView className="flex-1 flex-col align-middle justify-between bg-white">

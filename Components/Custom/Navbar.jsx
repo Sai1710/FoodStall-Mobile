@@ -7,12 +7,12 @@ export default function NavBar({ title }) {
     <View className={` p-4 flex-row align-middle justify-between mx-2`}>
       {title !== "QuickCrave" ? (
         <>
-          <Text className={`text-[#1d543a] text-xl font-bold flex-1`}>
+          <Text className={`text-green-800 text-xl font-bold flex-1`}>
             {title}
           </Text>
         </>
       ) : (
-        <Text className={`text-[#1d543a] text-3xl font-bold flex-1`}>
+        <Text className={`text-green-800 text-3xl font-bold flex-1`}>
           Quick<Text className="text-black">Crave</Text>
         </Text>
       )}

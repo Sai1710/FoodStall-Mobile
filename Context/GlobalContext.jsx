@@ -11,6 +11,7 @@ const GlobalContext = createContext();
 
 const initialState = {
   categories: [],
+  userInfo: {},
   cart: {},
   cartArray: [],
   loading: false,
@@ -26,6 +27,8 @@ const globalReducer = (state, action) => {
       return { ...state, cart: action.payload };
     case "SET_CART_ARRAY":
       return { ...state, cartArray: action.payload };
+    case "SET_USER":
+      return { ...state, userInfo: action.payload };
     default:
       return state;
   }
@@ -142,6 +145,10 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const setUserInfo = (userInfo) => {
+    dispatch({ type: "SET_USER", payload: userInfo });
+  };
+
   const handleAdd = async (item, quantity) => {
     const cartId = await AsyncStorage.getItem("cart-id");
     if (cartId === null && quantity !== 0) {
@@ -215,12 +222,14 @@ export const GlobalProvider = ({ children }) => {
         loading: state.loading,
         cart: state.cart,
         cartArray: state.cartArray,
+        userInfo: state.userInfo,
         fetchCategories,
         handleAdd,
         getCart,
         updateItem,
         deleteCart,
         categorizeCart,
+        setUserInfo,
       }}
     >
       {children}

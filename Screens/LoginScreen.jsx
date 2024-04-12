@@ -17,12 +17,14 @@ import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
+import GlobalContext from "../Context/GlobalContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("customer");
   const navigation = useNavigation();
+  const { setUserInfo } = useContext(GlobalContext);
 
   const setCredentials = async (res) => {
     switch (mode) {
@@ -45,7 +47,12 @@ export default function LoginScreen() {
           "categories",
           JSON.stringify(res.data.categories)
         );
+        await AsyncStorage.setItem(
+          "user-info",
+          JSON.stringify(res.data.vendor)
+        );
         await AsyncStorage.setItem("role", "vendor");
+        setUserInfo(res.data.vendor);
 
         return;
       default:

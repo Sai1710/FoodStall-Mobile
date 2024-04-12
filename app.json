@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "FoodStall-Mobile",
+    "name": "FoodStall",
     "slug": "FoodStall-Mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,10 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {

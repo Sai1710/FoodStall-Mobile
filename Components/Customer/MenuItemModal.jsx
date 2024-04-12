@@ -44,7 +44,7 @@ const MenuItemModal = ({ modalVisible, setModalVisible, item }) => {
       <View
         className=" w-full h-full bg-black bg-opacity-50 flex items-end justify-center"
         style={{
-          backgroundColor: "rgba(0,0,0,0.5)",
+          backgroundColor: "rgba(0,0,0,0.1)",
           justifyContent: "flex-end",
         }}
       >
@@ -61,17 +61,69 @@ const MenuItemModal = ({ modalVisible, setModalVisible, item }) => {
                     ? require("../../assets/VEG.png")
                     : require("../../assets/NONVEG.png")
                 }
-                className="h-5 w-5 mr-2"
+                className="h-5 w-5 mr-2 mb-4"
               />
-              <Text className="text-lg font-bold">{item.name}</Text>
+              <Text className="text-lg font-bold mb-4">{item.name}</Text>
             </View>
             <Text className="text-lg font-bold text-green-700">
               ₹{item.price}
             </Text>
           </View>
-
+          <View>
+            <View>
+              <Text className="font-semibold text-base mb-3 border-b-0.5 pb-2">
+                SubType
+              </Text>
+              <View className="flex-row mb-3">
+                {item.sub_type.map((item, index) => {
+                  return (
+                    <Text
+                      className="bg-green-800  text-white px-3 font-semibold py-2 mr-2 rounded-2xl"
+                      key={index}
+                    >
+                      {item}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+            <View>
+              <Text className="font-semibold text-base mb-3 border-b-0.5 pb-2">
+                Tags
+              </Text>
+              <View className="flex-row mb-3">
+                {item.tags.map((item, index) => {
+                  return (
+                    <Text
+                      className="bg-green-800  text-white px-3 font-semibold py-2 mr-2 rounded-2xl"
+                      key={index}
+                    >
+                      {item}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+            <View>
+              <Text className="font-semibold text-base mb-3 border-b-0.5 pb-2">
+                Taste
+              </Text>
+              <View className="flex-row mb-3">
+                {item.taste.map((item, index) => {
+                  return (
+                    <Text
+                      className="bg-green-800  text-white px-3 font-semibold py-2 mr-2 rounded-2xl"
+                      key={index}
+                    >
+                      {item}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
           <View className="flex flex-row items-center justify-between mt-4">
-            <View className="flex flex-row items-center justify-around bg-gray-100 p-2 rounded-lg border border-green-700 mr-2">
+            <View className="flex flex-row items-center justify-around bg-gray-100 p-2 rounded-lg border-0.5 border-green-700 mr-2">
               <TouchableOpacity
                 onPress={() => {
                   if (quantity > 0) {
@@ -91,7 +143,7 @@ const MenuItemModal = ({ modalVisible, setModalVisible, item }) => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity
-              className="flex flex-row items-center flex-1 justify-center ml-2 bg-green-700 p-2 rounded-lg border border-green-700"
+              className="flex flex-row items-center flex-1 justify-center ml-2 bg-green-800 p-2 rounded-lg border-0.5 border-green-700"
               onPress={() => {
                 if (itemPresent) {
                   updateItem(cartItemId, item, quantity);

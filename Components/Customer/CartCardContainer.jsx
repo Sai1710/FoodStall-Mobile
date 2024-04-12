@@ -3,12 +3,14 @@ import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import CartItemCard from "./CartItemCard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const CartCardContainer = ({ stall, items }) => {
   const renderItem = (itemData) => {
     return <CartItemCard item={itemData.item} />;
   };
   const navigation = useNavigation();
+  const handlePayment = () => {};
 
   return (
     <View className="m-4 border-0.5 p-3 rounded border-green-800">
@@ -36,7 +38,10 @@ const CartCardContainer = ({ stall, items }) => {
           $ {items.reduce((total, item) => total + item.price, 0)}
         </Text>
       </View>
-      <TouchableOpacity className="bg-green-800 rounded-lg p-2">
+      <TouchableOpacity
+        className="bg-green-800 rounded-lg p-2"
+        onPress={handlePayment}
+      >
         <Text className="text-white text-lg font-bold text-center">Pay</Text>
       </TouchableOpacity>
     </View>
