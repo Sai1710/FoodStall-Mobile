@@ -17,9 +17,10 @@ import CustomerStallMenu from "./Screens/Customer/CustomerStallMenu";
 import CustomerSignUpScreen from "./Screens/CustomerSignUpScreen";
 import CustomerCart from "./Screens/Customer/CustomerCart";
 const Stack = createNativeStackNavigator();
+import IP_ADDRESS from "./config";
 
 export default function App() {
-  axios.defaults.baseURL = `http://${process.env.IP_ADDRESS}:3000`;
+  axios.defaults.baseURL = `http://${IP_ADDRESS}:3000`;
   axios.interceptors.request.use(
     async (config) => {
       config.headers["Authorization"] =
@@ -59,8 +60,6 @@ export default function App() {
             />
             <Stack.Screen name="StallMenu" component={CustomerStallMenu} />
 
-
-            
             {/* VendorPages */}
             <Stack.Screen name="VendorHome" component={VendorHome} />
             {/* Admin */}

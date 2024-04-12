@@ -8,6 +8,9 @@ node_modules/
 dist/
 web-build/
 
+# Ignore config.js
+config.js
+
 # Native
 *.orig.*
 *.jks

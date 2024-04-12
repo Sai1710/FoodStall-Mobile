@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import IP_ADDRESS from "../../config";
 
 const StallCard = ({ data, categoryId }) => {
   const link = "https://www.happyeater.com/images/default-food-image.jpg";
@@ -18,10 +19,7 @@ const StallCard = ({ data, categoryId }) => {
           <Image
             source={{
               uri: data.stall_logo_url
-                ? data.stall_logo_url.replace(
-                    "localhost",
-                    process.env.IP_ADDRESS
-                  )
+                ? data.stall_logo_url.replace("localhost", IP_ADDRESS)
                 : link,
             }}
             className={`h-36 w-36 rounded`}
