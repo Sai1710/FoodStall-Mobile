@@ -10,9 +10,6 @@
     "image": "food_court-web",
 
     "preview": {
-      "android": {
-        "buildType": "apk"
-      },
       "distribution": "internal"
     },
     "production": {

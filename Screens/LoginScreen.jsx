@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import VendorHome from "./Vendor/VendorHome";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../Context/GlobalContext";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
