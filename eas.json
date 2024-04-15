@@ -13,7 +13,7 @@
     },
     "production": {
       "android": {
-        "image": "food_court-web"
+        "image": "latest"
       }
     }
   },
