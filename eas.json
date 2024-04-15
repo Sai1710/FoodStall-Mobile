@@ -7,13 +7,19 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "image": "food_court-web",
+
     "preview": {
       "android": {
         "buildType": "apk"
       },
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "image": "food_court-web"
+      }
+    }
   },
   "submit": {
     "production": {}
