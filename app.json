@@ -2,7 +2,7 @@
   "expo": {
     "name": "FoodStall",
     "slug": "FoodStall-Mobile",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,8 @@
     ],
     "ios": {
       "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.saikiriti.quickcrave"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "38e7eac7-7774-41f0-bae9-0fec5142c418"
+        "projectId": "4ab57dfe-bae2-4a5a-8a78-dd9964c34df5"
       }
     }
   }
