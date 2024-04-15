@@ -7,7 +7,6 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "image": "food_court-web",
 
     "preview": {
       "distribution": "internal"
